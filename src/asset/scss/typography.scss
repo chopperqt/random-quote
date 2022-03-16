@@ -1,0 +1,43 @@
+$font-primary: 'kraM';
+$font-secondary: 'PTSerifRegular';
+
+$font-size--xs: 12px;
+$font-size--sm: 14px;
+$font-size--md: 16px;
+$font-size--ls: 18px;
+
+.heading--sm {
+  font-size: $font-size--sm;
+}
+
+.heading--md {
+  font-size: $font-size--md;
+}
+
+.heading--xs {
+  font-size: $font-size--xs;
+}
+
+.heading--ls {
+  font-size: $font-size--ls;
+}
+
+.text-style--italic {
+  font-style: italic;
+}
+
+.text--right {
+  text-align: right;
+}
+
+.text--left {
+  text-align: left;
+}
+
+.text--bold {
+  font-weight: 700;
+}
+
+.text-regular {
+  font-weight: 400;
+}

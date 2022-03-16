@@ -1,24 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {
+  Routes,
+  Route
+} from 'react-router-dom'
+
+import Home from 'pages/home/Home'
+import useUser from 'helpers/useUser'
+import { routes } from 'routes'
+import AdminPanel from 'pages/admin-panel/AdminPane';
+
+import './asset/scss/typography.scss'
+import './App.scss'
 
 function App() {
+  const {
+    hasUser
+  } = useUser()
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Routes>
+        <Route path={routes.adminPanel} element={<AdminPanel />} />
+        <Route path={routes.default} element={<Home />} />
+      </Routes>
     </div>
   );
 }

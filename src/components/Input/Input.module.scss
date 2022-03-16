@@ -1,0 +1,17 @@
+@import 'asset/scss/colors';
+@import 'asset/scss/common';
+
+.input {
+  padding: 10px;
+  border: 1px solid $text-color-primary--500;
+  border-radius: $border-radius--small;
+
+  &--full {
+    width: 100%;
+  }
+}
+
+.layout {
+  display: grid;
+  row-gap: 5px;
+}

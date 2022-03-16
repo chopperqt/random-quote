@@ -1,0 +1,11 @@
+@import 'asset/scss/mixin';
+@import 'asset/scss/colors';
+@import 'asset/scss/common';
+
+.button {
+  @include reset-button;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid $text-color-primary--500;
+  border-radius: $border-radius--small;
+}

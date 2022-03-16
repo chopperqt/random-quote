@@ -1,0 +1,39 @@
+@import 'asset/scss/mixin';
+@import 'asset/scss/common';
+
+.home {
+  width: 100%;
+  height: 100vh;
+}
+
+.quote {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+  justify-content: center;
+  align-items: center;
+}
+
+.button {
+  @include reset-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: .4;
+  transition: $transition--short;
+  
+  &:hover {
+    opacity: 1;
+  }
+
+  :global(.icon-svg) {
+    width: 30px;
+    height: 30px;
+  }
+}

@@ -1,0 +1,18 @@
+@import 'asset/scss/typography';
+@import 'asset/scss/colors';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: $font-secondary;
+}
+
+body {
+  background-color: $color-secondary--300;
+}
+
+h1,h2,h3,h4,h5,p {
+  margin: 0;
+  padding: 0;
+}
