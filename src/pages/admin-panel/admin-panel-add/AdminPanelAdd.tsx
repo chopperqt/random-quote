@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useForm, SubmitHandler } from 'react-hook-form'
+
 
 import Input from "components/Input/Input"
 import { postQuote } from 'utils/quotes'
@@ -23,10 +25,25 @@ const MOCK_DATA = [
   }
 ]
 
+type Inputs = {
+  example: string,
+  exampleRequited: string
+}
+
 const AdminPanelAdd = () => {
   const [date, setDate] = useState<string>('')
   const [text, setText] = useState<string>('')
   const [option, setOption] = useState<IOption>({ key: '', label: '' })
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: {
+      errors,
+    },
+  } = useForm<Inputs>();
+  const onSubmit: SubmitHandler<Inputs> = data => console.log(data)
+
 
   const handleSend = (e: React.FormEvent<HTMLFormElement>) => {
     postQuote(text, date, +option.key)
@@ -36,7 +53,7 @@ const AdminPanelAdd = () => {
 
   return (
     <form
-      onSubmit={(e) => handleSend(e)}
+      onSubmit={handleSubmit(onSubmit)}
       className={styles.form}
     >
       <Selector
@@ -46,17 +63,18 @@ const AdminPanelAdd = () => {
         onChange={setOption}
       />
       <Input
-        value={date}
-        onChange={(e) => setDate(e.currentTarget.value)}
+        {...register("example")}
         label={DATA_TEXT}
         className={styles.input}
       />
       <Input
-        value={text}
-        onChange={(e) => setText(e.currentTarget.value)}
+        {...register("exampleRequited", { required: true })}
         label={QUOTE_TEXT}
         className={styles.input}
       />
+      {errors.exampleRequited && (
+        <span>This field is required!</span>
+      )}
       <Button type="submit">{CREATE_TEXT}</Button>
     </form>
   )
