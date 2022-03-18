@@ -1,18 +1,30 @@
 @font-face {
   font-family: 'kraM';
-  src: url('asset/fonts/kraM.eot');
-  src: url('asset/fonts/kraM.eot') format('embedded-opentype'),
-       url('asset/fonts/kraM.woff2') format('woff2'),
-       url('asset/fonts/kraM.woff') format('woff'),
-       url('asset/fonts/kraM.ttf') format('truetype'),
-       url('asset/fonts/kraM.svg#kraM') format('svg');
+  src: url('../fonts/kraM.eot');
+  src: url('../fonts/kraM.eot') format('embedded-opentype'),
+       url('../fonts/kraM.woff2') format('woff2'),
+       url('../fonts/kraM.woff') format('woff'),
+       url('../fonts/kraM.ttf') format('truetype'),
+       url('../fonts/kraM.svg#kraM') format('svg');
 }
+
 @font-face {
   font-family: 'PTSerifRegular';
-  src: url('asset/fonts/PTSerifRegular.eot');
-  src: url('asset/fonts/PTSerifRegular.eot') format('embedded-opentype'),
-       url('asset/fonts/PTSerifRegular.woff2') format('woff2'),
-       url('asset/fonts/PTSerifRegular.woff') format('woff'),
-       url('asset/fonts/PTSerifRegular.ttf') format('truetype'),
-       url('asset/fonts/PTSerifRegular.svg#PTSerifRegular') format('svg');
+  src: url('../fonts/PTSerifRegular.eot');
+  src: url('../fonts/PTSerifRegular.eot') format('embedded-opentype'),
+       url('../fonts/PTSerifRegular.woff2') format('woff2'),
+       url('../fonts/PTSerifRegular.woff') format('woff'),
+       url('../fonts/PTSerifRegular.ttf') format('truetype'),
+       url('../fonts/PTSerifRegular.svg#PTSerifRegular') format('svg');
 }
+
+@font-face {
+  font-family: 'PTSansRegular';
+  src: url('../fonts/PTSansRegular.eot');
+  src: url('../fonts/PTSansRegular.eot') format('embedded-opentype'),
+       url('../fonts/PTSansRegular.woff2') format('woff2'),
+       url('../fonts/PTSansRegular.woff') format('woff'),
+       url('../fonts/PTSansRegular.ttf') format('truetype'),
+       url('../fonts/PTSansRegular.svg#PTSansRegular') format('svg');
+}
+

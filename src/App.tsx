@@ -10,6 +10,7 @@ import { routes } from 'routes'
 import AdminPanel from 'pages/admin-panel/AdminPane';
 
 import './asset/scss/typography.scss'
+import './asset/scss/fonts.scss'
 import './App.scss'
 
 function App() {

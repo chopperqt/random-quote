@@ -1,11 +1,40 @@
 @import 'asset/scss/mixin';
 @import 'asset/scss/colors';
 @import 'asset/scss/common';
+@import 'asset/scss/typography';
 
 .button {
   @include reset-button;
   padding: 10px;
   box-sizing: border-box;
-  border: 1px solid $text-color-primary--500;
+  border: 1px solid $color-primary--6;
   border-radius: $border-radius--small;
+  transition: $transition--short;
+  background: $color-primary--5;
+  color: $color-white--500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 10px;
+
+  &:hover {
+    background: $color-primary--6;
+   }
+
+  &:focus, 
+  &:active {
+    border: 1px solid $color-primary--5;
+    background: $color-primary--4;
+  }
+
+  &:disabled {
+    border: 1px solid $color-primary--4;
+    background: $color-primary--3;
+  } 
+
+}
+
+.loader {
+  width: 20px;
+  height: inherit;
 }
