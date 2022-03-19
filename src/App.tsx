@@ -7,7 +7,7 @@ import {
 import Home from 'pages/home/Home'
 import useUser from 'helpers/useUser'
 import { routes } from 'routes'
-import AdminPanel from 'pages/admin-panel/AdminPane';
+import AdminPanel from 'pages/admin-panel/AdminPanel';
 
 import './asset/scss/typography.scss'
 import './asset/scss/fonts.scss'

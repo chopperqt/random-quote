@@ -3,7 +3,7 @@ import React from 'react'
 import Modal from 'components/modal'
 import Tabs, { TabItem } from 'components/tabs'
 import useModalAdd from './hooks/useModalAdd'
-import Input from 'components/Input/Input'
+import Input from 'components/input'
 import { postQuote } from 'utils/quotes'
 import AdminPanelAdd from './admin-panel-add/AdminPanelAdd'
 

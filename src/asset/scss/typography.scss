@@ -7,16 +7,17 @@ $font-size--sm: 14px;
 $font-size--md: 16px;
 $font-size--ls: 18px;
 
+
+.heading--xs {
+  font-size: $font-size--xs;
+}
+
 .heading--sm {
   font-size: $font-size--sm;
 }
 
 .heading--md {
   font-size: $font-size--md;
-}
-
-.heading--xs {
-  font-size: $font-size--xs;
 }
 
 .heading--ls {

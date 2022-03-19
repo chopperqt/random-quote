@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm, SubmitHandler } from 'react-hook-form'
 
 
-import Input from "components/Input/Input"
+import Input from "components/input"
 import { postQuote } from 'utils/quotes'
 import Selector, { IOption } from "components/selector/Selector";
 import Button from 'components/button'
@@ -71,10 +71,8 @@ const AdminPanelAdd = () => {
         {...register("exampleRequited", { required: true })}
         label={QUOTE_TEXT}
         className={styles.input}
+        error={errors.exampleRequited && 'This field is Required'}
       />
-      {errors.exampleRequited && (
-        <span>This field is required!</span>
-      )}
       <Button type="submit">{CREATE_TEXT}</Button>
     </form>
   )
