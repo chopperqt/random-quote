@@ -52,7 +52,7 @@ const Tabs = ({
           return (
             <div
               className={cx(styles.tab, {
-                'tab--active': actualTab,
+                'tab--active text--bold': actualTab,
               })}
               onClick={() => handleClickTab(key)}
               key={key}

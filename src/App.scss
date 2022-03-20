@@ -6,6 +6,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: $font-secondary;
+  outline: none;
 }
 
 body {
@@ -15,4 +16,23 @@ body {
 h1,h2,h3,h4,h5,p {
   margin: 0;
   padding: 0;
+}
+
+.container {
+  width: 1200px;
+}
+
+.notification {
+  z-index: 22;
+  position: fixed;
+  width: 340px;
+  height: 400px;
+  max-height: 300px;
+  top: 0;
+  right: 0;
+  padding-right: 40px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  justify-content: flex-end;
 }

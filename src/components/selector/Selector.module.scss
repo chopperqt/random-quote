@@ -16,7 +16,7 @@
 
 .input {
   padding: 10px 36px 10px 10px;
-  border: 1px solid $text-color-primary--500;
+  border: 1px solid $color-secondary--4;
   border-radius: $border-radius--small; 
   width: 100%;
 }
@@ -34,7 +34,8 @@
   height: 100%;
 
   :global(.icon-svg) {
-    width: 24px;
+    fill: $color-secondary--6;
+    width: 18px;
   }
 }
 
@@ -46,7 +47,7 @@
   padding: 10px;
   border-radius: $border-radius--small;
   background-color: $color-white--500;
-  border: 1px solid $text-color-primary--500;
+  border: 1px solid $color-secondary--4;
 }
 
 .value {

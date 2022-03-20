@@ -12,7 +12,6 @@ export interface IButton extends React.ComponentProps<'button'> {
   className?: string
   loading?: boolean
   children?: JSX.Element | string
-
 }
 
 const Button = ({
@@ -31,7 +30,7 @@ const Button = ({
     <button
       {...props}
       disabled={props.disabled || hasLoaderVisible}
-      className={cx(styles.button, 'heading--ls', className)}
+      className={cx(styles.button, 'heading--md', className)}
     >
       {hasLoaderVisible && (
         <img

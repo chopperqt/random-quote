@@ -63,7 +63,17 @@ export const getRandomQuote = async () => {
   return modifyData
 }
 
-export const postQuote = async (text: string, time: string, author: number) => {
+interface IPostQuote {
+  text: string
+  time: string
+  author: number
+}
+
+export const postQuote = async ({
+  text,
+  time,
+  author,
+}: IPostQuote) => {
   let createQuote = await supabase
     .from(Tables.quotes)
     .insert({ text, data: time })

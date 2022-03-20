@@ -1,0 +1,64 @@
+@import 'asset/scss/common';
+@import 'asset/scss/colors';
+@import 'asset/scss/mixin';
+
+.notification {
+  width: 100%;
+  padding: 10px;
+  border-radius: $border-radius--small;
+  color: $color-white--500;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  transform: translate(400px, 0);
+  
+  z-index: 25;
+
+  &:global(.notification-success) {
+    background: $color-success--4;
+  }
+
+  &:global(.notification-error) {
+    background: $color-warning--4;
+  }
+
+  &:global(.notification-show) {
+    animation: .5s ease-in-out 0s both  notification-in;
+  }
+
+  &:global(.notification-hide) {
+    animation: .5s ease-in-out 0s both  notification-out;
+  }
+}
+
+.button {
+  @include reset-button;
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  margin-top: 3px;
+
+  :global(.icon-svg) {
+    width: 16px;
+    height: 16px;
+    fill: $color-white--500;
+  }
+}
+
+@keyframes notification-in {
+  0% {
+    transform: translate(400px, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes notification-out {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(400px, 0);
+  }
+}

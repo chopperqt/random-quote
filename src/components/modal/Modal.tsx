@@ -26,13 +26,14 @@ const Modal = ({
           <div className={cx(styles.title, "heading--ls text--bold")}>{title}</div>
         )}
         {children}
+        <button
+          onClick={onClose}
+          className={styles.button}
+        >
+          <Icon icon={IconList.cross} />
+        </button>
       </div>
-      <button
-        onClick={onClose}
-        className={styles.button}
-      >
-        <Icon icon={IconList.cross} />
-      </button>
+
     </div >
   )
 }

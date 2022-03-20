@@ -9,32 +9,31 @@ interface IInput extends React.ComponentProps<'input'> {
   label?: string
   error?: string
 }
-const Input = ({
+const Input = React.forwardRef(({
   className,
   fullWidth,
   label,
   error,
   ...props
-}: IInput) => {
-  return (
-    <div className={styles.layout}>
-      {label && (
-        <label className={cx(styles.label, {
-          'label--error': !!error,
-        })}>{label}</label>
-      )}
-      <input
-        className={cx(styles.input, className, {
-          'input--full': fullWidth,
-          'input--error': !!error,
-        })}
-        {...props}
-      />
-      {error && (
-        <span className={cx('heading--sm', styles.error)}>{error}</span>
-      )}
-    </div>
-  )
-}
+}: IInput, ref: any) => (
+  <div className={styles.layout}>
+    {label && (
+      <label className={cx(styles.label, {
+        'label--error': !!error,
+      })}>{label}</label>
+    )}
+    <input
+      className={cx(styles.input, className, {
+        'input--full': fullWidth,
+        'input--error': !!error,
+      })}
+      ref={ref}
+      {...props}
+    />
+    {error && (
+      <span className={cx('heading--sm', styles.error)}>{error}</span>
+    )}
+  </div>
+))
 
 export default Input

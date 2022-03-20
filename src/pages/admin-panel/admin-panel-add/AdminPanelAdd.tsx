@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from 'react-hook-form'
 
-
 import Input from "components/input"
 import { postQuote } from 'utils/quotes'
 import Selector, { IOption } from "components/selector/Selector";
 import Button from 'components/button'
+import { notificationMethods } from 'services'
 
 import styles from './AdminPanelAdd.module.scss'
+import { useDispatch } from "react-redux";
 
 const QUOTE_TEXT = 'Цитата'
 const DATA_TEXT = 'Дата'
 const AUTHOR_TEXT = 'Автор'
 const CREATE_TEXT = 'Создать'
+const QUOTE_PLACEHOLDER = 'Мужчины любят глазами, а девушки ушами'
+const DATA_PLACEHOLDER = '01.01.1999'
 
 const MOCK_DATA = [
   {
@@ -26,13 +29,12 @@ const MOCK_DATA = [
 ]
 
 type Inputs = {
-  example: string,
-  exampleRequited: string
+  date: string,
+  quote: string
 }
 
 const AdminPanelAdd = () => {
-  const [date, setDate] = useState<string>('')
-  const [text, setText] = useState<string>('')
+  const dispatch = useDispatch()
   const [option, setOption] = useState<IOption>({ key: '', label: '' })
   const {
     register,
@@ -42,14 +44,17 @@ const AdminPanelAdd = () => {
       errors,
     },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = data => console.log(data)
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    postQuote({
+      text: data.quote,
+      time: data.date,
+      author: +option.key
+    })
 
-
-  const handleSend = (e: React.FormEvent<HTMLFormElement>) => {
-    postQuote(text, date, +option.key)
-
-    e.preventDefault()
+    dispatch(notificationMethods.createNotification('Учпешно', 'SUCCESS'))
   }
+
+  console.log(watch("date"))
 
   return (
     <form
@@ -63,15 +68,18 @@ const AdminPanelAdd = () => {
         onChange={setOption}
       />
       <Input
-        {...register("example")}
         label={DATA_TEXT}
         className={styles.input}
+        error={errors.date && 'This field is Requited'}
+        placeholder={DATA_PLACEHOLDER}
+        {...(register("date", { required: true })) as any}
       />
       <Input
-        {...register("exampleRequited", { required: true })}
+        {...register("quote", { required: true })}
         label={QUOTE_TEXT}
         className={styles.input}
-        error={errors.exampleRequited && 'This field is Required'}
+        error={errors.quote && 'This field is Required'}
+        placeholder={QUOTE_PLACEHOLDER}
       />
       <Button type="submit">{CREATE_TEXT}</Button>
     </form>
