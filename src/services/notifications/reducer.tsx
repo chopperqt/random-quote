@@ -8,7 +8,8 @@ const initialState: INotificationsStore = {
 
 const {
   CREATE_NOTIFICATION,
-  DELETE_NOTIFICATION
+  DELETE_NOTIFICATION,
+  CREATE_LOADING,
 } = actions
 
 export interface INotificationsStore {
@@ -38,6 +39,15 @@ const notificationsStore = (
     payload: any
   }) => {
   switch (type) {
+    case CREATE_LOADING: {
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
+          [payload.name]: payload.status
+        }
+      }
+    }
     case CREATE_NOTIFICATION: {
       return {
         ...state,

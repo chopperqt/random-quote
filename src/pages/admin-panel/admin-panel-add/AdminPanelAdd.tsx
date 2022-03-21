@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { useSelector } from 'react-redux'
 
 import Input from "components/input"
 import { postQuote } from 'utils/quotes'
 import Selector, { IOption } from "components/selector/Selector";
 import Button from 'components/button'
-import { notificationMethods } from 'services'
+import { IStore } from 'services'
 
 import styles from './AdminPanelAdd.module.scss'
-import { useDispatch } from "react-redux";
 
 const QUOTE_TEXT = 'Цитата'
 const DATA_TEXT = 'Дата'
@@ -33,28 +33,40 @@ type Inputs = {
   quote: string
 }
 
-const AdminPanelAdd = () => {
-  const dispatch = useDispatch()
+interface IAdminPanelAdd {
+  onClose?: () => void
+}
+const AdminPanelAdd = ({
+  onClose = () => { },
+}: IAdminPanelAdd) => {
+  const postQuoteStatus = useSelector((store: IStore) => store.notificationsStore.loading)
+  const hasLoading = postQuoteStatus.postQuote === 'PENDING'
   const [option, setOption] = useState<IOption>({ key: '', label: '' })
   const {
     register,
     handleSubmit,
     watch,
+    resetField,
     formState: {
       errors,
     },
   } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    postQuote({
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const response = await postQuote({
       text: data.quote,
       time: data.date,
       author: +option.key
     })
 
-    dispatch(notificationMethods.createNotification('Учпешно', 'SUCCESS'))
-  }
+    if (response) {
+      resetField('date')
+      resetField('quote')
 
-  console.log(watch("date"))
+      onClose()
+    }
+
+
+  }
 
   return (
     <form
@@ -81,7 +93,10 @@ const AdminPanelAdd = () => {
         error={errors.quote && 'This field is Required'}
         placeholder={QUOTE_PLACEHOLDER}
       />
-      <Button type="submit">{CREATE_TEXT}</Button>
+      <Button
+        loading={hasLoading}
+        type="submit"
+      >{CREATE_TEXT}</Button>
     </form>
   )
 }

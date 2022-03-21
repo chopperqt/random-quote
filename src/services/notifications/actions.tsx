@@ -1,7 +1,7 @@
 import Store from 'services'
 import { v4 as uuid } from 'uuid'
 
-import { INotification } from './reducer'
+import { INotification, TLoading } from './reducer'
 import { TNotification } from "components/notification/Notification"
 
 const DELAY_AFTER_DELETE = 3000
@@ -9,9 +9,19 @@ const DELAY_AFTER_DELETE = 3000
 export const actions = {
   CREATE_NOTIFICATION: 'CREATE_NOTIFICATION',
   DELETE_NOTIFICATION: 'DELETE_NOTIFICATION',
+  CREATE_LOADING: 'LOADING'
 }
 
 export const methods = {
+  loadingRequest: (name: string, status: TLoading) => {
+    return {
+      type: actions.CREATE_LOADING,
+      payload: {
+        name,
+        status,
+      }
+    }
+  },
   addNotification: ({ text, type, id }: INotification) => {
     return {
       type: actions.CREATE_NOTIFICATION,
@@ -29,6 +39,7 @@ export const methods = {
     }
   },
   createNotification,
+
 }
 
 function createNotification(text: string, type: TNotification) {

@@ -1,6 +1,7 @@
 import supabase from "./client";
 
-import Store, { quoteMethods } from 'services'
+import Store, { quoteMethods, notificationMethods } from 'services'
+import { SuccessMessages } from 'helpers/successMessages'
 import { generateRandomNumber } from 'helpers/random'
 import {
   Tables
@@ -74,12 +75,20 @@ export const postQuote = async ({
   time,
   author,
 }: IPostQuote) => {
+  Store.dispatch(notificationMethods.loadingRequest('postQuote', 'PENDING'))
+
   let createQuote = await supabase
     .from(Tables.quotes)
     .insert({ text, data: time })
     .single();
 
   if (createQuote.error) {
+    const { message } = createQuote.error
+
+    Store.dispatch(notificationMethods.loadingRequest('postQuote', 'FAILURE'))
+
+    notificationMethods.createNotification(message, 'ERROR')
+
     return
   }
 
@@ -93,8 +102,18 @@ export const postQuote = async ({
       .single();
 
     if (createAuthorQuotes.error) {
-      return createAuthorQuotes.error
+      const { message } = createAuthorQuotes.error
+
+      Store.dispatch(notificationMethods.loadingRequest('postQuote', 'FAILURE'))
+
+      notificationMethods.createNotification(message, 'ERROR')
+
+      return
     }
+
+    Store.dispatch(notificationMethods.loadingRequest('postQuote', 'SUCCESS'))
+
+    notificationMethods.createNotification(SuccessMessages.createSuccess, 'SUCCESS')
 
     return {
       multiLine: createAuthorQuotes.data,

@@ -34,7 +34,9 @@ const AdminPanel = () => {
           tabs={MOCK_TABS}
         >
           <TabItem key={MOCK_TABS[0].key}>
-            <AdminPanelQuotes onOpenAddModal={handleOpen} />
+            <AdminPanelQuotes
+              onOpenAddModal={handleOpen}
+            />
           </TabItem>
           <TabItem key={MOCK_TABS[1].key}>
             <div>
@@ -47,7 +49,9 @@ const AdminPanel = () => {
           onClose={handleClose}
           open={open}
         >
-          <AdminPanelAdd />
+          <AdminPanelAdd
+            onClose={handleClose}
+          />
         </Modal>
 
       </div>
