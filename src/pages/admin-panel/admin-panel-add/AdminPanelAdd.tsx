@@ -6,7 +6,9 @@ import Input from "components/input"
 import { postQuote } from 'utils/quotes'
 import Selector, { IOption } from "components/selector/Selector";
 import Button from 'components/button'
+
 import { IStore } from 'services'
+import { IAdminPanelAdd, IAdminPanelAddField } from '../constants'
 
 import styles from './AdminPanelAdd.module.scss'
 
@@ -28,14 +30,6 @@ const MOCK_DATA = [
   }
 ]
 
-type Inputs = {
-  date: string,
-  quote: string
-}
-
-interface IAdminPanelAdd {
-  onClose?: () => void
-}
 const AdminPanelAdd = ({
   onClose = () => { },
 }: IAdminPanelAdd) => {
@@ -50,8 +44,8 @@ const AdminPanelAdd = ({
     formState: {
       errors,
     },
-  } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  } = useForm<IAdminPanelAddField>();
+  const onSubmit: SubmitHandler<IAdminPanelAddField> = async (data) => {
     const response = await postQuote({
       text: data.quote,
       time: data.date,
@@ -64,8 +58,6 @@ const AdminPanelAdd = ({
 
       onClose()
     }
-
-
   }
 
   return (
