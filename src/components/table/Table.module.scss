@@ -1,0 +1,22 @@
+@import 'asset/scss/colors';
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.head {
+  padding: 5px;
+  background: $color-white--500;
+  border-left: 1px solid $color-secondary--5;
+  
+  &:first-child {
+    border-left: none;
+  }
+}
+
+.row {
+  padding: 5px 10px;
+  background: $color-white--500;
+  border-top: 1px solid $color-secondary--5;
+}

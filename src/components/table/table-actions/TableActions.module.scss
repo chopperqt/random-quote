@@ -1,0 +1,13 @@
+@import 'asset/scss/colors';
+
+.wrap {
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+}
+
+.button {
+  :global(.icon-svg) { 
+    fill: $color-white--500;
+  }
+}

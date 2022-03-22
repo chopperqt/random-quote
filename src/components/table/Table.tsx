@@ -1,7 +1,9 @@
 import React from 'react'
 import { useTable } from 'react-table'
 
-import { ITable } from './constants'
+import { ITable } from './'
+
+import styles from './Table.module.scss'
 
 const Table = ({
   columns,
@@ -15,21 +17,18 @@ const Table = ({
     prepareRow,
   } = useTable({ columns, data })
 
-
   return (
-    <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
+    <table
+      {...getTableProps()}
+      className={styles.table}
+    >
       <thead>
         {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map(column => (
               <th
                 {...column.getHeaderProps()}
-                style={{
-                  borderBottom: 'solid 3px red',
-                  background: 'aliceblue',
-                  color: 'black',
-                  fontWeight: 'bold',
-                }}
+                className={styles.head}
               >
                 {column.render('Header')}
               </th>
@@ -46,11 +45,7 @@ const Table = ({
                 return (
                   <td
                     {...cell.getCellProps()}
-                    style={{
-                      padding: '10px',
-                      border: 'solid 1px gray',
-                      background: 'papayawhip',
-                    }}
+                    className={styles.row}
                   >
                     {cell.render('Cell')}
                   </td>
