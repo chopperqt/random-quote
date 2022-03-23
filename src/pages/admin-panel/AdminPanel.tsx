@@ -1,4 +1,5 @@
 import React from 'react'
+import cx from 'classnames'
 
 import Modal from 'components/modal'
 import Tabs, { TabItem } from 'components/tabs'
@@ -29,7 +30,7 @@ const AdminPanel = () => {
 
   return (
     <div className={styles.adminPanel}>
-      <div className="container">
+      <div className={cx("container", styles.wrap)}>
         <Tabs
           tabs={MOCK_TABS}
         >

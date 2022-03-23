@@ -27,6 +27,7 @@ const TableAction = ({
     <Button
       className={styles.button}
       onClick={onDelete}
+      color="warning"
     >
       <>
         <Icon icon={IconList.trash} />

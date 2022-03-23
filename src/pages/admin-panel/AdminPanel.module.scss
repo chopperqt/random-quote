@@ -1,5 +1,14 @@
+@import 'asset/scss/common';
+@import 'asset/scss/colors';
+
 .adminPanel {
   padding: 60px 0 0;
   display: flex;
   justify-content: center;
+}
+
+.wrap {
+  padding: 15px;
+  border-radius: $border-radius--large;
+  background-color: $color-white--500;
 }

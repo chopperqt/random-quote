@@ -1,5 +1,20 @@
+@import 'asset/scss/colors';
+
 .test {
   width: 900px;
   height: 900px;
   background: #000;
+}
+
+.layout {
+  display: grid;
+  row-gap: 15px;
+}
+
+.button { 
+  width: fit-content;
+
+  :global(.icon-svg) {
+    fill: $color-white--500;
+  }
 }

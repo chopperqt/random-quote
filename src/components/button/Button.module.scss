@@ -7,31 +7,53 @@
   @include reset-button;
   padding: 10px;
   box-sizing: border-box;
-  border: 1px solid $color-primary--6;
   border-radius: $border-radius--small;
   transition: $transition--short;
-  background: $color-primary--5;
   color: $color-white--500;
   display: flex;
   align-items: center;
   justify-content: center;
   column-gap: 10px;
 
-  &:hover {
-    background: $color-primary--6;
-   }
+  &:global(.button-color--primary) {
+    border: 1px solid $color-primary--6;
+    background: $color-primary--5;
 
-  &:focus, 
-  &:active {
-    border: 1px solid $color-primary--5;
-    background: $color-primary--4;
+    &:hover {
+      background: $color-primary--6;
+    }
+
+    &:focus, 
+    &:active {
+      border: 1px solid $color-primary--8;
+      background: $color-primary--7;
+    }
+
+    &:disabled {
+      border: 1px solid $color-primary--4;
+      background: $color-primary--3;
+    } 
   }
 
-  &:disabled {
-    border: 1px solid $color-primary--4;
-    background: $color-primary--3;
-  } 
+  &:global(.button-color--warning) {
+    border: 1px solid $color-warning--6;
+    background: $color-warning--5;
 
+    &:hover {
+      background: $color-warning--6;
+    }
+
+    &:focus, 
+    &:active {
+      border: 1px solid $color-warning--8;
+      background: $color-warning--7;
+    }
+
+    &:disabled {
+      border: 1px solid $color-warning--4;
+      background: $color-warning--3;
+    } 
+  }
 }
 
 .loader {

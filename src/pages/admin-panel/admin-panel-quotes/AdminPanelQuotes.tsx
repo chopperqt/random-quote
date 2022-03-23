@@ -3,6 +3,7 @@ import React, { useMemo } from 'react'
 import Button from 'components/button'
 import Spin from 'components/spin'
 import Table, { TableAction } from 'components/table'
+import Icon, { IconList } from 'components/icon'
 
 import { IAdminPanelQuotes } from '../constants'
 
@@ -14,7 +15,7 @@ const AdminPanelQuotes = ({
   onOpenAddModal,
 }: IAdminPanelQuotes) => {
 
-  const data = React.useMemo(
+  const data = useMemo(
     () => [
       {
         id: '23',
@@ -24,7 +25,7 @@ const AdminPanelQuotes = ({
             onDelete={() => { }}
             onEdit={() => { }}
           />
-        )
+        ),
       },
       {
         id: '43',
@@ -38,7 +39,7 @@ const AdminPanelQuotes = ({
     []
   )
 
-  const columns = React.useMemo(
+  const columns = useMemo(
     () => [
       {
         Header: 'ID',
@@ -50,16 +51,23 @@ const AdminPanelQuotes = ({
       },
       {
         Header: 'Действия',
-        accessor: 'actions'
+        accessor: 'actions',
       }
     ],
     []
   )
 
   return (
-    <div>
-      <Button onClick={onOpenAddModal}>{BUTTON_TEXT}</Button>
-      Table 1
+    <div className={styles.layout}>
+      <Button
+        onClick={onOpenAddModal}
+        className={styles.button}
+      >
+        <>
+          <Icon icon={IconList.save} />
+          {BUTTON_TEXT}
+        </>
+      </Button>
       <Spin loading={false}>
         <Table
           data={data}
