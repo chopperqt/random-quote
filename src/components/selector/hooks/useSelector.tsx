@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 
 import Icon, { IconList } from 'components/icon'
-import { IOption } from '../Selector'
+import { IOption } from '../'
 
 export interface IUseSelector {
   inputRef: HTMLInputElement | null

@@ -1,26 +1,14 @@
 import React, { useRef } from 'react'
 import cx from 'classnames'
 
-import Icon, { IconList } from 'components/icon'
 import useSelector from './hooks/useSelector'
+
+import {
+  ISelector,
+} from './'
 
 import styles from './Selector.module.scss'
 
-export interface IOption {
-  key: string | number
-  label: string
-}
-
-export interface ISelector {
-  options: IOption[]
-  className?: string
-  classNameInput?: string
-  classNameOptions?: string
-  fullWidth?: boolean
-  label?: string
-  initialValue?: IOption
-  onChange?: (option: IOption) => void
-}
 const Selector = ({
   options,
   className = '',
@@ -66,7 +54,10 @@ const Selector = ({
         </button>
         {open && (
           <div className={cx(styles.options, classNameOptions)}>
-            {options.map(({ key, label }) => (
+            {options.map(({
+              key,
+              label
+            }) => (
               <div
                 key={key}
                 className={styles.value}

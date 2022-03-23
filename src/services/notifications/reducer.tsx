@@ -58,8 +58,6 @@ const notificationsStore = (
       }
     }
     case DELETE_NOTIFICATION: {
-      console.log('Вызываешься ? ')
-
       return {
         ...state,
         notification: state.notifications.filter(({ id }) => id !== payload)

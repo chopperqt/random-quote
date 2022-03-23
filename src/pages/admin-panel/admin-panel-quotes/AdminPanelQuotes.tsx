@@ -1,10 +1,13 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
+import { useSelector } from 'react-redux'
 
 import Button from 'components/button'
 import Spin from 'components/spin'
 import Table, { TableAction } from 'components/table'
 import Icon, { IconList } from 'components/icon'
+import { getQuotes } from 'utils/quotes'
 
+import { IStore } from 'services'
 import { IAdminPanelQuotes } from '../constants'
 
 import styles from './AdminPanelQuotes.module.scss'
@@ -14,48 +17,48 @@ const BUTTON_TEXT = 'Создать цитату'
 const AdminPanelQuotes = ({
   onOpenAddModal,
 }: IAdminPanelQuotes) => {
-
-  const data = useMemo(
-    () => [
-      {
-        id: '23',
-        quote: 'Цитата 2',
-        actions: (
-          <TableAction
-            onDelete={() => { }}
-            onEdit={() => { }}
-          />
-        ),
-      },
-      {
-        id: '43',
-        quote: 'Цитата1',
-      },
-      {
-        id: '31',
-        quote: 'Цитата 3',
-      },
-    ],
-    []
-  )
+  const hasLoading = useSelector((store: IStore) => store.notificationsStore.loading?.getQuotes)
+  const quotes = useSelector((store: IStore) => store.quotesStore.quotes)
+  const modifyActionsQuotes = quotes.map((quote) => ({
+    ...quote,
+    actions: (
+      <TableAction
+        onDelete={() => { }}
+        onEdit={() => { }}
+      />
+    )
+  }))
 
   const columns = useMemo(
     () => [
       {
         Header: 'ID',
-        accessor: 'id',
+        accessor: 'id_quote',
       },
       {
-        Header: 'Цитата',
-        accessor: 'quote',
+        Header: 'Quote',
+        accessor: 'text',
+        width: 600,
       },
       {
-        Header: 'Действия',
+        Header: 'Date',
+        accessor: 'data',
+      },
+      {
+        Header: 'Create At',
+        accessor: 'created_at',
+      },
+      {
+        Header: 'Actions',
         accessor: 'actions',
       }
     ],
     []
   )
+
+  useEffect(() => {
+    getQuotes()
+  }, [])
 
   return (
     <div className={styles.layout}>
@@ -68,9 +71,9 @@ const AdminPanelQuotes = ({
           {BUTTON_TEXT}
         </>
       </Button>
-      <Spin loading={false}>
+      <Spin loading={hasLoading === 'PENDING'}>
         <Table
-          data={data}
+          data={modifyActionsQuotes}
           columns={columns}
         />
       </Spin>

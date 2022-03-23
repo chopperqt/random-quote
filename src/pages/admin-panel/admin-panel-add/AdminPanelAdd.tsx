@@ -1,14 +1,21 @@
 import React, { useState } from "react";
-import { useForm, SubmitHandler } from 'react-hook-form'
+import {
+  useForm,
+  SubmitHandler,
+  Controller,
+} from 'react-hook-form'
 import { useSelector } from 'react-redux'
 
 import Input from "components/input"
 import { postQuote } from 'utils/quotes'
-import Selector, { IOption } from "components/selector/Selector";
+import Selector, { IOption } from "components/selector/";
 import Button from 'components/button'
 
 import { IStore } from 'services'
-import { IAdminPanelAdd, IAdminPanelAddField } from '../constants'
+import {
+  IAdminPanelAdd,
+  IAdminPanelAddField
+} from '../constants'
 
 import styles from './AdminPanelAdd.module.scss'
 
@@ -35,12 +42,12 @@ const AdminPanelAdd = ({
 }: IAdminPanelAdd) => {
   const postQuoteStatus = useSelector((store: IStore) => store.notificationsStore.loading)
   const hasLoading = postQuoteStatus.postQuote === 'PENDING'
-  const [option, setOption] = useState<IOption>({ key: '', label: '' })
   const {
     register,
     handleSubmit,
     watch,
     resetField,
+    control,
     formState: {
       errors,
     },
@@ -49,7 +56,7 @@ const AdminPanelAdd = ({
     const response = await postQuote({
       text: data.quote,
       time: data.date,
-      author: +option.key
+      author: +data.author.key
     })
 
     if (response) {
@@ -65,11 +72,22 @@ const AdminPanelAdd = ({
       onSubmit={handleSubmit(onSubmit)}
       className={styles.form}
     >
-      <Selector
-        initialValue={MOCK_DATA[0]}
-        label={AUTHOR_TEXT}
-        options={MOCK_DATA}
-        onChange={setOption}
+      <Controller
+        control={control}
+        name="author"
+        render={({ field: {
+          onChange,
+          onBlur,
+          value,
+          ref,
+        } }) => (
+          <Selector
+            label={AUTHOR_TEXT}
+            options={MOCK_DATA}
+            onChange={onChange}
+            initialValue={MOCK_DATA[0]}
+          />
+        )}
       />
       <Input
         label={DATA_TEXT}

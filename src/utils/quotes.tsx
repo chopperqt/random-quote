@@ -8,14 +8,23 @@ import {
 } from './constants'
 
 export const getQuotes = async () => {
+  Store.dispatch(notificationMethods.loadingRequest('getQuotes', 'PENDING'))
+
   let { data, error } = await supabase
     .from(Tables.quotes)
     .select('*')
     .order("id_quote", { ascending: true })
 
-  if (error) console.log('error', error)
+  if (error) {
+    const { message } = error
 
-  return data
+    Store.dispatch(notificationMethods.loadingRequest('getQuotes', 'FAILURE'))
+
+    notificationMethods.createNotification(message, 'ERROR')
+  }
+
+  Store.dispatch(notificationMethods.loadingRequest('getQuotes', 'SUCCESS'))
+  Store.dispatch(quoteMethods.getQuotes(data))
 }
 
 export const getAuthorQuotes = async (id_author: string) => {

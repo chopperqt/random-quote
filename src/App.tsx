@@ -22,6 +22,7 @@ function App() {
     hasUser
   } = useUser()
   const notifications = useSelector((store: IStore) => store.notificationsStore.notifications)
+  const hasNotifications = notifications.length > 0
 
   return (
     <div className="App">
@@ -29,9 +30,16 @@ function App() {
         <Route path={routes.adminPanel} element={<AdminPanel />} />
         <Route path={routes.default} element={<Home />} />
       </Routes>
-      {!!notifications && (
+
+      {console.log('notifications:', notifications)}
+
+      {hasNotifications && (
         <div className="notification">
-          {notifications.map(({ text, id, type }) => (
+          {notifications.map(({
+            text,
+            id,
+            type
+          }) => (
             <Notification
               key={id}
               id={id}

@@ -16,7 +16,12 @@
 }
 
 .row {
+  border-left: 1px solid $color-secondary--5;
   padding: 5px 10px;
   background: $color-white--500;
   border-top: 1px solid $color-secondary--5;
+
+  &:first-child {
+    border-left: none;
+  }
 }

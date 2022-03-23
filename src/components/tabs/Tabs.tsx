@@ -39,8 +39,6 @@ const Tabs = ({
     setCurrentTab(key)
   }
 
-  console.log(children)
-
   const tabContent = children.find((tab: any) => +currentTab === +tab.key)
 
   return (
