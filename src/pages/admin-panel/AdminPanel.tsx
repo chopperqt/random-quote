@@ -4,7 +4,7 @@ import cx from 'classnames'
 import Modal from 'components/modal'
 import Tabs, { TabItem } from 'components/tabs'
 import useModalAdd from './hooks/useModalAdd'
-import AdminPanelAdd from './admin-panel-add/AdminPanelAdd'
+import AdminPanelAdd from './admin-panel-quotes/add/Add'
 import AdminPanelQuotes from './admin-panel-quotes/AdminPanelQuotes'
 
 import styles from './AdminPanel.module.scss'

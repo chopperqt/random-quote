@@ -19,8 +19,10 @@ const AdminPanelQuotes = ({
 }: IAdminPanelQuotes) => {
   const hasLoading = useSelector((store: IStore) => store.notificationsStore.loading?.getQuotes)
   const quotes = useSelector((store: IStore) => store.quotesStore.quotes)
+  console.log(quotes)
   const modifyActionsQuotes = quotes.map((quote) => ({
     ...quote,
+    author: quote?.author?.name || '',
     actions: (
       <TableAction
         onDelete={() => { }}
@@ -41,8 +43,8 @@ const AdminPanelQuotes = ({
         width: 600,
       },
       {
-        Header: 'Date',
-        accessor: 'data',
+        Header: 'Author',
+        accessor: 'author',
       },
       {
         Header: 'Create At',

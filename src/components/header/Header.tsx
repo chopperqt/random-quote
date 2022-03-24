@@ -1,6 +1,7 @@
 import React from 'react'
 
 import useUser from 'helpers/useUser'
+import Icon, { IconList } from 'components/icon'
 
 import styles from './Header.module.scss'
 
@@ -13,12 +14,20 @@ const Header = () => {
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        {hasUser && (
+        <button className={styles.button}>
+          <Icon icon={IconList.quote} />
+        </button>
+        <button className={styles.button}>
+          <Icon icon={IconList.author} />
+        </button>
+
+
+        {/* {hasUser && (
           <img src={user?.avatar_url} alt={user?.email} />
         )}
         {!hasUser && (
           <button>Войти</button>
-        )}
+        )} */}
       </div>
     </header>
   )

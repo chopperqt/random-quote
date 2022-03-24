@@ -8,16 +8,16 @@ import { useSelector } from 'react-redux'
 
 import Input from "components/input"
 import { postQuote } from 'utils/quotes'
-import Selector, { IOption } from "components/selector/";
+import Selector from "components/selector/";
 import Button from 'components/button'
 
 import { IStore } from 'services'
 import {
   IAdminPanelAdd,
   IAdminPanelAddField
-} from '../constants'
+} from '../../constants'
 
-import styles from './AdminPanelAdd.module.scss'
+import styles from './Add.module.scss'
 
 const QUOTE_TEXT = 'Цитата'
 const DATA_TEXT = 'Дата'
@@ -37,7 +37,7 @@ const MOCK_DATA = [
   }
 ]
 
-const AdminPanelAdd = ({
+const Add = ({
   onClose = () => { },
 }: IAdminPanelAdd) => {
   const postQuoteStatus = useSelector((store: IStore) => store.notificationsStore.loading)
@@ -111,4 +111,4 @@ const AdminPanelAdd = ({
   )
 }
 
-export default AdminPanelAdd
+export default Add

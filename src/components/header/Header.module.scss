@@ -1,14 +1,36 @@
+@import 'asset/scss/colors';
+@import 'asset/scss/mixin';
+@import 'asset/scss/common';
+
 .header {
-  width: 100%;
-  height: 60px;
+  width: 70px;
+  height: 100%;
   display: flex;
   justify-content: center;
-  border-bottom: 1px solid #000;
+  border-right: 1px solid $color-secondary--5;
 }
 
 .container {
+  width: 100%;
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  width: 1200px;
+  row-gap: 25px;
+}
+
+.button {
+  @include reset-button;
+  padding: 10px 0;
+  width: inherit;
+  transition: $transition--short;
+
+  &:hover {
+    background-color: $color-secondary--4;
+  }
+
+  :global(.icon-svg) {
+    width: 25px;
+    height: 25px;
+  }
 }

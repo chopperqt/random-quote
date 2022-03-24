@@ -7,13 +7,21 @@ import {
   Tables
 } from './constants'
 
+const LIMIT_PER_PAGE = 20
+
 export const getQuotes = async () => {
   Store.dispatch(notificationMethods.loadingRequest('getQuotes', 'PENDING'))
 
   let { data, error } = await supabase
     .from(Tables.quotes)
-    .select('*')
+    .select(`
+      *,
+      author:id_author (name)
+    `)
     .order("id_quote", { ascending: true })
+    .limit(LIMIT_PER_PAGE);
+
+  //      author:id_author (name)
 
   if (error) {
     const { message } = error
@@ -45,32 +53,31 @@ export const getAuthorQuotes = async (id_author: string) => {
 }
 
 export const getRandomQuote = async () => {
+  Store.dispatch(notificationMethods.loadingRequest('getRandomQuote', 'PENDING'))
+
   let { data, error } = await supabase
     .from(Tables.quotes)
     .select(`
       *,
-      author:authors(
-        id_author,
+      author:id_author(
         name
       )
     `)
-    .eq('id_quote', generateRandomNumber(1, 6))
+    .eq('id_quote', 1)
     .limit(1);
 
   if (error) {
-    return console.log(error)
+    const { message } = error
+
+    Store.dispatch(notificationMethods.loadingRequest('getRandomQuote', 'FAILURE'))
+
+    notificationMethods.createNotification(message, 'ERROR')
+
+    return
   }
 
-  const modifyData = {
-    ...data![0],
-    author: {
-      ...data![0].author[0]
-    }
-  }
-
-  Store.dispatch(quoteMethods.getRandomQuote(modifyData))
-
-  return modifyData
+  Store.dispatch(notificationMethods.loadingRequest('getRandomQuote', 'SUCCESS'))
+  Store.dispatch(quoteMethods.getRandomQuote(data))
 }
 
 interface IPostQuote {

@@ -19,12 +19,12 @@ interface IQuote {
   created_at: string,
   data: string,
   id_quote: number,
+  id_author: number,
   text: string,
   author: IAuthor
 }
 
 interface IAuthor {
-  id_author: number,
   name: string
 }
 
@@ -39,7 +39,7 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
     case GET_RANDOM_QUOTE: {
       return {
         ...state,
-        quote: payload,
+        quote: payload[0],
       }
     }
     default: {

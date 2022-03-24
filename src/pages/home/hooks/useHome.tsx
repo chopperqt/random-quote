@@ -6,14 +6,8 @@ import { getRandomQuote } from 'utils/quotes'
 
 const useHome = () => {
   const { text, data, author } = useSelector((store: IStore) => store.quotesStore.quote)
-
-  const hasLoading = useMemo(() => {
-    if (text) {
-      return false
-    }
-
-    return true
-  }, [text])
+  const loading = useSelector((store: IStore) => store.notificationsStore.loading)
+  const hasLoading = loading.getRandomQuote === 'PENDING'
 
   const handleChangeQuote = () => {
     getRandomQuote()
@@ -27,7 +21,7 @@ const useHome = () => {
     hasLoading,
     text,
     data,
-    author: author?.name || '',
+    author: author?.name,
     handleChangeQuote,
   }
 }
