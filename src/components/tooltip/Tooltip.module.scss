@@ -7,16 +7,50 @@
   height: inherit;
 }
 
-.tooltip {
+.tooltipWrap {
   overflow: visible;
-  border-radius: $border-radius--small;
-  padding: 5px 10px;
-  left: 1px;
-  background-color: $color-secondary--10;
-  color: $color-white--500;
+
   position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  
+  &:global(.tooltip-in) {
+    animation: $transition--short ease-in-out 0s both  tooltip-show;
+  }
 
   &:global(.tooltip--left) {
-    left: 105%;
+    padding-left: 5px;
+    left: 100%;
+  }
+}
+
+.tooltip {
+  padding: 5px 10px;
+  border-radius: $border-radius--small;
+  background-color: $color-secondary--10;
+  color: $color-white--500;
+}
+
+
+
+.tooltip-out {
+  animation: .5s ease-in-out 0s both tooltip-hide;
+}
+
+@keyframes tooltip-hide {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes tooltip-show {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }

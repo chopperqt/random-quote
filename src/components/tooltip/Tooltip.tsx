@@ -16,12 +16,12 @@ const Tooltip = ({
   const tooltipRef = useRef<HTMLDivElement>(null)
 
   const {
-    tooltipHeight
+    styleCenter,
   } = useTooltip({
-    tooltip: tooltipWrapRef.current,
+    position,
+    tooltipWrap: tooltipWrapRef.current,
+    tooltip: tooltipRef.current,
   })
-
-  console.log(tooltipHeight)
 
   return (
     <div
@@ -29,12 +29,17 @@ const Tooltip = ({
       className={cx(styles.wrap, className)}>
       {children}
       <div
+        style={{ top: `${styleCenter}px` }}
         ref={tooltipRef}
-        className={cx(styles.tooltip, `tooltip--${position}`)}
+        className={cx(styles.tooltipWrap, `tooltip--${position}`)}
       >
-        awdawdaw
+        <div
+          className={styles.tooltip}
+        >
+          Цитаты
+        </div>
       </div>
-    </div>
+    </div >
   );
 }
 
