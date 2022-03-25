@@ -2,21 +2,26 @@ import React from 'react'
 
 import useUser from 'helpers/useUser'
 import Icon, { IconList } from 'components/icon'
+import Tooltip from 'components/tooltip'
 
 import styles from './Header.module.scss'
 
 const Header = () => {
   const {
     hasUser,
-    user
+    user,
   } = useUser()
 
   return (
     <header className={styles.header}>
       <div className={styles.container}>
-        <button className={styles.button}>
-          <Icon icon={IconList.quote} />
-        </button>
+        <Tooltip>
+          <button className={styles.button}>
+            <Icon icon={IconList.quote} />
+          </button>
+        </Tooltip>
+
+
         <button className={styles.button}>
           <Icon icon={IconList.author} />
         </button>
