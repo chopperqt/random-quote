@@ -1,5 +1,6 @@
 @import 'asset/scss/mixin';
 @import 'asset/scss/common';
+@import 'asset/scss/colors';
 
 .home {
   width: 100%;
@@ -36,5 +37,24 @@
   :global(.icon-svg) {
     width: 30px;
     height: 30px;
+  }
+}
+
+.footer {
+  display: grid;
+  row-gap: 5px;
+  position: absolute;
+  bottom: 40px;
+  justify-items: center;
+
+  :global(.icon-svg) {
+    width: 30px;
+    height: 30px;
+    fill: $color-secondary--7;
+    transition: $transition--short;
+
+    &:hover {
+      fill: $color-primary--5;
+    }
   }
 }

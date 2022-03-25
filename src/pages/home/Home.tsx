@@ -7,6 +7,8 @@ import Header from 'components/header'
 
 import styles from './Home.module.scss'
 
+const FOOTER_TEXT = 'Create with ❤️ by Chopper'
+
 const Home = () => {
   const {
     hasLoading,
@@ -32,6 +34,16 @@ const Home = () => {
         >
           <Icon icon={IconList.repeat} />
         </button>
+        <div className={styles.footer}>
+          <div>{FOOTER_TEXT}</div>
+          <a
+            href="https://github.com/chopperqt"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Icon icon={IconList.github} />
+          </a>
+        </div>
       </div>
     </div>
   )
