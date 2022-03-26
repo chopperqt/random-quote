@@ -15,7 +15,7 @@ export interface IQuotesStore {
   quotes: IQuote[]
 }
 
-interface IQuote {
+export interface IQuote {
   created_at: string,
   data: string,
   id_quote: number,
@@ -26,6 +26,7 @@ interface IQuote {
 
 interface IAuthor {
   name: string
+  path: string
 }
 
 const quotesStore = (state = initialState, { type, payload }: { type: string, payload: any }) => {

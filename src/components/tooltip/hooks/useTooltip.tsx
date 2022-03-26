@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useMemo } from 'react'
+import { createImportSpecifier } from 'typescript'
 
 import { TTooltipPosition } from '../'
 interface IUseTooltip {
@@ -12,23 +13,36 @@ const useTooltip = ({
   tooltipWrap,
   position,
 }: IUseTooltip) => {
-  const tooltipHeight = tooltip?.clientHeight || 0
-  const tooltipWrapHeight = tooltipWrap?.clientHeight || 0
-  const tooltipWidth = tooltip?.clientWidth || 0
-  const tooltipWrapWidth = tooltipWrap?.clientWidth || 0
+  const tooltipSize = useMemo(() => {
+    if (tooltip) {
+      return {
+        width: tooltip.clientWidth,
+        height: tooltip.clientHeight,
+      }
+    }
 
-  let styleCenter = (tooltipWrapHeight - tooltipHeight) / 2
+    return {
+      width: 0,
+      height: 0,
+    }
+  }, [tooltip])
 
-  const handleShowTooltip = () => {
-    tooltip?.classList.add('tooltip-in')
-  }
+  const tooltipWrapSize = useMemo(() => {
+    if (tooltipWrap) {
+      return {
+        width: tooltipWrap.clientWidth,
+        height: tooltipWrap.clientHeight,
+      }
+    }
 
-  const handleHideTooltip = () => {
-    tooltip?.classList.remove('tooltip-in')
-  }
+    return {
+      width: 0,
+      height: 0,
+    }
+  }, [tooltipWrap])
 
-  tooltipWrap?.addEventListener('mouseenter', handleShowTooltip)
-  tooltipWrap?.addEventListener('mouseleave', handleHideTooltip)
+
+  let styleCenter = (tooltipWrapSize.height - tooltipSize.height) / 2
 
   return {
     styleCenter,

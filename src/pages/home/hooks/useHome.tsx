@@ -4,8 +4,9 @@ import { useSelector } from 'react-redux'
 import { IStore } from 'services'
 import { getRandomQuote } from 'utils/quotes'
 
+const TIMER_REFRESH = 60000
+
 const useHome = () => {
-  const { text, data, author } = useSelector((store: IStore) => store.quotesStore.quote)
   const loading = useSelector((store: IStore) => store.notificationsStore.loading)
   const hasLoading = loading.getRandomQuote === 'PENDING'
 
@@ -15,13 +16,14 @@ const useHome = () => {
 
   useEffect(() => {
     getRandomQuote()
+
+    setInterval(() => {
+      getRandomQuote()
+    }, TIMER_REFRESH)
   }, [])
 
   return {
     hasLoading,
-    text,
-    data,
-    author: author?.name,
     handleChangeQuote,
   }
 }

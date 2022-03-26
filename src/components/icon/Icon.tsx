@@ -3,16 +3,9 @@ import cx from 'classnames'
 
 import styles from './Icon.module.scss'
 
+import { IIcon } from './'
+
 const DEFAULT_VIEWPORT = '0 0 25 25'
-
-interface IIcon {
-  icon: IIconItem
-}
-
-interface IIconItem {
-  icon: JSX.Element
-  viewport?: string
-}
 
 const Icon = ({
   icon

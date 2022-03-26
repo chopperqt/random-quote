@@ -1,9 +1,10 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 import Quote from 'components/quote'
 import useHome from './hooks/useHome'
 import Icon, { IconList } from 'components/icon'
-import Header from 'components/header'
+import { IStore } from 'services'
 
 import styles from './Home.module.scss'
 
@@ -12,28 +13,17 @@ const FOOTER_TEXT = 'Create with ❤️ by Chopper'
 const Home = () => {
   const {
     hasLoading,
-    text,
-    data,
-    author,
     handleChangeQuote,
   } = useHome()
+  const quote = useSelector((store: IStore) => store.quotesStore.quote)
 
   return (
     <div className={styles.home}>
-      <Header />
       <div className={styles.quote}>
         <Quote
           loading={hasLoading}
-          text={text}
-          author={author}
-          data={data}
+          quote={quote}
         />
-        <button
-          onClick={handleChangeQuote}
-          className={styles.button}
-        >
-          <Icon icon={IconList.repeat} />
-        </button>
         <div className={styles.footer}>
           <div>{FOOTER_TEXT}</div>
           <a

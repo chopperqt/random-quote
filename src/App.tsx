@@ -8,9 +8,10 @@ import { IStore } from 'services';
 
 import Home from 'pages/home/Home'
 import useUser from 'helpers/useUser'
-import { routes } from 'routes'
+import { routes } from 'helpers/routes'
 import AdminPanel from 'pages/admin-panel/AdminPanel';
 import Notification from 'components/notification';
+import Header from 'components/header'
 
 import './asset/scss/typography.scss'
 import './asset/scss/fonts.scss'
@@ -26,13 +27,13 @@ function App() {
 
   return (
     <div className="App">
-      <Routes>
-        <Route path={routes.adminPanel} element={<AdminPanel />} />
-        <Route path={routes.default} element={<Home />} />
-      </Routes>
-
-      {console.log('notifications:', notifications)}
-
+      <div className="layout">
+        <Header />
+        <Routes>
+          <Route path={routes.adminPanel} element={<AdminPanel />} />
+          <Route path={routes.default} element={<Home />} />
+        </Routes>
+      </div>
       {hasNotifications && (
         <div className="notification">
           {notifications.map(({

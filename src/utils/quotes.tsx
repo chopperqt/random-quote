@@ -21,8 +21,6 @@ export const getQuotes = async () => {
     .order("id_quote", { ascending: true })
     .limit(LIMIT_PER_PAGE);
 
-  //      author:id_author (name)
-
   if (error) {
     const { message } = error
 
@@ -60,7 +58,8 @@ export const getRandomQuote = async () => {
     .select(`
       *,
       author:id_author(
-        name
+        name,
+        path
       )
     `)
     .eq('id_quote', 1)

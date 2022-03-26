@@ -1,0 +1,12 @@
+@import 'asset/scss/colors';
+@import 'asset/scss/common';
+
+.link {
+  text-decoration: none;
+  color: $color-primary--4;
+  transition: $transition--short;
+
+  &:hover {
+    color: $color-primary--5;
+  }
+}
