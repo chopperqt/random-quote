@@ -6,6 +6,7 @@ $font-size--xs: 12px;
 $font-size--sm: 14px;
 $font-size--md: 16px;
 $font-size--ls: 18px;
+$font-size--lx: 22px;
 
 
 .heading--xs {
@@ -22,6 +23,10 @@ $font-size--ls: 18px;
 
 .heading--ls {
   font-size: $font-size--ls;
+}
+
+.heading--lx {
+  font-size: $font-size--lx;
 }
 
 .text-style--italic {

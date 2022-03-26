@@ -2,6 +2,7 @@ import supabase from "./client";
 
 import Store, { quoteMethods, notificationMethods } from 'services'
 import { SuccessMessages } from 'helpers/successMessages'
+import moment from 'moment'
 import { generateRandomNumber } from 'helpers/random'
 import {
   Tables
@@ -77,6 +78,26 @@ export const getRandomQuote = async () => {
 
   Store.dispatch(notificationMethods.loadingRequest('getRandomQuote', 'SUCCESS'))
   Store.dispatch(quoteMethods.getRandomQuote(data))
+}
+
+export const getLastQuotes = async () => {
+  const { data, error } = await supabase
+    .from(Tables.quotes)
+    .select(`
+    *,
+    author:id_author(
+      path,
+      name
+    )
+  `)
+    .gt("created_at", ((new Date()).toISOString()).toLocaleString());
+
+  if (error) {
+    console.log(error)
+  }
+
+  console.log(data)
+
 }
 
 interface IPostQuote {

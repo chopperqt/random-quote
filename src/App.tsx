@@ -12,6 +12,7 @@ import { routes } from 'helpers/routes'
 import AdminPanel from 'pages/admin-panel/AdminPanel';
 import Notification from 'components/notification';
 import Header from 'components/header'
+import Quotes from 'pages/quotes/Quotes';
 
 import './asset/scss/typography.scss'
 import './asset/scss/fonts.scss'
@@ -32,6 +33,7 @@ function App() {
         <Routes>
           <Route path={routes.adminPanel} element={<AdminPanel />} />
           <Route path={routes.default} element={<Home />} />
+          <Route path={routes.quotes} element={<Quotes />} />
         </Routes>
       </div>
       {hasNotifications && (

@@ -3,18 +3,12 @@ import cx from 'classnames'
 import moment from 'moment'
 
 import { routes } from 'helpers/routes'
-import {
-  QuoteSkeletonAuthor,
-  QuoteSkeletonDate,
-  QuoteSkeletonText,
-} from './quote-skeleton/QuoteSkeleton'
-import { translateUrl } from 'helpers/translateUrl'
-import Timer from './timer/Timer'
-import { IQuote } from 'services/quotes/reducer'
+import QuoteSkeleton from './quote-skeleton/QuoteSkeleton'
+import Link from 'components/link'
 
 import styles from './Quote.module.scss'
 
-import Link from 'components/link'
+import { IQuote } from 'services/quotes/reducer'
 
 interface IQuoteProps {
   loading?: boolean
@@ -29,15 +23,7 @@ const Quote = ({
 
   if (!hasQuote || loading) {
     return (
-      <div className={styles.layout}>
-        <QuoteSkeletonText />
-        <div className={styles.info}>
-          <Fragment>
-            <QuoteSkeletonDate />
-            <QuoteSkeletonAuthor />
-          </Fragment>
-        </div>
-      </div>
+      <QuoteSkeleton />
     )
   }
 
