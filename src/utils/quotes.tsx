@@ -81,7 +81,9 @@ export const getRandomQuote = async () => {
 }
 
 export const getLastQuotes = async () => {
-  const { data, error } = await supabase
+  Store.dispatch(notificationMethods.loadingRequest('getLastQuotes', 'PENDING'))
+
+  const { data, error, count } = await supabase
     .from(Tables.quotes)
     .select(`
     *,
@@ -89,15 +91,19 @@ export const getLastQuotes = async () => {
       path,
       name
     )
-  `)
-    .gt("created_at", ((new Date()).toISOString()).toLocaleString());
+  `, { count: 'exact' })
+    .gt("created_at", moment().startOf('day').toISOString());
 
   if (error) {
-    console.log(error)
+    const { message } = error
+
+    Store.dispatch(notificationMethods.loadingRequest('getLastQuotes', 'FAILURE'))
+
+    notificationMethods.createNotification(message, 'ERROR')
   }
 
-  console.log(data)
-
+  Store.dispatch(notificationMethods.loadingRequest('getLastQuotes', 'SUCCESS'))
+  Store.dispatch(quoteMethods.getLastQuotes({ data, count }))
 }
 
 interface IPostQuote {

@@ -1,6 +1,7 @@
 export const LAST_UPDATE_QUOTES_TEXT = 'Последние добавленные цитаты'
 export const SHOW_MORE_TEXT = 'Показать ещё'
 export const ALL_QUOTES_TEXT = 'Все цитаты'
+export const LAST_UPDATE_QUOTES_DESCRIPTION_TEXT = 'было добавлено за последние 24 часа'
 
 export const MOCK_DATA = {
   author: {

@@ -3,16 +3,21 @@ import { actions } from './actions'
 const {
   GET_RANDOM_QUOTE,
   GET_QUOTES,
+  GET_LAST_QUOTES,
 } = actions
 
 const initialState = {
   quote: {},
   quotes: [],
+  lastQuotes: [],
+  lastQuotesCount: 0,
 }
 
 export interface IQuotesStore {
   quote: IQuote
   quotes: IQuote[]
+  lastQuotes: IQuote[]
+  lastQuotesCount: number
 }
 
 export interface IQuote {
@@ -35,6 +40,13 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
       return {
         ...state,
         quotes: payload,
+      }
+    }
+    case GET_LAST_QUOTES: {
+      return {
+        ...state,
+        lastQuotes: payload.data,
+        lastQuotesCount: payload.count
       }
     }
     case GET_RANDOM_QUOTE: {
