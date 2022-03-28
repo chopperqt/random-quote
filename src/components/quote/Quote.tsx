@@ -28,7 +28,7 @@ const Quote = ({
   }
 
   return (
-    <div className={styles.layout}>
+    <div className={cx(styles.layout, 'item-content')}>
       <div className={cx(styles.text, "heading--ls")}>
         {quote.text}
       </div>

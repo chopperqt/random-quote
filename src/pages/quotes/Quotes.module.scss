@@ -1,4 +1,5 @@
 @import 'asset/scss/colors';
+@import 'asset/scss/common';
 
 .layout {
   width: 100%;
@@ -52,4 +53,22 @@
 
 .description {
   color: $color-secondary--6;
+}
+
+.descriptionSkeleton {
+  height: 22px;
+  width: 320px;
+  background-color: $color-secondary--4;
+  border-radius: $border-radius--small;
+}
+
+.grid {
+  display: flex;
+  align-items: flex-start;
+  column-gap: 15px;
+}
+
+.gridColumn {
+  display: grid;
+  row-gap: 15px;
 }

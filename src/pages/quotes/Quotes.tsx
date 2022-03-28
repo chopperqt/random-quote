@@ -2,9 +2,9 @@ import React, { useEffect } from 'react'
 
 import Quote, { QuoteSkeleton } from 'components/quote'
 import Button from 'components/button'
-import { getLastQuotes } from 'utils/quotes'
 import SkeletonLastQuotes from './skeleton-last-quotes/SkeletonLastQuotes'
 import Empty from './empty/Empty'
+import useQuotes from './hooks/useQuotes'
 
 import styles from './Quotes.module.scss'
 
@@ -26,9 +26,12 @@ const Quotes = () => {
   const lastQuotesCount = useSelector((store: IStore) => store.quotesStore.lastQuotesCount)
   const loadingLastQuotes = useSelector((store: IStore) => store.notificationsStore.loading.getLastQuotes)
 
-  useEffect(() => {
-    getLastQuotes()
-  }, [])
+  const {
+    quotesFirstColumn,
+    quotesSecondColumn,
+  } = useQuotes({
+    quotes: lastQuotes,
+  })
 
   return (
     <div className={styles.layout}>
@@ -36,10 +39,14 @@ const Quotes = () => {
         <div className="heading--lx text--bold">
           {LAST_UPDATE_QUOTES_TEXT}
         </div>
-        {console.log('lastQuotes', lastQuotes)}
-        <div className={styles.description}>
-          12 {LAST_UPDATE_QUOTES_DESCRIPTION_TEXT}
-        </div>
+        {(!loadingLastQuotes || loadingLastQuotes === 'PENDING') && (
+          <div className={styles.descriptionSkeleton} />
+        )}
+        {loadingLastQuotes === 'SUCCESS' && (
+          <div className={styles.description}>
+            12 {LAST_UPDATE_QUOTES_DESCRIPTION_TEXT}
+          </div>
+        )}
         <div className={styles.quotesWrap}>
           <div className={styles.quotes}>
             {(!loadingLastQuotes || loadingLastQuotes === 'PENDING') && (
@@ -49,13 +56,22 @@ const Quotes = () => {
               <Empty />
             )}
             {loadingLastQuotes === 'SUCCESS' && loadingLastQuotes.length !== 0 && (
-              <>
-                {lastQuotes.map((quote) => (
-                  <Quote
-                    quote={quote}
-                  />
-                ))}
-              </>
+              <div className={styles.grid}>
+                <div className={styles.gridColumn}>
+                  {quotesFirstColumn.map((quote) => (
+                    <Quote
+                      quote={quote}
+                    />
+                  ))}
+                </div>
+                <div className={styles.gridColumn}>
+                  {quotesSecondColumn.map((quote) => (
+                    <Quote
+                      quote={quote}
+                    />
+                  ))}
+                </div>
+              </div>
             )}
           </div>
           <div className={styles.moreQuotes}>
