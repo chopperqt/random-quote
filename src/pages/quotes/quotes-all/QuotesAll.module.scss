@@ -1,0 +1,22 @@
+@import 'asset/scss/colors';
+
+.filters {
+  display: flex;
+  flex-direction: column;
+}
+
+.allQuotes {
+  display: flex;
+  margin-top: 20px;
+}
+
+.allQuotesWrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 15px;
+  row-gap: 15px;
+}
+
+.description {
+  color: $color-secondary--6;
+}

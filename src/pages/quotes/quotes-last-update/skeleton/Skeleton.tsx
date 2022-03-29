@@ -2,7 +2,7 @@ import React from 'react'
 
 import { QuoteSkeleton } from 'components/quote'
 
-const SkeletonLastQuotes = () => (
+const Skeleton = () => (
   <>
     <QuoteSkeleton />
     <QuoteSkeleton />
@@ -15,4 +15,4 @@ const SkeletonLastQuotes = () => (
   </>
 )
 
-export default SkeletonLastQuotes
+export default Skeleton

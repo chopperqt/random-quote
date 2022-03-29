@@ -1,7 +1,13 @@
-export const LAST_UPDATE_QUOTES_TEXT = 'Последние добавленные цитаты'
+export const LAST_UPDATE_QUOTES_TEXT = 'Последние цитаты'
 export const SHOW_MORE_TEXT = 'Показать ещё'
 export const ALL_QUOTES_TEXT = 'Все цитаты'
-export const LAST_UPDATE_QUOTES_DESCRIPTION_TEXT = 'было добавлено за последние 24 часа'
+export const LAST_UPDATE_QUOTES_DESCRIPTION = 'было добавлено за последние 24 часа'
+export const QUOTES_ALL_TEXT = 'Всего'
+export const QUOTES_OF_AUTHORS_TEXT = 'авторов'
+
+export const EMPTY_TEXT = 'За последние 24 часа не было добавлено ни одной цитаты! 😟'
+
+export const LAST_QUOTES_PER_PAGE = 8;
 
 export const MOCK_DATA = {
   author: {
