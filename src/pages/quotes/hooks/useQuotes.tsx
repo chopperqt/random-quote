@@ -7,13 +7,13 @@ import { LAST_UPDATE_QUOTES_DESCRIPTION } from '../constants'
 
 interface IUseQuotes {
   quotes: IQuote[]
-  lastQuotesCount: number
+  lastQuotesCount?: number
 }
 
 
 const useQuotes = ({
   quotes,
-  lastQuotesCount,
+  lastQuotesCount = 0,
 }: IUseQuotes) => {
   let quotesFirstColumn: IQuote[] = quotes.filter((quote, index) => index % 2 === 0)
   let quotesSecondColumn: IQuote[] = quotes.filter((quote, index) => index % 2 !== 0)

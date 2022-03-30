@@ -9,6 +9,7 @@ const {
 const initialState = {
   quote: {},
   quotes: [],
+  quotesCount: 0,
   lastQuotes: [],
   lastQuotesCount: 0,
 }
@@ -16,6 +17,7 @@ const initialState = {
 export interface IQuotesStore {
   quote: IQuote
   quotes: IQuote[]
+  quotesCount: number
   lastQuotes: IQuote[]
   lastQuotesCount: number
 }
@@ -39,7 +41,8 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
     case GET_QUOTES: {
       return {
         ...state,
-        quotes: payload,
+        quotes: payload.data,
+        quotesCount: payload.count,
       }
     }
     case GET_LAST_QUOTES: {

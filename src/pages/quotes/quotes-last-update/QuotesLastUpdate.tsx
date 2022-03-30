@@ -1,51 +1,47 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 
-import { IStore } from 'services'
 import Skeleton from './skeleton/Skeleton'
-import useQuotes from '../hooks/useQuotes'
 import Quote from 'components/quote'
 import Button from 'components/button'
 import {
-  LAST_QUOTES_PER_PAGE,
   SHOW_MORE_TEXT,
-  LAST_UPDATE_QUOTES_TEXT
+  EMPTY_TEXT
 } from '../constants'
-import Empty from './empty/Empty'
+import Information, { DefaultMessage } from 'components/Information'
+import { useQuotesLastUpdate } from '../hooks'
 
 import styles from './QuotesLastUpdate.module.scss'
+import Title from './partials/Title'
 
 const QuotesLastUpdate = () => {
-  const loadingLastQuotes = useSelector((store: IStore) => store.notificationsStore.loading.getLastQuotes)
-  const lastQuotes = useSelector((store: IStore) => store.quotesStore.lastQuotes)
-  const lastQuotesCount = useSelector((store: IStore) => store.quotesStore.lastQuotesCount)
-
   const {
+    isEmpty,
+    isError,
+    isLoading,
+    isSuccess,
+    lastQuotesDescription,
     quotesFirstColumn,
     quotesSecondColumn,
-    lastQuotesDescription,
-  } = useQuotes({
-    lastQuotesCount,
-    quotes: lastQuotes,
-  })
+    isMoreButton
+  } = useQuotesLastUpdate()
 
   return (
     <div className={styles.container}>
-      <div className="heading--lx text--bold">
-        {LAST_UPDATE_QUOTES_TEXT}
-      </div>
-      <div className={styles.description}>
-        {lastQuotesDescription}
-      </div>
+      <Title
+        description={lastQuotesDescription}
+      />
       <div className={styles.quotesWrap}>
         <div className={styles.quotes}>
-          {(!loadingLastQuotes || loadingLastQuotes === 'PENDING') && (
+          {isLoading && (
             <Skeleton />
           )}
-          {(loadingLastQuotes === 'FAILURE' || loadingLastQuotes === 'SUCCESS') && lastQuotes.length === 0 && (
-            <Empty />
+          {isEmpty && (
+            <Information text={EMPTY_TEXT} />
           )}
-          {loadingLastQuotes === 'SUCCESS' && loadingLastQuotes.length !== 0 && (
+          {isError && (
+            <Information text={DefaultMessage.error} />
+          )}
+          {isSuccess && (
             <div className={styles.grid}>
               <div className={styles.gridColumn}>
                 {quotesFirstColumn.map((quote) => (
@@ -65,7 +61,7 @@ const QuotesLastUpdate = () => {
           )}
         </div>
         <div className={styles.moreQuotes}>
-          {lastQuotesCount > LAST_QUOTES_PER_PAGE && (
+          {isMoreButton && (
             <Button>
               {SHOW_MORE_TEXT}
             </Button>

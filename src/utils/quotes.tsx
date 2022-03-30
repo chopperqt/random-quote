@@ -13,12 +13,12 @@ const LIMIT_PER_PAGE = 20
 export const getQuotes = async () => {
   Store.dispatch(notificationMethods.loadingRequest('getQuotes', 'PENDING'))
 
-  let { data, error } = await supabase
+  let { data, error, count } = await supabase
     .from(Tables.quotes)
     .select(`
       *,
       author:id_author (name)
-    `)
+    `, { count: 'exact' })
     .order("id_quote", { ascending: true })
     .limit(LIMIT_PER_PAGE);
 
@@ -30,8 +30,10 @@ export const getQuotes = async () => {
     notificationMethods.createNotification(message, 'ERROR')
   }
 
+  console.log(count)
+
   Store.dispatch(notificationMethods.loadingRequest('getQuotes', 'SUCCESS'))
-  Store.dispatch(quoteMethods.getQuotes(data))
+  Store.dispatch(quoteMethods.getQuotes({ data, count }))
 }
 
 export const getAuthorQuotes = async (id_author: string) => {
