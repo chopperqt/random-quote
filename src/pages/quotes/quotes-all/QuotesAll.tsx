@@ -6,11 +6,13 @@ import decOfNum, { quoteWords } from 'helpers/decOfNum'
 import {
   ALL_QUOTES_TEXT,
   QUOTES_ALL_TEXT,
-  QUOTES_OF_AUTHORS_TEXT,
 } from '../constants'
 import { getQuotes } from 'utils/quotes'
 import Quote from 'components/quote'
 import useQuotes from '../hooks/useQuotes'
+import useResponse from 'helpers/useResponse'
+import Information, { DefaultMessage } from 'components/Information'
+
 
 import styles from './QuotesAll.module.scss'
 
@@ -19,7 +21,7 @@ import { IStore } from 'services'
 const QuotesAll = () => {
   const quotes = useSelector((store: IStore) => store.quotesStore.quotes)
   const quotesCount = useSelector((store: IStore) => store.quotesStore.quotesCount)
-  const hasLoadingQuotes = useSelector((store: IStore) => store.notificationsStore.loading.getQuotes)
+  const loading = useSelector((store: IStore) => store.notificationsStore.loading.getQuotes)
   const formattedDescription = `${QUOTES_ALL_TEXT} ${quotesCount} ${decOfNum(quotesCount, quoteWords)} от 4 авторов`
 
   const {
@@ -27,6 +29,15 @@ const QuotesAll = () => {
     quotesSecondColumn,
   } = useQuotes({
     quotes
+  })
+
+  const {
+    isError,
+    isLoading,
+    isSuccess,
+  } = useResponse({
+    count: quotesCount,
+    loading,
   })
 
   useEffect(() => {
@@ -48,7 +59,7 @@ const QuotesAll = () => {
           <div>Количество комментариев</div>
         </div>
         <div className={styles.allQuotesWrap}>
-          {hasLoadingQuotes === 'SUCCESS' && quotes.length > 0 && (
+          {isSuccess && (
             <>
               <div className={styles.gridColumn}>
                 {quotesFirstColumn.map((quote) => (
@@ -62,8 +73,11 @@ const QuotesAll = () => {
               </div>
             </>
           )}
-          {hasLoadingQuotes === 'PENDING' && (
+          {isLoading && (
             <Skeleton />
+          )}
+          {isError && (
+            <Information text={DefaultMessage.error} />
           )}
         </div>
         {/* <Skeleton /> */}

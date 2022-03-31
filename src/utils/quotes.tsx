@@ -3,10 +3,10 @@ import supabase from "./client";
 import Store, { quoteMethods, notificationMethods } from 'services'
 import { SuccessMessages } from 'helpers/successMessages'
 import moment from 'moment'
-import { generateRandomNumber } from 'helpers/random'
 import {
   Tables
 } from './constants'
+import Table from "components/table";
 
 const LIMIT_PER_PAGE = 20
 
@@ -17,7 +17,10 @@ export const getQuotes = async () => {
     .from(Tables.quotes)
     .select(`
       *,
-      author:id_author (name)
+      author:id_author (
+        name,
+        path
+      )
     `, { count: 'exact' })
     .order("id_quote", { ascending: true })
     .limit(LIMIT_PER_PAGE);

@@ -1,13 +1,14 @@
 import React, { Fragment } from 'react'
+import cx from 'classnames'
 
 import styles from './QuoteSkeleton.module.scss'
 import rootStyles from '../Quote.module.scss'
 
 export const QuoteSkeletonText = () => (
   <div className={styles.text}>
-    <div className={styles.textItem} />
-    <div className={styles.textItem} />
-    <div className={styles.textItem} />
+    <div className={cx(styles.textItem, 'custom')} />
+    <div className={cx(styles.textItem, 'custom')} />
+    <div className={cx(styles.textItem, 'custom')} />
   </div>
 )
 
