@@ -1,14 +1,23 @@
 import React, { useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
-import { IStore } from 'services'
 import { getRandomQuote } from 'utils/quotes'
+import { IStore } from 'services'
+import useResponse from 'helpers/useResponse'
 
 const TIMER_REFRESH = 60000
 
 const useHome = () => {
-  const loading = useSelector((store: IStore) => store.notificationsStore.loading)
-  const hasLoading = loading.getRandomQuote === 'PENDING'
+  const quote = useSelector((store: IStore) => store.quotesStore.quote)
+  const loading = useSelector((store: IStore) => store.notificationsStore.loading.getRandomQuote)
+  const {
+    isError,
+    isSuccess,
+    isLoading,
+  } = useResponse({
+    loading,
+    count: 1,
+  })
 
   const handleChangeQuote = () => {
     getRandomQuote()
@@ -17,13 +26,20 @@ const useHome = () => {
   useEffect(() => {
     getRandomQuote()
 
-    setInterval(() => {
+    const interval = setInterval(() => {
       getRandomQuote()
     }, TIMER_REFRESH)
+
+    return (
+      clearInterval(interval)
+    )
   }, [])
 
   return {
-    hasLoading,
+    quote,
+    isError,
+    isSuccess,
+    isLoading,
     handleChangeQuote,
   }
 }

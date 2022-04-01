@@ -1,26 +1,38 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 
 import Quote from 'components/quote'
 import useHome from './hooks/useHome'
-import { IStore } from 'services'
 import Footer from 'components/footer'
+import Information, { DefaultMessage } from 'components/Information'
 
 import styles from './Home.module.scss'
 
 const Home = () => {
   const {
-    hasLoading,
+    quote,
+    isLoading,
+    isSuccess,
+    isError,
   } = useHome()
-  const quote = useSelector((store: IStore) => store.quotesStore.quote)
 
   return (
     <div className={styles.home}>
       <div className={styles.quote}>
-        <Quote
-          loading={hasLoading}
-          quote={quote}
-        />
+        {isLoading && (
+          <Quote
+            loading={isLoading}
+            quote={quote}
+          />
+        )}
+        {isSuccess && (
+          <Quote
+            loading={isLoading}
+            quote={quote}
+          />
+        )}
+        {isError && (
+          <Information text={DefaultMessage.error} />
+        )}
         <div className={styles.footer}>
           <Footer />
         </div>

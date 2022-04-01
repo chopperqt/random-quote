@@ -42,3 +42,14 @@
   display: flex;
   justify-content: center;
 }
+
+.skeleton {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 15px;
+  row-gap: 15px;
+
+  &:global(.custom) {
+    min-width: 100%;
+  }
+}

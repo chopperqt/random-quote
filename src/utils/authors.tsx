@@ -1,6 +1,6 @@
 import supabase from "./client";
 
-import Store, { notificationMethods } from 'services'
+import Store, { notificationMethods, authorsMethods } from 'services'
 import { Tables } from './constants'
 
 export const getAuthors = async () => {
@@ -19,6 +19,8 @@ export const getAuthors = async () => {
   }
 
   Store.dispatch(notificationMethods.loadingRequest('getAuthors', 'SUCCESS'))
-
-  console.log(data)
+  Store.dispatch(authorsMethods.getAuthors({
+    data,
+    count,
+  }))
 }

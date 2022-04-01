@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Skeleton from './skeleton/Skeleton'
+import Skeleton from './partials/Skeleton'
 import Quote from 'components/quote'
 import Button from 'components/button'
 import {
