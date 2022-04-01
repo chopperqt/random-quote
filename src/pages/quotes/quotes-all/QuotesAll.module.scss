@@ -1,9 +1,7 @@
 @import 'asset/scss/colors';
 
-.filters {
-  display: grid;
-  row-gap: 15px;
-  align-content: baseline;
+.container {
+  width: 1215px;;
 }
 
 .allQuotes {
@@ -32,4 +30,15 @@
 .gridColumn {
   display: grid;
   row-gap: 15px;
+}
+
+.button {
+  margin-top: 20px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.field {
+  margin-top: 20px;
 }

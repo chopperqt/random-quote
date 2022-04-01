@@ -26,7 +26,7 @@ const QuotesLastUpdate = () => {
   } = useQuotesLastUpdate()
 
   return (
-    <div className={styles.container}>
+    <div className="container">
       <Title
         description={lastQuotesDescription}
       />

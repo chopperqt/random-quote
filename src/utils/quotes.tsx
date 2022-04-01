@@ -6,9 +6,8 @@ import moment from 'moment'
 import {
   Tables
 } from './constants'
-import Table from "components/table";
 
-const LIMIT_PER_PAGE = 20
+const LIMIT_PER_PAGE = 10
 
 export const getQuotes = async () => {
   Store.dispatch(notificationMethods.loadingRequest('getQuotes', 'PENDING'))
