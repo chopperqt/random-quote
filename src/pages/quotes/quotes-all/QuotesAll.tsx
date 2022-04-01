@@ -11,7 +11,7 @@ import Button from 'components/button'
 import Input from 'components/input'
 import Title from './partials/Title'
 import useQuotesAll from '../hooks/useQuotesAll'
-import Filters from './filters/FIlters'
+import Filters from './filters/Filters'
 
 import styles from './QuotesAll.module.scss'
 

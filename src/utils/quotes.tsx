@@ -12,7 +12,7 @@ const LIMIT_PER_PAGE = 10
 export const getQuotes = async () => {
   Store.dispatch(notificationMethods.loadingRequest('getQuotes', 'PENDING'))
 
-  let { data, error, count } = await supabase
+  const { data, error, count } = await supabase
     .from(Tables.quotes)
     .select(`
       *,
@@ -31,8 +31,6 @@ export const getQuotes = async () => {
 
     notificationMethods.createNotification(message, 'ERROR')
   }
-
-  console.log(count)
 
   Store.dispatch(notificationMethods.loadingRequest('getQuotes', 'SUCCESS'))
   Store.dispatch(quoteMethods.getQuotes({ data, count }))
@@ -58,17 +56,9 @@ export const getAuthorQuotes = async (id_author: string) => {
 export const getRandomQuote = async () => {
   Store.dispatch(notificationMethods.loadingRequest('getRandomQuote', 'PENDING'))
 
-  let { data, error } = await supabase
-    .from(Tables.quotes)
-    .select(`
-      *,
-      author:id_author(
-        name,
-        path
-      )
-    `)
-    .eq('id_quote', 1)
-    .limit(1);
+  let { data, error, } = await supabase
+    .rpc('fuckyou3')
+
 
   if (error) {
     const { message } = error
@@ -81,7 +71,18 @@ export const getRandomQuote = async () => {
   }
 
   Store.dispatch(notificationMethods.loadingRequest('getRandomQuote', 'SUCCESS'))
-  Store.dispatch(quoteMethods.getRandomQuote(data))
+
+  const modifyData = [
+    {
+      ...data?.[0],
+      author: {
+        name: data?.[0].name,
+        path: data?.[0].path,
+      }
+    }
+  ]
+
+  Store.dispatch(quoteMethods.getRandomQuote(modifyData))
 }
 
 export const getLastQuotes = async () => {
