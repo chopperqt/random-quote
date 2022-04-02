@@ -12,6 +12,7 @@ import Input from 'components/input'
 import Title from './partials/Title'
 import useQuotesAll from '../hooks/useQuotesAll'
 import Filters from './filters/Filters'
+import { translateUrl } from 'helpers/translateUrl'
 
 import styles from './QuotesAll.module.scss'
 
@@ -25,6 +26,8 @@ const QuotesAll = () => {
     quotesSecondColumn,
     hasMoreQuotes,
   } = useQuotesAll()
+
+  console.log(translateUrl('Никколо Макиавелли'))
 
   return (
     <div className="container">

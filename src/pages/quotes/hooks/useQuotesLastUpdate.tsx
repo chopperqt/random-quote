@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
-import { getLastQuotes } from 'utils/quotes'
+import { getQuotesLast } from 'utils/quotes'
 import decOfNum, { quoteWords } from 'helpers/decOfNum'
 import {
   LAST_UPDATE_QUOTES_DESCRIPTION,
@@ -35,7 +35,7 @@ const useQuotesLastUpdate = () => {
   const isMoreButton = lastQuotesCount > LAST_QUOTES_PER_PAGE
 
   useEffect(() => {
-    getLastQuotes()
+    getQuotesLast()
   }, [])
 
   return {

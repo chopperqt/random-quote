@@ -2,6 +2,7 @@ import supabase from "./client";
 
 import Store, { quoteMethods, notificationMethods } from 'services'
 import { SuccessMessages } from 'helpers/successMessages'
+import loadingStatuses from "helpers/loadingStatuses";
 import moment from 'moment'
 import {
   Tables
@@ -9,8 +10,21 @@ import {
 
 const LIMIT_PER_PAGE = 10
 
+const QuotesRequests = {
+  getQuotes: 'getQuotes',
+  getQuotesAuthor: 'getQuotesAuthor',
+  getQuotesLast: 'getQuotesLast',
+  getRandomQuote: 'getRandomQuote',
+}
+
 export const getQuotes = async () => {
-  Store.dispatch(notificationMethods.loadingRequest('getQuotes', 'PENDING'))
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess
+  } = loadingStatuses(QuotesRequests.getQuotes)
+
+  handlePending()
 
   const { data, error, count } = await supabase
     .from(Tables.quotes)
@@ -25,18 +39,25 @@ export const getQuotes = async () => {
     .limit(LIMIT_PER_PAGE);
 
   if (error) {
-    const { message } = error
+    handleFailure(error)
 
-    Store.dispatch(notificationMethods.loadingRequest('getQuotes', 'FAILURE'))
-
-    notificationMethods.createNotification(message, 'ERROR')
+    return
   }
 
-  Store.dispatch(notificationMethods.loadingRequest('getQuotes', 'SUCCESS'))
+  handleSuccess()
+
   Store.dispatch(quoteMethods.getQuotes({ data, count }))
 }
 
-export const getAuthorQuotes = async (id_author: string) => {
+export const getQuotesAuthors = async (id_author: string) => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses(QuotesRequests.getQuotesAuthor)
+
+  handlePending()
+
   let { data, error } = await supabase
     .from(Tables.authorsQuotes)
     .select(`
@@ -48,29 +69,36 @@ export const getAuthorQuotes = async (id_author: string) => {
     `)
     .eq('id_author', +id_author);
 
-  if (error) console.log('error', error)
+  if (error) {
+    handleFailure(error)
+
+    return
+  }
+
+  handleSuccess()
 
   return data
 }
 
 export const getRandomQuote = async () => {
-  Store.dispatch(notificationMethods.loadingRequest('getRandomQuote', 'PENDING'))
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses(QuotesRequests.getRandomQuote)
+
+  handlePending()
 
   let { data, error, } = await supabase
     .rpc('fuckyou3')
 
-
   if (error) {
-    const { message } = error
-
-    Store.dispatch(notificationMethods.loadingRequest('getRandomQuote', 'FAILURE'))
-
-    notificationMethods.createNotification(message, 'ERROR')
+    handleFailure(error)
 
     return
   }
 
-  Store.dispatch(notificationMethods.loadingRequest('getRandomQuote', 'SUCCESS'))
+  handleSuccess()
 
   const modifyData = [
     {
@@ -85,8 +113,14 @@ export const getRandomQuote = async () => {
   Store.dispatch(quoteMethods.getRandomQuote(modifyData))
 }
 
-export const getLastQuotes = async () => {
-  Store.dispatch(notificationMethods.loadingRequest('getLastQuotes', 'PENDING'))
+export const getQuotesLast = async () => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses(QuotesRequests.getQuotesLast)
+
+  handlePending()
 
   const { data, error, count } = await supabase
     .from(Tables.quotes)
@@ -100,15 +134,18 @@ export const getLastQuotes = async () => {
     .gt("created_at", moment().startOf('day').toISOString());
 
   if (error) {
-    const { message } = error
+    handleFailure(error)
 
-    Store.dispatch(notificationMethods.loadingRequest('getLastQuotes', 'FAILURE'))
-
-    notificationMethods.createNotification(message, 'ERROR')
+    return
   }
 
-  Store.dispatch(notificationMethods.loadingRequest('getLastQuotes', 'SUCCESS'))
+  handleSuccess()
+
   Store.dispatch(quoteMethods.getLastQuotes({ data, count }))
+}
+
+export const searchQuote = async () => {
+  // Store.dispatch()
 }
 
 interface IPostQuote {
@@ -168,4 +205,5 @@ export const postQuote = async ({
     }
   }
 }
+
 
