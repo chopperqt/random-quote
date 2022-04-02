@@ -144,8 +144,9 @@ export const getQuotesLast = async () => {
   Store.dispatch(quoteMethods.getLastQuotes({ data, count }))
 }
 
-export const searchQuote = async () => {
+export const searchQuote = async (search: string) => {
   // Store.dispatch()
+  console.log(search)
 }
 
 interface IPostQuote {

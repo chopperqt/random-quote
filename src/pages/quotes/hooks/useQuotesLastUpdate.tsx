@@ -14,7 +14,7 @@ import { IQuote } from 'services/quotes/reducer'
 
 
 const useQuotesLastUpdate = () => {
-  const loadingLastQuotes = useSelector((store: IStore) => store.notificationsStore.loading.getLastQuotes)
+  const loadingLastQuotes = useSelector((store: IStore) => store.notificationsStore.loading.getQuotesLast)
   const lastQuotes = useSelector((store: IStore) => store.quotesStore.lastQuotes)
   const lastQuotesCount = useSelector((store: IStore) => store.quotesStore.lastQuotesCount)
 

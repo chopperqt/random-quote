@@ -4,6 +4,7 @@
 .layout {
   display: grid;
   row-gap: 5px;
+  position: relative;
 }
 
 .input {
@@ -33,4 +34,11 @@
   &:global(.label--error) {
     color: $color-warning--4;
   }
+}
+
+.loading {
+  width: 18px;
+  top: 30px;
+  position: absolute;
+  right: 15px;
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 
 import Skeleton from './partials/Skeleton'
 import {
@@ -12,7 +13,6 @@ import Input from 'components/input'
 import Title from './partials/Title'
 import useQuotesAll from '../hooks/useQuotesAll'
 import Filters from './filters/Filters'
-import { translateUrl } from 'helpers/translateUrl'
 
 import styles from './QuotesAll.module.scss'
 
@@ -25,9 +25,9 @@ const QuotesAll = () => {
     quotesFirstColumn,
     quotesSecondColumn,
     hasMoreQuotes,
+    handleChangeSearch,
+    search,
   } = useQuotesAll()
-
-  console.log(translateUrl('Никколо Макиавелли'))
 
   return (
     <div className="container">
@@ -35,6 +35,8 @@ const QuotesAll = () => {
       <Input
         placeholder={SEARCH_TEXT}
         className={styles.field}
+        value={search}
+        onChange={_.throttle((event) => handleChangeSearch(event), 3000)}
       />
       <div className={styles.allQuotes}>
         <Filters />
