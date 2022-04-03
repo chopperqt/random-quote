@@ -23,7 +23,7 @@ export const getQuotes = async () => {
   const {
     handleFailure,
     handlePending,
-    handleSuccess
+    handleSuccess,
   } = loadingStatuses(QuotesRequests.getQuotes)
 
   handlePending()
@@ -159,8 +159,8 @@ export const searchQuote = debounce(async (search) => {
 
   const { data, error } = await supabase
     .from(Tables.quotes)
-    .select()
-    .textSearch('text', search)
+    .select("*")
+    .textSearch('text', `'${search}'`)
 
   if (error) {
     handleFailure(error)
@@ -169,8 +169,6 @@ export const searchQuote = debounce(async (search) => {
   }
 
   handleSuccess()
-
-  console.log(data)
 }, 800)
 
 interface IPostQuote {
