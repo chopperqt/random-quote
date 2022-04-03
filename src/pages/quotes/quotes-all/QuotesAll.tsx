@@ -1,11 +1,8 @@
 import React from 'react'
-import _ from 'lodash'
+import cx from 'classnames'
 
 import Skeleton from './partials/Skeleton'
-import {
-  SEARCH_TEXT,
-  SHOW_MORE_TEXT,
-} from '../constants'
+import { SHOW_MORE_TEXT } from '../constants'
 import Quote from 'components/quote'
 import Information, { DefaultMessage } from 'components/Information'
 import Button from 'components/button'
@@ -13,6 +10,7 @@ import Input from 'components/input'
 import Title from './partials/Title'
 import useQuotesAll from '../hooks/useQuotesAll'
 import Filters from './filters/Filters'
+import SearchInput from './partials/SearhcInput'
 
 import styles from './QuotesAll.module.scss'
 
@@ -25,18 +23,19 @@ const QuotesAll = () => {
     quotesFirstColumn,
     quotesSecondColumn,
     hasMoreQuotes,
-    handleChangeSearch,
     search,
+    setSearch,
   } = useQuotesAll()
 
   return (
     <div className="container">
       <Title text={description} />
-      <Input
-        placeholder={SEARCH_TEXT}
+      <SearchInput
         className={styles.field}
         value={search}
-        onChange={_.throttle((event) => handleChangeSearch(event), 3000)}
+        onChangeText={(e: React.ChangeEvent<HTMLInputElement>) => {
+          setSearch(e.target.value)
+        }}
       />
       <div className={styles.allQuotes}>
         <Filters />

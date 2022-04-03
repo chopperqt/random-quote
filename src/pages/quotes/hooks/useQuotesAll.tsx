@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import _ from 'lodash'
+import debounce from 'lodash.debounce'
 
 import { QUOTES_ALL_TEXT } from '../constants'
 import decOfNum, { quoteWords } from 'helpers/decOfNum'
@@ -23,19 +23,7 @@ const useQuotesAll = () => {
   const quotesFirstColumn: IQuote[] = quotes.filter((quote, index) => index % 2 === 0)
   const quotesSecondColumn: IQuote[] = quotes.filter((quote, index) => index % 2 !== 0)
 
-  let timerID: ReturnType<typeof setTimeout>;
-
   const hasMoreQuotes = count > quotes.length
-
-  const handleChangeSearch = (e: React.FormEvent<HTMLInputElement>) => {
-    clearInterval(timerID)
-
-    setSearch(e.currentTarget.value)
-
-    if (e.currentTarget.value.length > 3) {
-      timerID = setTimeout(() => searchQuote(search), 1000)
-    }
-  }
 
   const {
     isLoading,
@@ -50,6 +38,10 @@ const useQuotesAll = () => {
     getQuotes()
   }, [])
 
+  useEffect(() => {
+    searchQuote(search)
+  }, [search])
+
   return {
     description,
     quotesFirstColumn,
@@ -58,7 +50,7 @@ const useQuotesAll = () => {
     isError,
     isSuccess,
     hasMoreQuotes,
-    handleChangeSearch,
+    setSearch,
     search,
   }
 }

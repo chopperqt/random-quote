@@ -1,12 +1,13 @@
-import supabase from "./client";
+import moment from 'moment'
 
+import supabase from "./client";
 import Store, { quoteMethods, notificationMethods } from 'services'
 import { SuccessMessages } from 'helpers/successMessages'
 import loadingStatuses from "helpers/loadingStatuses";
-import moment from 'moment'
 import {
-  Tables
+  Tables,
 } from './constants'
+import debounce from 'lodash.debounce';
 
 const LIMIT_PER_PAGE = 10
 
@@ -15,6 +16,7 @@ const QuotesRequests = {
   getQuotesAuthor: 'getQuotesAuthor',
   getQuotesLast: 'getQuotesLast',
   getRandomQuote: 'getRandomQuote',
+  searchQuote: 'searchQuote',
 }
 
 export const getQuotes = async () => {
@@ -144,10 +146,32 @@ export const getQuotesLast = async () => {
   Store.dispatch(quoteMethods.getLastQuotes({ data, count }))
 }
 
-export const searchQuote = async (search: string) => {
-  // Store.dispatch()
-  console.log(search)
-}
+export const searchQuote = debounce(async (search) => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses(QuotesRequests.searchQuote)
+
+  handlePending()
+
+  console.log('search: ', search)
+
+  const { data, error } = await supabase
+    .from(Tables.quotes)
+    .select()
+    .textSearch('text', search)
+
+  if (error) {
+    handleFailure(error)
+
+    return
+  }
+
+  handleSuccess()
+
+  console.log(data)
+}, 800)
 
 interface IPostQuote {
   text: string
