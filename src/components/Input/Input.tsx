@@ -2,24 +2,22 @@ import React from 'react'
 import cx from 'classnames'
 
 import loadingImg from 'templates/loading.gif'
+import Icon, { IconList } from 'components/icon'
 
 import styles from './Input.module.scss'
 
-interface IInput extends React.ComponentProps<'input'> {
-  className?: string
-  fullWidth?: boolean
-  label?: string
-  error?: string
-  loading?: boolean
-}
+import { IInputProps } from './'
+
 const Input = React.forwardRef(({
   className,
   fullWidth,
   label,
   error,
   loading,
+  value,
+  onClear,
   ...props
-}: IInput, ref: any) => (
+}: IInputProps, ref: any) => (
   <div className={styles.layout}>
     {label && (
       <label className={cx(styles.label, {
@@ -27,6 +25,7 @@ const Input = React.forwardRef(({
       })}>{label}</label>
     )}
     <input
+      value={value}
       className={cx(styles.input, className, {
         'input--full': fullWidth,
         'input--error': !!error,
@@ -39,8 +38,14 @@ const Input = React.forwardRef(({
         className={styles.loading}
         src={loadingImg}
         alt="Loading..."
-
       />
+    )}
+    {onClear && !loading && value && value.length > 1 && (
+      <button
+        onClick={onClear}
+        className={cx(styles.loading, styles.clear)}>
+        <Icon icon={IconList.cross} />
+      </button>
     )}
     {error && (
       <span className={cx('heading--sm', styles.error)}>{error}</span>

@@ -1,5 +1,6 @@
 @import 'asset/scss/colors';
 @import 'asset/scss/common';
+@import 'asset/scss/mixin';
 
 .layout {
   display: grid;
@@ -41,4 +42,9 @@
   top: 30px;
   position: absolute;
   right: 15px;
+}
+
+.clear {
+  @include reset-button;
+  top: 34px;
 }

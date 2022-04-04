@@ -36,6 +36,7 @@ const QuotesAll = () => {
         onChangeText={(e: React.ChangeEvent<HTMLInputElement>) => {
           setSearch(e.target.value)
         }}
+        onClear={() => setSearch('')}
       />
       <div className={styles.allQuotes}>
         <Filters />

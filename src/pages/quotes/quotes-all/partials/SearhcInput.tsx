@@ -8,12 +8,14 @@ interface ISearchInputProps {
   value: string
   onChangeText: any
   className?: string
+  onClear: () => void
 }
 
 const SearchInput = ({
   value,
   onChangeText,
   className,
+  onClear
 }: ISearchInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -30,6 +32,7 @@ const SearchInput = ({
       placeholder={SEARCH_TEXT}
       value={value}
       onChange={onChangeText}
+      onClear={onClear}
     />
   )
 }
