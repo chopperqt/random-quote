@@ -22,7 +22,8 @@ const useQuotesAll = () => {
   const loadingSearch = useSelector((store: IStore) => store.notificationsStore.loading.searchQuote)
   const description = `${QUOTES_ALL_TEXT} ${count} ${decOfNum(count, quoteWords)} от 4 авторов`
 
-  const quoteItems = quotesSearch.length > 0 ? quotesSearch : quotes
+  const quoteItems = quotesSearch.length > 0 && search.length > 2 ? quotesSearch : quotes
+  const hasSearchQuotes = quotesSearch.length > 0
 
   const quotesFirstColumn: IQuote[] = quoteItems.filter((quote, index) => index % 2 === 0)
   const quotesSecondColumn: IQuote[] = quoteItems.filter((quote, index) => index % 2 !== 0)
@@ -32,10 +33,16 @@ const useQuotesAll = () => {
   const {
     isLoading,
     isError,
-    isSuccess
+    isSuccess,
   } = useResponse({
     loading,
     count,
+  })
+
+
+  const searchStatuses = useResponse({
+    loading: loadingSearch,
+    count: 0,
   })
 
   useEffect(() => {
@@ -59,6 +66,9 @@ const useQuotesAll = () => {
     setSearch,
     search,
     loadingSearch,
+    quotesSearch,
+    hasSearchQuotes,
+    searchStatuses,
   }
 }
 

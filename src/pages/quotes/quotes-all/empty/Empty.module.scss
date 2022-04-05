@@ -1,0 +1,8 @@
+@import 'asset/scss/colors';
+@import 'asset/scss/common';
+
+.empty {
+  padding: 20px;
+  background-color: $color-white--500;
+  border-radius: $border-radius--large;
+}

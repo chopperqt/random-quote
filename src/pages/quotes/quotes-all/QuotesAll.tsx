@@ -9,8 +9,10 @@ import Title from './partials/Title'
 import useQuotesAll from '../hooks/useQuotesAll'
 import Filters from './filters/Filters'
 import SearchInput from './partials/SearhcInput'
+import Empty from './empty/Empty'
 
 import styles from './QuotesAll.module.scss'
+
 
 const QuotesAll = () => {
   const {
@@ -24,6 +26,8 @@ const QuotesAll = () => {
     search,
     setSearch,
     loadingSearch,
+    hasSearchQuotes,
+    searchStatuses,
   } = useQuotesAll()
 
   return (
@@ -41,7 +45,10 @@ const QuotesAll = () => {
       <div className={styles.allQuotes}>
         <Filters />
         <div className={styles.allQuotesWrap}>
-          {isSuccess && (
+          {search.length > 3 && !hasSearchQuotes && (
+            <Empty />
+          )}
+          {search.length < 3 && isSuccess && (
             <>
               <div className={styles.gridColumn}>
                 {quotesFirstColumn.map((quote) => (
