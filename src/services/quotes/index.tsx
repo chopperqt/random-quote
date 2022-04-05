@@ -4,12 +4,14 @@ const {
   GET_RANDOM_QUOTE,
   GET_QUOTES,
   GET_LAST_QUOTES,
+  SEARCH_QUOTES,
 } = actions
 
 const initialState = {
   quote: {},
   quotes: [],
   quotesCount: 0,
+  quotesSearch: [],
   lastQuotes: [],
   lastQuotesCount: 0,
 }
@@ -18,6 +20,7 @@ export interface IQuotesStore {
   quote: IQuote
   quotes: IQuote[]
   quotesCount: number
+  quotesSearch: IQuote[]
   lastQuotes: IQuote[]
   lastQuotesCount: number
 }
@@ -56,6 +59,12 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
       return {
         ...state,
         quote: payload[0],
+      }
+    }
+    case SEARCH_QUOTES: {
+      return {
+        ...state,
+        quotesSearch: payload
       }
     }
     default: {

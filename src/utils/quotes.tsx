@@ -155,11 +155,15 @@ export const searchQuote = debounce(async (search) => {
 
   handlePending()
 
-  console.log('search: ', search)
-
   const { data, error } = await supabase
     .from(Tables.quotes)
-    .select("*")
+    .select(`
+      *,
+      author:id_author(
+        path,
+        name
+      )
+    `)
     .textSearch('text', `'${search}'`)
 
   if (error) {
@@ -169,6 +173,8 @@ export const searchQuote = debounce(async (search) => {
   }
 
   handleSuccess()
+
+  Store.dispatch(quoteMethods.quotesSearch(data))
 }, 800)
 
 interface IPostQuote {

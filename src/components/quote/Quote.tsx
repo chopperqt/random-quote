@@ -9,7 +9,7 @@ import Icon, { IconList } from 'components/icon'
 
 import styles from './Quote.module.scss'
 
-import { IQuote } from 'services/quotes/reducer'
+import { IQuote } from 'services/quotes'
 import useQuote from './hooks/useQuote'
 
 interface IQuoteProps {

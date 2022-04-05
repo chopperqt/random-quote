@@ -11,17 +11,21 @@ import {
 } from 'utils/quotes'
 
 import { IStore } from 'services'
-import { IQuote } from 'services/quotes/reducer'
+import { IQuote } from 'services/quotes'
 
 const useQuotesAll = () => {
   const [search, setSearch] = useState<string>('')
   const quotes = useSelector((store: IStore) => store.quotesStore.quotes)
+  const quotesSearch = useSelector((store: IStore) => store.quotesStore.quotesSearch)
   const count = useSelector((store: IStore) => store.quotesStore.quotesCount)
   const loading = useSelector((store: IStore) => store.notificationsStore.loading.getQuotes)
+  const loadingSearch = useSelector((store: IStore) => store.notificationsStore.loading.searchQuote)
   const description = `${QUOTES_ALL_TEXT} ${count} ${decOfNum(count, quoteWords)} от 4 авторов`
 
-  const quotesFirstColumn: IQuote[] = quotes.filter((quote, index) => index % 2 === 0)
-  const quotesSecondColumn: IQuote[] = quotes.filter((quote, index) => index % 2 !== 0)
+  const quoteItems = quotesSearch.length > 0 ? quotesSearch : quotes
+
+  const quotesFirstColumn: IQuote[] = quoteItems.filter((quote, index) => index % 2 === 0)
+  const quotesSecondColumn: IQuote[] = quoteItems.filter((quote, index) => index % 2 !== 0)
 
   const hasMoreQuotes = count > quotes.length
 
@@ -39,7 +43,9 @@ const useQuotesAll = () => {
   }, [])
 
   useEffect(() => {
-    searchQuote(search)
+    if (search.length > 2) {
+      searchQuote(search)
+    }
   }, [search])
 
   return {
@@ -52,6 +58,7 @@ const useQuotesAll = () => {
     hasMoreQuotes,
     setSearch,
     search,
+    loadingSearch,
   }
 }
 

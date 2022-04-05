@@ -5,7 +5,7 @@ import {
 } from 'redux'
 import thunk from 'redux-thunk'
 
-import quotesStore, { IQuotesStore } from './quotes/reducer'
+import quotesStore, { IQuotesStore } from './quotes'
 import userStore, { IUserStore } from './user/reducer'
 import notificationsStore, { INotificationsStore } from './notifications/reducer'
 import authorsStore, { IAuthorsStore } from './authors'

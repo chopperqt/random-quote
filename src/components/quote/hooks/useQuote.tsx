@@ -1,7 +1,4 @@
-
-
-import { IQuote } from 'services/quotes/reducer'
-
+import { IQuote } from 'services/quotes'
 interface useQuote {
   quote: IQuote
 }

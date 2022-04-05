@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { IQuote } from 'services/quotes/reducer'
+import { IQuote } from 'services/quotes'
 import { getQuotesLast } from 'utils/quotes'
 import decOfNum, { quoteWords } from 'helpers/decOfNum'
 import { LAST_UPDATE_QUOTES_DESCRIPTION } from '../constants'

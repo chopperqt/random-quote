@@ -10,7 +10,7 @@ import {
 import useResponse from 'helpers/useResponse'
 
 import { IStore } from 'services'
-import { IQuote } from 'services/quotes/reducer'
+import { IQuote } from 'services/quotes'
 
 
 const useQuotesLastUpdate = () => {

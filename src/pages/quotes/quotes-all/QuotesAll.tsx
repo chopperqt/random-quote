@@ -1,12 +1,10 @@
 import React from 'react'
-import cx from 'classnames'
 
 import Skeleton from './partials/Skeleton'
 import { SHOW_MORE_TEXT } from '../constants'
 import Quote from 'components/quote'
 import Information, { DefaultMessage } from 'components/Information'
 import Button from 'components/button'
-import Input from 'components/input'
 import Title from './partials/Title'
 import useQuotesAll from '../hooks/useQuotesAll'
 import Filters from './filters/Filters'
@@ -25,12 +23,14 @@ const QuotesAll = () => {
     hasMoreQuotes,
     search,
     setSearch,
+    loadingSearch,
   } = useQuotesAll()
 
   return (
     <div className="container">
       <Title text={description} />
       <SearchInput
+        loading={loadingSearch === 'PENDING'}
         className={styles.field}
         value={search}
         onChangeText={(e: React.ChangeEvent<HTMLInputElement>) => {

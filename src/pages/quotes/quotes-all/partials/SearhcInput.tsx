@@ -7,6 +7,7 @@ import { SEARCH_TEXT } from '../../constants'
 interface ISearchInputProps {
   value: string
   onChangeText: any
+  loading?: boolean
   className?: string
   onClear: () => void
 }
@@ -15,7 +16,8 @@ const SearchInput = ({
   value,
   onChangeText,
   className,
-  onClear
+  onClear,
+  loading
 }: ISearchInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -27,6 +29,7 @@ const SearchInput = ({
 
   return (
     <Input
+      loading={loading}
       className={className}
       ref={inputRef}
       placeholder={SEARCH_TEXT}
