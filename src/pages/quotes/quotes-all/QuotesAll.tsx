@@ -34,7 +34,7 @@ const QuotesAll = () => {
     <div className="container">
       <Title text={description} />
       <SearchInput
-        loading={loadingSearch === 'PENDING'}
+        loading={searchStatuses.isLoading}
         className={styles.field}
         value={search}
         onChangeText={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +45,7 @@ const QuotesAll = () => {
       <div className={styles.allQuotes}>
         <Filters />
         <div className={styles.allQuotesWrap}>
-          {search.length > 3 && !hasSearchQuotes && (
+          {search.length > 2 && searchStatuses.isSuccess && !hasSearchQuotes && (
             <Empty />
           )}
           {search.length < 3 && isSuccess && (
