@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import cx from 'classnames'
 
 import Modal from 'components/modal'
