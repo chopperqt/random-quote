@@ -39,10 +39,9 @@ const useQuotesAll = () => {
     count,
   })
 
-
   const searchStatuses = useResponse({
     loading: loadingSearch,
-    count: 0,
+    count: quotesSearch.length,
   })
 
   useEffect(() => {

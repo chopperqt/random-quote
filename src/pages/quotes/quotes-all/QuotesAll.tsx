@@ -45,7 +45,7 @@ const QuotesAll = () => {
       <div className={styles.allQuotes}>
         <Filters />
         <div className={styles.allQuotesWrap}>
-          {search.length > 2 && searchStatuses.isSuccess && !hasSearchQuotes && (
+          {search.length > 2 && searchStatuses.isEmpty && !hasSearchQuotes && (
             <Empty />
           )}
           {search.length < 3 && isSuccess && (
