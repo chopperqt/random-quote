@@ -44,7 +44,7 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
     case GET_QUOTES: {
       return {
         ...state,
-        quotes: payload.data,
+        quotes: [...state.quotes, ...payload.data],
         quotesCount: payload.count,
       }
     }

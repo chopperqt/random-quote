@@ -13,7 +13,7 @@ export function updateUrlParams({ ...props }) {
 }
 
 export function getUrlParam(str: string) {
-  const url = new URL(window.location.host)
+  const url = new URL(window.location.href)
 
   return url.searchParams.get(str)
 }

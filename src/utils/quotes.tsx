@@ -13,6 +13,7 @@ const LIMIT_PER_PAGE = 10
 
 const QuotesRequests = {
   getQuotes: 'getQuotes',
+  getQuotesMore: 'getQuotesMore',
   getQuotesAuthor: 'getQuotesAuthor',
   getQuotesLast: 'getQuotesLast',
   getRandomQuote: 'getRandomQuote',
@@ -38,7 +39,47 @@ export const getQuotes = async () => {
       )
     `, { count: 'exact' })
     .order("id_quote", { ascending: true })
-    .limit(LIMIT_PER_PAGE);
+    .limit(LIMIT_PER_PAGE)
+
+  if (error) {
+    handleFailure(error)
+
+    return
+  }
+
+  handleSuccess()
+
+  Store.dispatch(quoteMethods.getQuotes({ data, count }))
+}
+interface IGetQuotes {
+  from?: number
+  to?: number
+}
+
+export const getQuotesMore = async ({
+  from = 0,
+  to = LIMIT_PER_PAGE
+}: IGetQuotes) => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses(QuotesRequests.getQuotesMore)
+
+  handlePending()
+
+  const { data, error, count } = await supabase
+    .from(Tables.quotes)
+    .select(`
+      *,
+      author:id_author (
+        name,
+        path
+      )
+    `, { count: 'exact' })
+    .order("id_quote", { ascending: true })
+    .range(from, to)
+    .limit(LIMIT_PER_PAGE)
 
   if (error) {
     handleFailure(error)

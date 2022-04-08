@@ -10,7 +10,6 @@ import useQuotesAll from '../hooks/useQuotesAll'
 import Filters from './filters/Filters'
 import SearchInput from './partials/SearhcInput'
 import Empty from './empty/Empty'
-import { updateUrlParams } from 'helpers/urlParams'
 
 import styles from './QuotesAll.module.scss'
 
@@ -28,6 +27,8 @@ const QuotesAll = () => {
     loadingSearch,
     hasSearchQuotes,
     searchStatuses,
+    handleLoadMore,
+    isLoadingMore,
   } = useQuotesAll()
 
   return (
@@ -74,10 +75,9 @@ const QuotesAll = () => {
           {hasMoreQuotes && (
             <div className={styles.button}>
               <Button
-                onClick={() => updateUrlParams({
-                  p: '2',
-                  s: 'awdawdaw',
-                })}
+                disabled={isLoadingMore}
+                loading={isLoadingMore}
+                onClick={handleLoadMore}
               >
                 {SHOW_MORE_TEXT}
               </Button>

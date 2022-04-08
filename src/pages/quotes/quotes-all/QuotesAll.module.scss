@@ -27,6 +27,7 @@
 .gridColumn {
   display: grid;
   row-gap: 15px;
+  align-content: baseline;
 }
 
 .button {
