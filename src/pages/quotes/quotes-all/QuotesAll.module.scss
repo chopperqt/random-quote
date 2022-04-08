@@ -13,9 +13,6 @@
 
 .allQuotesWrap {
   display: grid;
-  grid-template-columns: 485px 485px;
-  column-gap: 15px;
-  row-gap: 15px;
   align-items: baseline;
 
   :global(.custom) {
@@ -41,4 +38,10 @@
 
 .field {
   margin-top: 20px;
+}
+
+.section {
+  display: grid;
+  grid-template-columns: 485px 485px;
+  grid-gap: 15px;
 }
