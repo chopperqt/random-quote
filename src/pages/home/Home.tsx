@@ -9,12 +9,7 @@ import { Stores } from 'services'
 import styles from './Home.module.scss'
 
 const Home = () => {
-  const {
-    QuoteStore,
-  } = Stores()
-  const {
-    quote,
-  } = QuoteStore
+  const { QuoteStore: { quote } } = Stores()
   const {
     isLoading,
     isSuccess,

@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import debounce from 'lodash.debounce'
 
 import { QUOTES_ALL_TEXT } from '../constants'
 import decOfNum, { quoteWords } from 'helpers/decOfNum'
@@ -10,58 +8,52 @@ import {
   searchQuote,
   getQuotesMore,
 } from 'utils/quotes'
-import {
-  updateUrlParams,
-  getUrlParam,
-} from 'helpers/urlParams'
 
-
-import Store, { IStore } from 'services'
+import { Stores } from 'services'
 import { IQuote } from 'services/quotes'
 
 const useQuotesAll = () => {
   const [search, setSearch] = useState<string>('')
-  const quotes = useSelector((store: IStore) => store.quotesStore.quotes)
-  const quotesSearch = useSelector((store: IStore) => store.quotesStore.quotesSearch)
-  const count = useSelector((store: IStore) => store.quotesStore.quotesCount)
-  const loading = useSelector((store: IStore) => store.notificationsStore.loading.getQuotes)
-  const loadingMore = useSelector((store: IStore) => store.notificationsStore.loading.getQuotesMore)
-  const loadingSearch = useSelector((store: IStore) => store.notificationsStore.loading.searchQuote)
-  const description = `${QUOTES_ALL_TEXT} ${count} ${decOfNum(count, quoteWords)} от 4 авторов`
+  const [page, setPage] = useState<number>(1)
+  const {
+    QuoteStore: {
+      quotes,
+      quotesSearch,
+      quotesCount,
+    },
+    NotificationStore: {
+      loading,
+    }
+  } = Stores()
+  const description = `${QUOTES_ALL_TEXT} ${quotesCount} ${decOfNum(quotesCount, quoteWords)} от 4 авторов`
   const quoteItems = quotesSearch.length > 0 && search.length > 2 ? quotesSearch : quotes
-  const hasSearchQuotes = quotesSearch.length > 0
-
   const quotesFirstColumn: IQuote[] = quoteItems.filter((quote, index) => index % 2 === 0)
   const quotesSecondColumn: IQuote[] = quoteItems.filter((quote, index) => index % 2 !== 0)
+  const hasMoreQuotes = quotesCount > quotes.length
+  const hasSearchQuotes = quotesSearch.length > 0
 
-  const hasMoreQuotes = count > quotes.length
-  const isLoadingMore = loadingMore === 'PENDING'
-
-  const {
-    isLoading,
-    isError,
-    isSuccess,
-  } = useResponse({
-    loading,
-    count,
+  const loadingQuotes = useResponse({
+    loading: loading.getQuotes,
+    count: quotesCount,
   })
 
-  const searchStatuses = useResponse({
-    loading: loadingSearch,
+  const loadingSearch = useResponse({
+    loading: loading.searchQuote,
     count: quotesSearch.length,
   })
 
+  const loadingMoreQuotes = useResponse({
+    loading: loading.getQuotesMore,
+    count: quotesCount
+  })
+
   const handleLoadMore = () => {
-    const page = getUrlParam('p') || 1
-
-    updateUrlParams({
-      p: +page + 1
-    })
-
     getQuotesMore({
       from: +page * 10,
       to: (+page + 1) * 10
     })
+
+    setPage(page + 1)
   }
 
   useEffect(() => {
@@ -78,18 +70,15 @@ const useQuotesAll = () => {
     description,
     quotesFirstColumn,
     quotesSecondColumn,
-    isLoading,
-    isError,
-    isSuccess,
     hasMoreQuotes,
     setSearch,
     search,
-    loadingSearch,
     quotesSearch,
     hasSearchQuotes,
-    searchStatuses,
-    isLoadingMore,
+    loadingSearch,
     handleLoadMore,
+    loadingQuotes,
+    loadingMoreQuotes,
   }
 }
 

@@ -15,9 +15,6 @@ import styles from './QuotesAll.module.scss'
 
 const QuotesAll = () => {
   const {
-    isError,
-    isLoading,
-    isSuccess,
     description,
     quotesFirstColumn,
     quotesSecondColumn,
@@ -25,17 +22,17 @@ const QuotesAll = () => {
     search,
     setSearch,
     loadingSearch,
+    loadingMoreQuotes,
+    loadingQuotes,
     hasSearchQuotes,
-    searchStatuses,
     handleLoadMore,
-    isLoadingMore,
   } = useQuotesAll()
 
   return (
     <div className="container">
       <Title text={description} />
       <SearchInput
-        loading={searchStatuses.isLoading}
+        loading={loadingSearch.isLoading}
         className={styles.field}
         value={search}
         onChangeText={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,10 +44,10 @@ const QuotesAll = () => {
         <Filters />
         <div className={styles.allQuotesWrap}>
           <div className={styles.section}>
-            {search.length > 2 && searchStatuses.isEmpty && !hasSearchQuotes && (
+            {search.length > 2 && loadingSearch.isEmpty && !hasSearchQuotes && (
               <Empty />
             )}
-            {search.length < 3 && isSuccess && (
+            {search.length < 3 && loadingQuotes.isSuccess && (
               <>
                 <div className={styles.gridColumn}>
                   {quotesFirstColumn.map((quote) => (
@@ -64,10 +61,10 @@ const QuotesAll = () => {
                 </div>
               </>
             )}
-            {isLoading && (
+            {loadingQuotes.isLoading && (
               <Skeleton />
             )}
-            {isError && (
+            {loadingQuotes.isError && (
               <Information text={DefaultMessage.error} />
             )}
 
@@ -75,8 +72,8 @@ const QuotesAll = () => {
           {hasMoreQuotes && (
             <div className={styles.button}>
               <Button
-                disabled={isLoadingMore}
-                loading={isLoadingMore}
+                disabled={loadingMoreQuotes.isLoading}
+                loading={loadingMoreQuotes.isLoading}
                 onClick={handleLoadMore}
               >
                 {SHOW_MORE_TEXT}
