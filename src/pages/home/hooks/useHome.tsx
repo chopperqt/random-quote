@@ -9,7 +9,6 @@ import { changeDocumentTitle, DocumentTitles } from 'helpers/documentTitle'
 const TIMER_REFRESH = 60000
 
 const useHome = () => {
-  const quote = useSelector((store: IStore) => store.quotesStore.quote)
   const loading = useSelector((store: IStore) => store.notificationsStore.loading.getRandomQuote)
   const {
     isError,
@@ -38,7 +37,6 @@ const useHome = () => {
   }, [])
 
   return {
-    quote,
     isError,
     isSuccess,
     isLoading,

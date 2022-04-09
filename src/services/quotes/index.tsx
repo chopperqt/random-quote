@@ -32,6 +32,7 @@ export interface IQuote {
   id_author: number,
   text: string,
   author: IAuthor
+  likes: number
 }
 
 interface IAuthor {

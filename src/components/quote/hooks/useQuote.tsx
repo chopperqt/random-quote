@@ -1,21 +1,16 @@
 import { IQuote } from 'services/quotes'
 interface useQuote {
-  quote: IQuote
+  text: string
 }
 
 const useQuote = ({
-  quote,
+  text,
 }: useQuote) => {
-  const hasQuote = Object.keys(quote).length !== 0
-
   const handleCopyText = () => {
-    const { text } = quote
-
     navigator.clipboard.writeText(text)
   }
 
   return {
-    hasQuote,
     handleCopyText,
   }
 }

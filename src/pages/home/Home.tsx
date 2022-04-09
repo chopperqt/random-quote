@@ -1,15 +1,21 @@
 import React from 'react'
 
-import Quote from 'components/quote'
+import Quote, { QuoteSkeleton } from 'components/quote'
 import useHome from './hooks/useHome'
 import Footer from 'components/footer'
 import Information, { DefaultMessage } from 'components/Information'
+import { Stores } from 'services'
 
 import styles from './Home.module.scss'
 
 const Home = () => {
   const {
+    QuoteStore,
+  } = Stores()
+  const {
     quote,
+  } = QuoteStore
+  const {
     isLoading,
     isSuccess,
     isError,
@@ -19,10 +25,7 @@ const Home = () => {
     <div className={styles.home}>
       <div className={styles.quote}>
         {isLoading && (
-          <Quote
-            loading={isLoading}
-            quote={quote}
-          />
+          <QuoteSkeleton />
         )}
         {isSuccess && (
           <Quote

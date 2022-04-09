@@ -9,7 +9,7 @@
 
 .tooltipWrap {
   overflow: visible;
-
+  z-index: 99;
   position: absolute;
   opacity: 0;
   pointer-events: none;

@@ -32,8 +32,9 @@
 .actions {
   opacity: 0;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template: 'action action action action';
   column-gap: 10px;
+  align-items: flex-end;
   transition: $transition--short;
 }
 

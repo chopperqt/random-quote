@@ -6,45 +6,34 @@ import { routes } from 'helpers/routes'
 import QuoteSkeleton from './quote-skeleton/QuoteSkeleton'
 import Link from 'components/link'
 import Icon, { IconList } from 'components/icon'
+import useQuote from './hooks/useQuote'
 
 import styles from './Quote.module.scss'
 
-import { IQuote } from 'services/quotes'
-import useQuote from './hooks/useQuote'
-
-interface IQuoteProps {
-  loading?: boolean
-  quote: IQuote
-}
+import { IQuoteProps } from './'
 
 const Quote = ({
-  loading = false,
   quote
 }: IQuoteProps) => {
+  const { created_at, text, author: { path, name } } = quote
   const {
-    hasQuote,
     handleCopyText,
   } = useQuote({
-    quote,
+    text: quote.text,
   })
-
-  if (!hasQuote || loading) {
-    return (
-      <QuoteSkeleton />
-    )
-  }
 
   return (
     <div className={cx(styles.layout, 'item-content')}>
       <div className={cx(styles.text, "heading--ls")}>
-        {quote.text}
+        {text}
       </div>
       <div className={styles.info}>
-        <div className="heading--sm">{moment(quote.created_at).fromNow()}</div>
+        <div className="heading--sm">{moment(created_at).fromNow()}</div>
         <div className={styles.actions}>
           <button className={styles.button}>
             <Icon icon={IconList.likeOff} />
           </button>
+          <div>0</div>
           <button
             onClick={handleCopyText}
             className={styles.button}>
@@ -55,9 +44,9 @@ const Quote = ({
           </button>
         </div>
         <Link
-          to={`${routes.authors}/${quote.author.path}`}
+          to={`${routes.authors}/${path}`}
           className="heading--sm text--right"
-        >{quote.author.name}</Link>
+        >{name}</Link>
       </div>
     </div>
   )

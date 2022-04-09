@@ -4,6 +4,7 @@ import {
   combineReducers
 } from 'redux'
 import thunk from 'redux-thunk'
+import { useSelector } from 'react-redux'
 
 import quotesStore, { IQuotesStore } from './quotes'
 import userStore, { IUserStore } from './user/reducer'
@@ -31,6 +32,18 @@ const rootStore = combineReducers({
 })
 
 const Store = createStore(rootStore, applyMiddleware(thunk))
+
+export const Stores = () => {
+  const NotificationStore = useSelector((store: IStore) => store.notificationsStore)
+  const AuthorStore = useSelector((store: IStore) => store.authorsStore)
+  const QuoteStore = useSelector((store: IStore) => store.quotesStore)
+
+  return {
+    NotificationStore,
+    AuthorStore,
+    QuoteStore,
+  }
+}
 
 export {
   quoteActions,

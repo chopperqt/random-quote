@@ -141,8 +141,6 @@ export const getRandomQuote = async () => {
     return
   }
 
-  handleSuccess()
-
   const modifyData = [
     {
       ...data?.[0],
@@ -154,6 +152,8 @@ export const getRandomQuote = async () => {
   ]
 
   Store.dispatch(quoteMethods.getRandomQuote(modifyData))
+
+  handleSuccess()
 }
 
 export const getQuotesLast = async () => {
