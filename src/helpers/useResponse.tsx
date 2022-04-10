@@ -11,8 +11,8 @@ const useResponse = ({
 }: IUseResponse) => {
   const isError = loading === 'FAILURE'
   const isEmpty = loading === 'SUCCESS' && count === 0
-  const isSuccess = loading === 'SUCCESS' && count > 0
-  const isLoading = !loading || loading === 'PENDING'
+  const isSuccess = loading === 'SUCCESS'
+  const isLoading = loading === 'PENDING'
 
   return {
     isError,

@@ -62,7 +62,7 @@ const useQuotesAll = () => {
 
   useEffect(() => {
     if (search.length > 2) {
-      searchQuote(search)
+      // searchQuote(search)
     }
   }, [search])
 

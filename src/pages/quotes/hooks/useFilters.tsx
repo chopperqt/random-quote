@@ -6,8 +6,12 @@ import {
   AUTHORS_TEXT,
 } from 'pages/quotes/quotes-all/constants'
 import useResponse from 'helpers/useResponse'
+import {
+  getUrlParam,
+  updateUrlParams,
+} from 'helpers/urlParams'
 
-import { IStore } from 'services'
+import { Stores } from 'services'
 
 interface IUseFilters {
 
@@ -17,23 +21,46 @@ const useFilters = ({
 
 }: IUseFilters) => {
   const [openedAuthors, setOpenedAuthors] = useState<boolean>(false)
-
-  const loading = useSelector((store: IStore) => store.notificationsStore.loading.getAuthors)
-  const count = useSelector((store: IStore) => store.authorsStore.authorsCount)
-  const authors = useSelector((store: IStore) => store.authorsStore.authors)
+  const {
+    NotificationStore: {
+      loading
+    },
+    AuthorStore: {
+      authorsCount,
+      authors
+    }
+  } = Stores()
 
   const handleOpenAuthors = () => setOpenedAuthors(true)
   const handleCloseAuthors = () => setOpenedAuthors(false)
 
-  const authorsTitle = `${AUTHORS_TEXT} (${count})`
+  const authorsTitle = `${AUTHORS_TEXT} (${authorsCount})`
 
   const {
     isLoading,
     isSuccess,
   } = useResponse({
-    loading,
-    count,
+    loading: loading.getAuthors,
+    count: authorsCount,
   })
+
+  const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>, path: string) => {
+    let authors: any = getUrlParam('authors')
+
+    if (authors) {
+      authors = JSON.parse(authors)
+    } else {
+      authors = []
+    }
+
+    if (event.currentTarget.checked) {
+      authors.push(path)
+
+      updateUrlParams({
+        authors: JSON.stringify(authors),
+      })
+    }
+  }
 
   useEffect(() => {
     getAuthors()
@@ -47,6 +74,7 @@ const useFilters = ({
     isLoading,
     isSuccess,
     authors,
+    handleChangeCheckbox,
   }
 }
 

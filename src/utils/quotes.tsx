@@ -87,9 +87,9 @@ export const getQuotesMore = async ({
     return
   }
 
-  handleSuccess()
-
   Store.dispatch(quoteMethods.getQuotes({ data, count }))
+
+  handleSuccess()
 }
 
 export const getQuotesAuthors = async (id_author: string) => {
@@ -194,7 +194,7 @@ export const searchQuote = debounce(async (search) => {
     handleSuccess,
   } = loadingStatuses(QuotesRequests.searchQuote)
 
-  handlePending()
+  // handlePending()
 
   const { data, error } = await supabase
     .from(Tables.quotes)
@@ -213,9 +213,9 @@ export const searchQuote = debounce(async (search) => {
     return
   }
 
-  handleSuccess()
-
   Store.dispatch(quoteMethods.quotesSearch(data))
+
+  // handleSuccess()
 }, 800)
 
 interface IPostQuote {

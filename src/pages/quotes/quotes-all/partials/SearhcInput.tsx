@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from 'react'
 
 import Input from 'components/input'
 import { SEARCH_TEXT } from '../../constants'
+import { updateUrlParams } from 'helpers/urlParams'
 
 interface ISearchInputProps {
   value: string
@@ -21,6 +22,14 @@ const SearchInput = ({
 }: ISearchInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
+  const handleBlur = () => {
+    if (value) {
+      updateUrlParams({
+        search: value
+      })
+    }
+  }
+
   useEffect(() => {
     inputRef.current?.addEventListener('input', onChangeText)
 
@@ -29,6 +38,7 @@ const SearchInput = ({
 
   return (
     <Input
+      onBlur={handleBlur}
       loading={loading}
       className={className}
       ref={inputRef}

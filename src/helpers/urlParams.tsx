@@ -17,3 +17,15 @@ export function getUrlParam(str: string) {
 
   return url.searchParams.get(str)
 }
+
+
+export function getUrlParams() {
+  const url = new URL(window.location.href)
+  const params: { [key: string]: string } = {}
+
+  url.searchParams.forEach((value, key) => {
+    params[key] = value
+  })
+
+  return params
+}
