@@ -18,7 +18,6 @@ export function getUrlParam(str: string) {
   return url.searchParams.get(str)
 }
 
-
 export function getUrlParams() {
   const url = new URL(window.location.href)
   const params: { [key: string]: string } = {}
@@ -29,3 +28,12 @@ export function getUrlParams() {
 
   return params
 }
+
+export function deleteUrlParam(string: string) {
+  const url = new URL(window.location.href)
+
+  url.searchParams.delete(string)
+
+  window.history.pushState('', '', url.pathname + url.search)
+}
+

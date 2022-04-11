@@ -9,6 +9,7 @@ import useResponse from 'helpers/useResponse'
 import {
   getUrlParam,
   updateUrlParams,
+  deleteUrlParam,
 } from 'helpers/urlParams'
 
 import { Stores } from 'services'
@@ -59,7 +60,15 @@ const useFilters = ({
       updateUrlParams({
         authors: JSON.stringify(authors),
       })
+
+      return
     }
+
+    authors = authors.filter((author: string) => author !== path)
+
+    updateUrlParams({
+      authors: JSON.stringify(authors)
+    })
   }
 
   useEffect(() => {

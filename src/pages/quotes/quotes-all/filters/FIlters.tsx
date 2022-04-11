@@ -39,7 +39,7 @@ const Filters = () => {
           >
             <div className={styles.authors}>
               {authors.map(({ name, path }) => {
-                const checked = filters?.authors.includes(path)
+                const checked = filters?.authors?.includes(path)
 
                 return (
                   <Checkbox
