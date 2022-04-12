@@ -1,6 +1,7 @@
 @import 'asset/scss/colors';
 @import 'asset/scss/common';
 @import 'asset/scss/mixin';
+@import 'asset/scss/typography';
 
 .layout {
   display: grid;
@@ -11,17 +12,26 @@
   max-width: 600px;
   position: relative;
   transition: $transition--short;
-
+  
   &:hover {
     .actions {
       opacity: 1;
     }
+  }
+
+  @media screen and (max-width: $media--mobile) {
+    width: 100%;
+    max-width: 100%;
   }
 }
 
 .text {
   text-align: justify;
   text-indent: 10px;
+  
+  @media screen and (max-width: $media--mobile) {
+    font-size: $font-size--md !important;
+  }
 }
 
 .info {
