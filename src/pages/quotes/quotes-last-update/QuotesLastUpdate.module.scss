@@ -36,6 +36,10 @@
   row-gap: 15px;
   column-gap: 15px;
   align-items: baseline;
+
+  @media screen and (max-width: $media--mobile) {
+    row-gap: 0;
+  }  
 }
 
 .moreQuotes {
@@ -51,5 +55,10 @@
 
   &:global(.custom) {
     min-width: 100%;
+  }
+
+  @media screen and (max-width: $media--mobile) {
+    grid-template-columns: 1fr;
+    width: 100%;
   }
 }

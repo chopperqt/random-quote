@@ -1,5 +1,6 @@
 @import 'asset/scss/typography';
 @import 'asset/scss/colors';
+@import 'asset/scss/common';
 
 * {
   margin: 0;
@@ -20,6 +21,10 @@ h1,h2,h3,h4,h5,p {
 
 .container {
   width: 1200px;
+
+  @media screen and (max-width: $media--mobile) {
+    width: 100%;
+  }
 }
 
 .notification {

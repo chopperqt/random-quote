@@ -1,3 +1,5 @@
+@import 'asset/scss/common';
+
 .layout {
   width: 100%;
   display: flex;
@@ -6,6 +8,11 @@
   justify-content: space-between;
   margin: 60px 0;
   padding-left: 60px;
+
+  @media screen and (max-width: $media--mobile) {
+    padding-left: 0;
+    padding: 0 16px
+  }
 }
 
 .footer {

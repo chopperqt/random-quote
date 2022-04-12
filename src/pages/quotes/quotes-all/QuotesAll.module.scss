@@ -1,4 +1,5 @@
 @import 'asset/scss/colors';
+@import 'asset/scss/common';
 
 .container {
   width: 1215px;;
@@ -9,6 +10,10 @@
   grid-template-columns: 200px 1fr;
   margin-top: 20px;
   column-gap: 15px;
+
+  @media screen and (max-width: $media--mobile) {
+    grid-template-columns: 100%;
+  }
 }
 
 .allQuotesWrap {
@@ -45,4 +50,8 @@
   display: grid;
   grid-template-columns: 485px 485px;
   grid-gap: 15px;
+
+  @media screen {
+    grid-template-columns: 100%;    
+  }
 }
