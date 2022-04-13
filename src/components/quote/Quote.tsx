@@ -15,7 +15,15 @@ import { IQuoteProps } from './'
 const Quote = ({
   quote
 }: IQuoteProps) => {
-  const { created_at, text, author: { path, name } } = quote
+  const {
+    created_at,
+    text,
+    likes,
+    author: {
+      path,
+      name
+    }
+  } = quote
   const {
     handleCopyText,
   } = useQuote({
@@ -24,16 +32,16 @@ const Quote = ({
 
   return (
     <div className={cx(styles.layout, 'item-content')}>
-      <div className={styles.section}>
+      <div className={styles.sectionLike}>
         <button className={styles.button}>
           <Icon icon={IconList.chevronUp} />
         </button>
-        <div>0</div>
+        <div>{likes}</div>
         <button className={styles.button}>
           <Icon icon={IconList.chevronDown} />
         </button>
       </div>
-      <div>
+      <div className={styles.sectionQuote}>
         <div className={cx(styles.text, "heading--ls")}>
           {text}
         </div>

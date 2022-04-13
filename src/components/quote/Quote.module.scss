@@ -54,9 +54,14 @@
   @include reset-button;
 }
 
-.section {
+.sectionLike {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.sectionQuote {
+  display: grid;
+  row-gap: 10px;
 }

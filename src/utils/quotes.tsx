@@ -133,7 +133,7 @@ export const getRandomQuote = async () => {
   handlePending()
 
   let { data, error, } = await supabase
-    .rpc('fuckyou3')
+    .rpc('quoterandom')
 
   if (error) {
     handleFailure(error)
