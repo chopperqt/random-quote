@@ -24,30 +24,38 @@ const Quote = ({
 
   return (
     <div className={cx(styles.layout, 'item-content')}>
-      <div className={cx(styles.text, "heading--ls")}>
-        {text}
+      <div className={styles.section}>
+        <button className={styles.button}>
+          <Icon icon={IconList.chevronUp} />
+        </button>
+        <div>0</div>
+        <button className={styles.button}>
+          <Icon icon={IconList.chevronDown} />
+        </button>
       </div>
-      <div className={styles.info}>
-        <div className="heading--sm">{moment(created_at).fromNow()}</div>
-        <div className={styles.actions}>
-          <button className={styles.button}>
-            <Icon icon={IconList.likeOff} />
-          </button>
-          <div>0</div>
-          <button
-            onClick={handleCopyText}
-            className={styles.button}>
-            <Icon icon={IconList.copy} />
-          </button>
-          <button className={styles.button}>
-            <Icon icon={IconList.share} />
-          </button>
+      <div>
+        <div className={cx(styles.text, "heading--ls")}>
+          {text}
         </div>
-        <Link
-          to={`${routes.authors}/${path}`}
-          className="heading--sm text--right"
-        >{name}</Link>
+        <div className={styles.info}>
+          <div className="heading--sm">{moment(created_at).fromNow()}</div>
+          <div className={styles.actions}>
+            <button
+              onClick={handleCopyText}
+              className={styles.button}>
+              <Icon icon={IconList.copy} />
+            </button>
+            <button className={styles.button}>
+              <Icon icon={IconList.share} />
+            </button>
+          </div>
+          <Link
+            to={`${routes.authors}/${path}`}
+            className="heading--sm text--right"
+          >{name}</Link>
+        </div>
       </div>
+
     </div>
   )
 }
