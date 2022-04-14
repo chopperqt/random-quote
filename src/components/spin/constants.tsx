@@ -1,4 +1,5 @@
 export interface ISpin {
-  children: JSX.Element
   loading: boolean
+  children?: JSX.Element
+  className?: string
 }

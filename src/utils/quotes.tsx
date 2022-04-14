@@ -8,16 +8,19 @@ import {
   Tables,
 } from './constants'
 import debounce from 'lodash.debounce';
+import { PostgrestError } from '@supabase/supabase-js';
 
 const LIMIT_PER_PAGE = 10
 
-const QuotesRequests = {
+export const QuotesRequests = {
   getQuotes: 'getQuotes',
   getQuotesMore: 'getQuotesMore',
   getQuotesAuthor: 'getQuotesAuthor',
   getQuotesLast: 'getQuotesLast',
   getRandomQuote: 'getRandomQuote',
   searchQuote: 'searchQuote',
+  updateQuoteLikes: 'updateQuoteLikes',
+  postQuote: 'postQuotes'
 }
 
 export const getQuotes = async () => {
@@ -68,7 +71,11 @@ export const getQuotesMore = async ({
 
   handlePending()
 
-  const { data, error, count } = await supabase
+  const {
+    data,
+    error,
+    count
+  } = await supabase
     .from(Tables.quotes)
     .select(`
       *,
@@ -274,6 +281,71 @@ export const postQuote = async ({
       quote: createQuote.data
     }
   }
+}
+
+type TUpdate = 'quote' | 'random'
+
+export const updateQuoteLikes = async ({ id }: { id: number }, update: TUpdate) => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses(QuotesRequests.updateQuoteLikes)
+
+  handlePending()
+
+  const currentLikes = await getCurrentQuoteLike({ id })
+  const isNumberCurrentLikes = typeof currentLikes === 'number'
+
+  if (!isNumberCurrentLikes) {
+    handleFailure(currentLikes)
+  }
+
+  const {
+    data,
+    error,
+  } = await supabase
+    .from(Tables.quotes)
+    .update({ likes: +currentLikes + 1 })
+    .match({ id_quote: id })
+
+  if (error) {
+    handleFailure(error)
+  }
+
+  if (update === 'random') {
+    const modifyData = [
+      {
+        ...data?.[0],
+        author: {
+          name: data?.[0].name,
+          path: data?.[0].path,
+        }
+      }
+    ]
+
+    Store.dispatch(quoteMethods.updateRandomQuote(modifyData))
+
+    handleSuccess()
+
+    return
+  }
+}
+
+export const getCurrentQuoteLike = async ({ id }: { id: number }): Promise<PostgrestError | number> => {
+  const {
+    data,
+    error
+  } = await supabase
+    .from(Tables.quotes)
+    .select('*')
+    .match({ id_quote: id })
+
+  if (error) {
+    return error
+  }
+
+  return data[0].likes
 }
 
 

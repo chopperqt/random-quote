@@ -2,7 +2,7 @@ import { TLoading } from "services/notifications/reducer"
 
 export interface IUseResponse {
   loading: TLoading
-  count: number
+  count?: number
 }
 
 const useResponse = ({

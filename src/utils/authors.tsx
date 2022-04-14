@@ -3,6 +3,10 @@ import supabase from "./client";
 import Store, { notificationMethods, authorsMethods } from 'services'
 import { Tables } from './constants'
 
+export const AuthorsRequests = {
+  getAuthors: 'getAuthors'
+}
+
 export const getAuthors = async () => {
   Store.dispatch(notificationMethods.loadingRequest('getAuthors', 'PENDING'))
 

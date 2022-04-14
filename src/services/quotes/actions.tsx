@@ -3,6 +3,7 @@ export const actions = {
   GET_LAST_QUOTES: 'GET_LAST_QUOTES',
   GET_QUOTES: 'GET_QUOTES',
   SEARCH_QUOTES: 'SEARCH_QUOTES',
+  UPDATE_RANDOM_QUOTE: 'UPDATE_RANDOM_QUOTE'
 }
 
 export const methods = {
@@ -27,6 +28,12 @@ export const methods = {
   quotesSearch<T>(data: T) {
     return {
       type: actions.SEARCH_QUOTES,
+      payload: data,
+    }
+  },
+  updateRandomQuote<T>(data: T) {
+    return {
+      type: actions.UPDATE_RANDOM_QUOTE,
       payload: data,
     }
   }

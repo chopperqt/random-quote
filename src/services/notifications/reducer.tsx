@@ -1,9 +1,10 @@
 import { TNotification } from "components/notification/Notification"
 import { actions } from "./actions"
+import { TRequests, Requests } from 'utils'
 
 const initialState: INotificationsStore = {
   notifications: [],
-  loading: {}
+  loading: {} as any
 }
 
 const {
@@ -23,11 +24,11 @@ export interface INotification {
   type: TNotification
 }
 
-interface ILoading {
-  [key: string]: TLoading
+type ILoading = {
+  [key in TRequests]: TLoading
 }
 
-export type TLoading = 'PENDING' | 'SUCCESS' | 'FAILURE'
+export type TLoading = 'PENDING' | 'SUCCESS' | 'FAILURE' | undefined
 
 const notificationsStore = (
   state = initialState,

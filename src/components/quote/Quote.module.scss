@@ -52,6 +52,11 @@
 
 .button {
   @include reset-button;
+
+  :global(.icon-svg) {
+    width: 50px;
+    height: 20px;
+  }
 }
 
 .sectionLike {
@@ -64,4 +69,13 @@
 .sectionQuote {
   display: grid;
   row-gap: 10px;
+}
+
+.loading { 
+  width: 17px;
+  height: 22px;
+  img {
+    width: 24px;
+    height: 24px;
+  }
 }

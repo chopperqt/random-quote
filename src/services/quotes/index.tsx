@@ -5,6 +5,7 @@ const {
   GET_QUOTES,
   GET_LAST_QUOTES,
   SEARCH_QUOTES,
+  UPDATE_RANDOM_QUOTE,
 } = actions
 
 const initialState = {
@@ -66,6 +67,12 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
       return {
         ...state,
         quotesSearch: payload
+      }
+    }
+    case UPDATE_RANDOM_QUOTE: {
+      return {
+        ...state,
+        quote: payload[0]
       }
     }
     default: {

@@ -1,4 +1,5 @@
 import React from 'react'
+import cx from 'classnames'
 
 import loadingImg from 'templates/loading.gif'
 
@@ -9,10 +10,11 @@ import styles from './Spin.module.scss'
 const Spin = ({
   children,
   loading,
+  className,
 }: ISpin) => (
   <div className={styles.layout}>
     {loading && (
-      <div className={styles.wrap}>
+      <div className={cx(styles.wrap, className)}>
         <img
           src={loadingImg}
           alt="Loading..."
