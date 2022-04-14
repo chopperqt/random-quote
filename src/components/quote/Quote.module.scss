@@ -43,9 +43,7 @@
 
 .actions {
   opacity: 0;
-  display: grid;
-  grid-template: 'action action action action';
-  column-gap: 10px;
+  display: flex;
   align-items: flex-end;
   transition: $transition--short;
 }
@@ -54,7 +52,7 @@
   @include reset-button;
 
   :global(.icon-svg) {
-    width: 50px;
+    width: 30px;
     height: 20px;
   }
 }
@@ -71,9 +69,14 @@
   row-gap: 10px;
 }
 
+.loadingWrap {
+  background-color: $color-white--500;
+  opacity: 1;
+}
+
 .loading { 
-  width: 17px;
-  height: 22px;
+  opacity: 1;
+  background-color: $color-white--500;
   img {
     width: 24px;
     height: 24px;

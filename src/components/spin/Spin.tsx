@@ -10,11 +10,12 @@ import styles from './Spin.module.scss'
 const Spin = ({
   children,
   loading,
+  classNameSpin,
   className,
 }: ISpin) => (
-  <div className={styles.layout}>
+  <div className={cx(styles.layout, className)}>
     {loading && (
-      <div className={cx(styles.wrap, className)}>
+      <div className={cx(styles.wrap, classNameSpin)}>
         <img
           src={loadingImg}
           alt="Loading..."

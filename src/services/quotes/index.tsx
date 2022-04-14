@@ -72,7 +72,10 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
     case UPDATE_RANDOM_QUOTE: {
       return {
         ...state,
-        quote: payload[0]
+        quote: {
+          ...state.quote,
+          ...payload[0]
+        }
       }
     }
     default: {

@@ -15,6 +15,7 @@ const useResponse = ({
   const isLoading = loading === 'PENDING'
 
   return {
+    hasStatus: !loading,
     isError,
     isEmpty,
     isSuccess,

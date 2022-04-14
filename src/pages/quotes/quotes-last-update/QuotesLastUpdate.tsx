@@ -22,7 +22,8 @@ const QuotesLastUpdate = () => {
     lastQuotesDescription,
     quotesFirstColumn,
     quotesSecondColumn,
-    isMoreButton
+    isMoreButton,
+    hasStatus,
   } = useQuotesLastUpdate()
 
   return (
@@ -32,7 +33,7 @@ const QuotesLastUpdate = () => {
       />
       <div className={styles.quotesWrap}>
         <div className={styles.quotes}>
-          {isLoading && (
+          {(isLoading || hasStatus)! && (
             <Skeleton />
           )}
           {isEmpty && (

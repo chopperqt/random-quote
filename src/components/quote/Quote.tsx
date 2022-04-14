@@ -3,16 +3,16 @@ import cx from 'classnames'
 import moment from 'moment'
 
 import { routes } from 'helpers/routes'
-import QuoteSkeleton from './quote-skeleton/QuoteSkeleton'
 import Link from 'components/link'
 import Icon, { IconList } from 'components/icon'
 import useQuote from './hooks/useQuote'
 import { updateQuoteLikes } from 'utils/quotes'
-import Spin from 'components/spin'
+import Likes from './likes/Likes'
 
 import styles from './Quote.module.scss'
 
 import { IQuoteProps } from './'
+
 
 const Quote = ({
   quote
@@ -36,31 +36,12 @@ const Quote = ({
 
   return (
     <div className={cx(styles.layout, 'item-content')}>
-      <div className={styles.sectionLike}>
-        <button
-          className={cx(styles.button, styles.buttonLike)}
-          onClick={() => updateQuoteLikes({ id: id_quote }, 'random')}
-        >
-          <Icon icon={IconList.chevronUp} />
-        </button>
-        <div>
-          {loadingUpdateQuotesLike.isLoading && (
-            <Spin
-              className={styles.loading}
-              loading={true}
-            />
-          )}
-          {!loadingUpdateQuotesLike.isLoading && (
-            <div className={styles.loading}>
-              {likes}
-            </div>
-          )}
-
-        </div>
-        <button className={styles.button}>
-          <Icon icon={IconList.chevronDown} />
-        </button>
-      </div>
+      <Likes
+        count={likes}
+        loading={loadingUpdateQuotesLike.isLoading}
+        onClickLike={() => updateQuoteLikes({ id: id_quote }, 'like')}
+        onClickDislike={() => updateQuoteLikes({ id: id_quote }, 'dislike')}
+      />
       <div className={styles.sectionQuote}>
         <div className={cx(styles.text, "heading--ls")}>
           {text}

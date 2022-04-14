@@ -283,9 +283,9 @@ export const postQuote = async ({
   }
 }
 
-type TUpdate = 'quote' | 'random'
+type TUpdateAction = 'like' | 'dislike'
 
-export const updateQuoteLikes = async ({ id }: { id: number }, update: TUpdate) => {
+export const updateQuoteLikes = async ({ id }: { id: number }, action: TUpdateAction) => {
   const {
     handleFailure,
     handlePending,
@@ -301,35 +301,27 @@ export const updateQuoteLikes = async ({ id }: { id: number }, update: TUpdate) 
     handleFailure(currentLikes)
   }
 
+  let likes = +currentLikes + 1
+
+  if (action === 'dislike') {
+    likes = +currentLikes - 1
+  }
+
   const {
     data,
     error,
   } = await supabase
     .from(Tables.quotes)
-    .update({ likes: +currentLikes + 1 })
+    .update({ likes })
     .match({ id_quote: id })
 
   if (error) {
     handleFailure(error)
   }
 
-  if (update === 'random') {
-    const modifyData = [
-      {
-        ...data?.[0],
-        author: {
-          name: data?.[0].name,
-          path: data?.[0].path,
-        }
-      }
-    ]
+  Store.dispatch(quoteMethods.updateRandomQuote(data))
 
-    Store.dispatch(quoteMethods.updateRandomQuote(modifyData))
-
-    handleSuccess()
-
-    return
-  }
+  handleSuccess()
 }
 
 export const getCurrentQuoteLike = async ({ id }: { id: number }): Promise<PostgrestError | number> => {

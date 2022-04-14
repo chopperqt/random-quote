@@ -6,6 +6,13 @@ export interface IQuoteProps {
   quote: IQuote
 }
 
+export interface ILikesProps {
+  onClickLike: () => void
+  onClickDislike: () => void
+  loading: boolean
+  count: number
+}
+
 export {
   QuoteSkeleton
 }

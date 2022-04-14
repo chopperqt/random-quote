@@ -26,7 +26,8 @@ const useQuotesLastUpdate = () => {
     isEmpty,
     isLoading,
     isError,
-    isSuccess
+    isSuccess,
+    hasStatus,
   } = useResponse({
     loading: loadingLastQuotes,
     count: lastQuotesCount,
@@ -47,6 +48,7 @@ const useQuotesLastUpdate = () => {
     quotesFirstColumn,
     quotesSecondColumn,
     isMoreButton,
+    hasStatus,
   }
 }
 

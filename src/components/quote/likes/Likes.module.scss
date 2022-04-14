@@ -1,0 +1,31 @@
+@import 'asset/scss/colors';
+@import 'asset/scss/mixin';
+
+.sectionLike {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 5px;
+}
+
+.loadingWrap {
+  background-color: $color-white--500;
+  opacity: 1;
+}
+
+.loading { 
+  opacity: 1;
+  background-color: $color-white--500;
+  img {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.button {
+  @include reset-button;
+  display: flex;
+  justify-self: center;
+  align-items: center;
+}

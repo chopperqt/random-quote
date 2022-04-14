@@ -1,7 +1,5 @@
-import loadingStatuses from 'helpers/loadingStatuses'
 import useResponse from 'helpers/useResponse'
 import { Stores } from 'services'
-import { QuotesRequests } from 'utils/quotes'
 interface useQuote {
   text: string
 }
