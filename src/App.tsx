@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IStore } from 'services';
 
 import Home from 'pages/home/Home'
+import Profile from 'pages/profile';
 import useUser from 'helpers/useUser'
 import { routes } from 'helpers/routes'
 import AdminPanel from 'pages/admin-panel/AdminPanel';
@@ -20,9 +21,6 @@ import './App.scss'
 
 function App() {
   const dispatch = useDispatch()
-  const {
-    hasUser
-  } = useUser()
   const notifications = useSelector((store: IStore) => store.notificationsStore.notifications)
   const hasNotifications = notifications.length > 0
 
@@ -34,6 +32,8 @@ function App() {
           <Route path={routes.adminPanel} element={<AdminPanel />} />
           <Route path={routes.default} element={<Home />} />
           <Route path={routes.quotes} element={<Quotes />} />
+          <Route path={routes.profile} element={<Profile />} />
+          <Route path={routes.logIn} element={<div>ЛОгин</div>} />
         </Routes>
       </div>
       {hasNotifications && (

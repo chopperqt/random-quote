@@ -1,7 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import useResponse from 'helpers/useResponse'
 import { Stores } from 'services'
-import { updateQuoteLikes } from 'utils/quotes'
+import {
+  updateQuoteLikes,
+  getLikedQuote
+} from 'utils/quotes'
+import useUser from 'helpers/useUser'
 
 interface useQuote {
   text: string
@@ -13,10 +17,13 @@ const useQuote = ({
   id,
 }: useQuote) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [disableLike, setDisabledLike] = useState<boolean>(false)
+  const [disableDislike, setDisableDislike] = useState<boolean>(false)
   const { NotificationStore } = Stores()
   const {
     loading,
   } = NotificationStore
+  const { user } = useUser()
 
   const loadingUpdateQuotesLike = useResponse({
     loading: loading.updateQuoteLikes,
@@ -54,12 +61,30 @@ const useQuote = ({
     setIsLoading(false)
   }
 
+  const checkDisabledLikes = async () => {
+    if (user && id) {
+      const data = await getLikedQuote(id, user.id)
+
+      if (data) {
+        const isDisabledLike = data[0].action === 'like'
+
+        setDisabledLike(isDisabledLike)
+      }
+    }
+  }
+
+  useEffect(() => {
+    checkDisabledLikes()
+  }, [])
+
   return {
     handleCopyText,
     loadingUpdateQuotesLike,
     isLoadingLike: isLoading,
     handleClickLike,
     handleClickDislike,
+    disableLike,
+    disableDislike,
   }
 }
 

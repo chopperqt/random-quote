@@ -1,3 +1,4 @@
+import { findLastIndex } from 'lodash'
 import { actions } from './actions'
 
 const {
@@ -6,6 +7,7 @@ const {
   GET_LAST_QUOTES,
   SEARCH_QUOTES,
   UPDATE_RANDOM_QUOTE,
+  UPDATE_LAST_QUOTE,
 } = actions
 
 const initialState = {
@@ -70,12 +72,36 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
       }
     }
     case UPDATE_RANDOM_QUOTE: {
+      const findLastQuoteIndex = state.lastQuotes.findIndex((item: IQuote) => item.id_quote === payload.id)
+      const findQuote = state.quotes.findIndex((item: IQuote) => item.id_quote === payload.id)
+
+      const modifyRandomQuote = {
+        ...state.quote,
+        likes: payload.data[0].likes,
+      }
+
+      let modifyLastQuote: IQuote[] = state.lastQuotes
+      let modifyQuote: IQuote[] = state.quotes
+
+      if (typeof findLastQuoteIndex === 'number') {
+        modifyLastQuote[findLastQuoteIndex] = {
+          ...modifyLastQuote[findLastQuoteIndex],
+          likes: payload.data[0].likes,
+        }
+      }
+
+      if (typeof findQuote === 'number') {
+        modifyQuote[findQuote] = {
+          ...modifyQuote[findQuote],
+          likes: payload.data[0].likes
+        }
+      }
+
       return {
         ...state,
-        quote: {
-          ...state.quote,
-          ...payload[0]
-        }
+        quote: modifyRandomQuote,
+        lastQuotes: modifyLastQuote,
+        quotes: modifyQuote,
       }
     }
     default: {

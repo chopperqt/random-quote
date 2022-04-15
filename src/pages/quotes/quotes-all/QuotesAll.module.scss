@@ -51,7 +51,12 @@
   grid-template-columns: 485px 485px;
   grid-gap: 15px;
 
-  @media screen {
+  @media screen and (max-width: $media--mobile) {
     grid-template-columns: 100%;    
   }
+}
+
+.skeletonWrap {
+  width: 100%;
+  grid-template-columns: 1fr 1fr;
 }

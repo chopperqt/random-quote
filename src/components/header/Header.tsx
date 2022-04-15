@@ -33,12 +33,6 @@ const Header = () => {
             </Tooltip>
           )
         })}
-        {/* {hasUser && (
-          <img src={user?.avatar_url} alt={user?.email} />
-        )}
-        {!hasUser && (
-          <button>Войти</button>
-        )} */}
       </div>
     </header>
   )

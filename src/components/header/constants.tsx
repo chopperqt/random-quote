@@ -18,5 +18,10 @@ export const MenuList: IMenuList[] = [
     path: routes.authors,
     icon: IconList.author,
     text: 'Авторы',
+  },
+  {
+    path: routes.profile,
+    icon: IconList.user,
+    text: 'Профиль',
   }
 ]

@@ -3,7 +3,8 @@ export const actions = {
   GET_LAST_QUOTES: 'GET_LAST_QUOTES',
   GET_QUOTES: 'GET_QUOTES',
   SEARCH_QUOTES: 'SEARCH_QUOTES',
-  UPDATE_RANDOM_QUOTE: 'UPDATE_RANDOM_QUOTE'
+  UPDATE_RANDOM_QUOTE: 'UPDATE_RANDOM_QUOTE',
+  UPDATE_LAST_QUOTE: 'UPDATE_LAST_QUOTE',
 }
 
 export const methods = {
@@ -31,10 +32,10 @@ export const methods = {
       payload: data,
     }
   },
-  updateRandomQuote<T>(data: T) {
+  updateRandomQuote<T>(data: T, id: number) {
     return {
       type: actions.UPDATE_RANDOM_QUOTE,
-      payload: data,
+      payload: { data, id },
     }
-  }
+  },
 }

@@ -5,6 +5,7 @@ import {
 } from 'redux'
 import thunk from 'redux-thunk'
 import { useSelector } from 'react-redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
 
 import quotesStore, { IQuotesStore } from './quotes'
 import userStore, { IUserStore } from './user/reducer'
@@ -29,7 +30,6 @@ import {
   methods as filterMethods,
 } from './filters/actions'
 
-
 const rootStore = combineReducers({
   quotesStore,
   userStore,
@@ -38,7 +38,7 @@ const rootStore = combineReducers({
   filtersStore,
 })
 
-const Store = createStore(rootStore, applyMiddleware(thunk))
+const Store = createStore(rootStore, composeWithDevTools(applyMiddleware(thunk)))
 
 export const Stores = () => {
   const NotificationStore = useSelector((store: IStore) => store.notificationsStore)

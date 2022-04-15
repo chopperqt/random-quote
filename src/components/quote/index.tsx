@@ -6,11 +6,16 @@ export interface IQuoteProps {
   quote: IQuote
 }
 
-export interface ILikesProps {
+export interface ILikesProps extends ILikesButtonProps {
   onClickLike: () => void
   onClickDislike: () => void
   loading: boolean
   count: number
+}
+
+export interface ILikesButtonProps {
+  disableLike: boolean
+  disableDislike: boolean
 }
 
 export {

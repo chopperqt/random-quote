@@ -13,10 +13,12 @@ const Likes = ({
   onClickDislike,
   loading = false,
   count = 0,
+  disableDislike,
+  disableLike,
 }: ILikesProps) => (
   <div className={styles.sectionLike}>
     <button
-      disabled={loading}
+      disabled={loading || disableLike}
       className={cx(styles.button, styles.buttonLike)}
       onClick={onClickLike}
     >
@@ -34,7 +36,7 @@ const Likes = ({
       </Spin>
     </div>
     <button
-      disabled={loading}
+      disabled={loading || disableDislike}
       onClick={onClickDislike}
       className={styles.button}
     >

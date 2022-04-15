@@ -41,9 +41,6 @@ const Filters = () => {
               {authors.map(({ name, path }) => {
                 const checked = filters?.authors?.includes(path)
 
-                console.log(authors)
-
-
                 return (
                   <Checkbox
                     checked={checked}

@@ -41,7 +41,7 @@ const QuotesAll = () => {
         onClear={() => setSearch('')}
       />
       <div className={styles.allQuotes}>
-        {/* <Filters /> */}
+        <Filters />
         <div className={styles.allQuotesWrap}>
           <div className={styles.section}>
             {search.length > 2 && loadingSearch.isEmpty && !hasSearchQuotes && (

@@ -9,6 +9,10 @@ import {
 } from './constants'
 import debounce from 'lodash.debounce';
 import { PostgrestError } from '@supabase/supabase-js';
+import {
+  IPostQuote,
+  TUpdateAction
+} from './'
 
 const LIMIT_PER_PAGE = 10
 
@@ -20,7 +24,8 @@ export const QuotesRequests = {
   getRandomQuote: 'getRandomQuote',
   searchQuote: 'searchQuote',
   updateQuoteLikes: 'updateQuoteLikes',
-  postQuote: 'postQuotes'
+  postQuote: 'postQuotes',
+  getLikedQuote: 'getLikedQuote',
 }
 
 export const getQuotes = async () => {
@@ -225,12 +230,6 @@ export const searchQuote = debounce(async (search) => {
   // handleSuccess()
 }, 800)
 
-interface IPostQuote {
-  text: string
-  time: string
-  author: number
-}
-
 export const postQuote = async ({
   text,
   time,
@@ -283,8 +282,6 @@ export const postQuote = async ({
   }
 }
 
-type TUpdateAction = 'like' | 'dislike'
-
 export const updateQuoteLikes = async ({ id }: { id: number }, action: TUpdateAction) => {
   const {
     handleFailure,
@@ -321,11 +318,21 @@ export const updateQuoteLikes = async ({ id }: { id: number }, action: TUpdateAc
     return error
   }
 
-  Store.dispatch(quoteMethods.updateRandomQuote(data))
+  const modifyData = [
+    {
+      ...data?.[0],
+      author: {
+        name: data?.[0].name,
+        path: data?.[0].path,
+      }
+    }
+  ]
+
+  Store.dispatch(quoteMethods.updateRandomQuote(modifyData, id))
 
   handleSuccess()
 
-  return data
+  return modifyData
 }
 
 export const getCurrentQuoteLike = async ({ id }: { id: number }): Promise<PostgrestError | number> => {
@@ -344,4 +351,29 @@ export const getCurrentQuoteLike = async ({ id }: { id: number }): Promise<Postg
   return data[0].likes
 }
 
+export const getLikedQuote = async (id_quote: number, id_user: string) => {
+  const {
+    handleSuccess,
+    handleFailure,
+    handlePending,
+  } = loadingStatuses(QuotesRequests.getLikedQuote)
+
+  handlePending()
+
+  const { data, error } = await supabase
+    .from(Tables.likes)
+    .select("*")
+    .match({
+      id_quote,
+      id_user,
+    })
+
+  if (error) {
+    handleFailure(error)
+  }
+
+  handleSuccess()
+
+  return data
+}
 

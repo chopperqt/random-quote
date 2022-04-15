@@ -14,7 +14,7 @@ import styles from './Quote.module.scss'
 import { IQuoteProps } from './'
 
 const Quote = ({
-  quote
+  quote,
 }: IQuoteProps) => {
   const {
     created_at,
@@ -31,6 +31,8 @@ const Quote = ({
     handleClickLike,
     handleClickDislike,
     isLoadingLike,
+    disableDislike,
+    disableLike,
   } = useQuote({
     text: quote.text,
     id: id_quote,
@@ -39,6 +41,8 @@ const Quote = ({
   return (
     <div className={cx(styles.layout, 'item-content')}>
       <Likes
+        disableDislike={disableDislike}
+        disableLike={disableLike}
         count={likes}
         loading={isLoadingLike}
         onClickLike={handleClickLike}
