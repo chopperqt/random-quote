@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import cx from 'classnames'
 import moment from 'moment'
 
@@ -12,7 +12,6 @@ import Likes from './likes/Likes'
 import styles from './Quote.module.scss'
 
 import { IQuoteProps } from './'
-
 
 const Quote = ({
   quote
@@ -29,18 +28,21 @@ const Quote = ({
   } = quote
   const {
     handleCopyText,
-    loadingUpdateQuotesLike,
+    handleClickLike,
+    handleClickDislike,
+    isLoadingLike,
   } = useQuote({
     text: quote.text,
+    id: id_quote,
   })
 
   return (
     <div className={cx(styles.layout, 'item-content')}>
       <Likes
         count={likes}
-        loading={loadingUpdateQuotesLike.isLoading}
-        onClickLike={() => updateQuoteLikes({ id: id_quote }, 'like')}
-        onClickDislike={() => updateQuoteLikes({ id: id_quote }, 'dislike')}
+        loading={isLoadingLike}
+        onClickLike={handleClickLike}
+        onClickDislike={handleClickDislike}
       />
       <div className={styles.sectionQuote}>
         <div className={cx(styles.text, "heading--ls")}>

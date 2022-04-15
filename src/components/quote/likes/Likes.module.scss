@@ -28,4 +28,10 @@
   display: flex;
   justify-self: center;
   align-items: center;
+
+  &:disabled {
+    :global(.icon-svg) { 
+      fill: $color-secondary--5;
+    }
+  }
 }

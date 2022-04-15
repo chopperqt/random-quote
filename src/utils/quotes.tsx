@@ -317,11 +317,15 @@ export const updateQuoteLikes = async ({ id }: { id: number }, action: TUpdateAc
 
   if (error) {
     handleFailure(error)
+
+    return error
   }
 
   Store.dispatch(quoteMethods.updateRandomQuote(data))
 
   handleSuccess()
+
+  return data
 }
 
 export const getCurrentQuoteLike = async ({ id }: { id: number }): Promise<PostgrestError | number> => {
