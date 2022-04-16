@@ -11,7 +11,8 @@ import debounce from 'lodash.debounce';
 import { PostgrestError } from '@supabase/supabase-js';
 import {
   IPostQuote,
-  TUpdateAction
+  TUpdateAction,
+  IGetQuotes,
 } from './'
 
 const LIMIT_PER_PAGE = 10
@@ -44,6 +45,9 @@ export const getQuotes = async () => {
       author:id_author (
         name,
         path
+      ),
+      action:id_quote (
+        action
       )
     `, { count: 'exact' })
     .order("id_quote", { ascending: true })
@@ -58,10 +62,6 @@ export const getQuotes = async () => {
   handleSuccess()
 
   Store.dispatch(quoteMethods.getQuotes({ data, count }))
-}
-interface IGetQuotes {
-  from?: number
-  to?: number
 }
 
 export const getQuotesMore = async ({
@@ -361,7 +361,7 @@ export const getLikedQuote = async (id_quote: number, id_user: string) => {
   handlePending()
 
   const { data, error } = await supabase
-    .from(Tables.likes)
+    .from(Tables.rating)
     .select("*")
     .match({
       id_quote,

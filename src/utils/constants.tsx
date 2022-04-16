@@ -2,5 +2,6 @@ export const Tables = {
   authors: 'authors',
   quotes: 'quotes',
   authorsQuotes: 'authorsQuotes',
-  likes: 'likes'
+  likes: 'likes',
+  rating: 'rating'
 }

@@ -18,6 +18,11 @@ export interface IPostQuote {
 
 export type TUpdateAction = 'like' | 'dislike'
 
+export interface IGetQuotes {
+  from?: number
+  to?: number
+}
+
 export {
   Requests
 }

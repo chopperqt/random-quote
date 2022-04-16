@@ -61,7 +61,7 @@ const notificationsStore = (
     case DELETE_NOTIFICATION: {
       return {
         ...state,
-        notification: state.notifications.filter(({ id }) => id !== payload)
+        notifications: state.notifications.filter(({ id }) => id !== payload)
       }
     }
     default: {

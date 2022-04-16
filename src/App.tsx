@@ -20,7 +20,6 @@ import './asset/scss/fonts.scss'
 import './App.scss'
 
 function App() {
-  const dispatch = useDispatch()
   const notifications = useSelector((store: IStore) => store.notificationsStore.notifications)
   const hasNotifications = notifications.length > 0
 
