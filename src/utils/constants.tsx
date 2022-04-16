@@ -5,3 +5,8 @@ export const Tables = {
   likes: 'likes',
   rating: 'rating'
 }
+
+export const SupabaseFunctions = {
+  getQuotes: 'getquotes',
+  getRandomQuote: 'getrandomquote',
+}

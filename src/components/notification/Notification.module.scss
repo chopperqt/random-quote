@@ -16,7 +16,7 @@
   z-index: 25;
 
   &:global(.notification-success) {
-    background: $color-success--4;
+    background-color: $color-success--4;
   }
 
   &:global(.notification-error) {

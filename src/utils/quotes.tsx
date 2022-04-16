@@ -6,6 +6,7 @@ import { SuccessMessages } from 'helpers/successMessages'
 import loadingStatuses from "helpers/loadingStatuses";
 import {
   Tables,
+  SupabaseFunctions,
 } from './constants'
 import debounce from 'lodash.debounce';
 import { PostgrestError } from '@supabase/supabase-js';
@@ -14,6 +15,7 @@ import {
   TUpdateAction,
   IGetQuotes,
 } from './'
+import { IQuote } from 'services/quotes';
 
 const LIMIT_PER_PAGE = 10
 
@@ -38,30 +40,69 @@ export const getQuotes = async () => {
 
   handlePending()
 
-  const { data, error, count } = await supabase
-    .from(Tables.quotes)
-    .select(`
-      *,
-      author:id_author (
-        name,
-        path
-      ),
-      action:id_quote (
-        action
-      )
-    `, { count: 'exact' })
-    .order("id_quote", { ascending: true })
-    .limit(LIMIT_PER_PAGE)
+  const quotes = await supabase
+    .rpc(SupabaseFunctions.getQuotes)
+  // .from(Tables.quotes)
+  // .select(`
+  //   *,
+  //   author:id_author (
+  //     name,
+  //     path
+  //   )
+  // `, { count: 'exact' })
+  // .order("id_quote", { ascending: true })
+  // .limit(LIMIT_PER_PAGE);
 
-  if (error) {
-    handleFailure(error)
+  if (quotes.error) {
+    handleFailure(quotes.error)
 
     return
   }
 
-  handleSuccess()
+  let list = []
 
-  Store.dispatch(quoteMethods.getQuotes({ data, count }))
+  for (let quote of quotes!.data) {
+    list.push(quote.id_quote)
+  }
+
+  const action = await supabase
+    .from(Tables.rating)
+    .select(`
+      entity_id,
+      action
+    `)
+    .match({
+      entity_type: 'quote',
+      id_user: '38f04821-058f-43e4-9484-0ab59b8bcffa'
+    })
+    .in('entity_id', list)
+    .order('id_user', {
+      ascending: false,
+    })
+    .limit(1)
+
+  if (action.error) {
+    handleFailure(action.error)
+
+    return
+  }
+
+  const newData = quotes.data.map((quote: IQuote) => {
+    const filterRaring = action.data.find((item) => +item.entity_id === +quote.id_quote)?.action || ''
+
+    return {
+      ...quote,
+      action: filterRaring
+    }
+
+  })
+
+  Store.dispatch(quoteMethods.getQuotes({
+    data: newData,
+    count: quotes.count,
+  }))
+
+  handleSuccess()
 }
 
 export const getQuotesMore = async ({

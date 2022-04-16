@@ -20,7 +20,8 @@ const Notification = ({
   type,
 }: INotifications) => {
   const {
-    visibility
+    visibility,
+    handleHide,
   } = useNotification()
 
   return (
@@ -31,6 +32,7 @@ const Notification = ({
     )}>
       {text}
       <button
+        onClick={handleHide}
         className={styles.button}
       >
         <Icon icon={IconList.cross} />
