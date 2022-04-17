@@ -1,5 +1,6 @@
 {
   "name": "random-quote",
+  "homepage": "https://grand-melba-7ded09.netlify.app/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
