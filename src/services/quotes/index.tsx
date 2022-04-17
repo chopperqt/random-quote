@@ -74,7 +74,8 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
 
       const modifyRandomQuote = {
         ...state.quote,
-        likes: payload.data[0].likes,
+        rating: payload.data[0].count,
+        action: payload.data[0].action,
       }
 
       let modifyLastQuote: IQuote[] = state.lastQuotes

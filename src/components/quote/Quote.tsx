@@ -6,7 +6,6 @@ import { routes } from 'helpers/routes'
 import Link from 'components/link'
 import Icon, { IconList } from 'components/icon'
 import useQuote from './hooks/useQuote'
-import { updateQuoteLikes } from 'utils/quotes'
 import Likes from './likes/Likes'
 
 import styles from './Quote.module.scss'
@@ -27,8 +26,8 @@ const Quote = ({
   } = quote
   const {
     handleCopyText,
-    handleClickLike,
-    handleClickDislike,
+    raiseRating,
+    lowerRating,
     isLoadingLike,
     disableDislike,
     disableLike,
@@ -45,8 +44,8 @@ const Quote = ({
         disableLike={disableLike}
         count={rating}
         loading={isLoadingLike}
-        onClickLike={handleClickLike}
-        onClickDislike={handleClickDislike}
+        onClickLike={raiseRating}
+        onClickDislike={lowerRating}
       />
       <div className={styles.sectionQuote}>
         <div className={cx(styles.text, "heading--ls")}>

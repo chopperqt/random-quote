@@ -16,6 +16,7 @@ import {
   IGetQuotes,
 } from './'
 import { IQuote } from 'services/quotes';
+import useUser from 'helpers/useUser';
 
 const LIMIT_PER_PAGE = 10
 
@@ -26,9 +27,10 @@ export const QuotesRequests = {
   getQuotesLast: 'getQuotesLast',
   getRandomQuote: 'getRandomQuote',
   searchQuote: 'searchQuote',
-  updateQuoteLikes: 'updateQuoteLikes',
+  changeRating: 'changeRating',
   postQuote: 'postQuotes',
   getLikedQuote: 'getLikedQuote',
+  getActionQuote: 'getActionQuote',
 }
 
 export const getQuotes = async ({
@@ -177,8 +179,7 @@ export const getRandomQuote = async () => {
 
   handlePending()
 
-  let { data, error, } = await supabase
-    .rpc('quoterandom')
+  let { data, error } = await supabase.rpc(SupabaseFunctions.getRandomQuote)
 
   if (error) {
     handleFailure(error)
@@ -186,17 +187,7 @@ export const getRandomQuote = async () => {
     return
   }
 
-  const modifyData = [
-    {
-      ...data?.[0],
-      author: {
-        name: data?.[0].name,
-        path: data?.[0].path,
-      }
-    }
-  ]
-
-  Store.dispatch(quoteMethods.getRandomQuote(modifyData))
+  Store.dispatch(quoteMethods.getRandomQuote(data))
 
   handleSuccess()
 }
@@ -315,35 +306,46 @@ export const postQuote = async ({
   }
 }
 
-export const updateQuoteLikes = async ({ id }: { id: number }, action: TUpdateAction) => {
+export const changeRating = async ({
+  id,
+  id_user,
+}: {
+  id: number
+  id_user: string
+}, action: TUpdateAction) => {
   const {
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(QuotesRequests.updateQuoteLikes)
+  } = loadingStatuses(QuotesRequests.changeRating)
 
   handlePending()
 
-  const currentLikes = await getCurrentQuoteLike({ id })
+  const currentLikes = await getCurrentQuoteRating({ id, id_user })
   const isNumberCurrentLikes = typeof currentLikes === 'number'
 
   if (!isNumberCurrentLikes) {
     handleFailure(currentLikes)
   }
 
-  let likes = +currentLikes + 1
+  let rating = +currentLikes + 1
 
   if (action === 'dislike') {
-    likes = +currentLikes - 1
+    rating = +currentLikes - 1
   }
 
   const {
     data,
     error,
   } = await supabase
-    .from(Tables.quotes)
-    .update({ likes })
-    .match({ id_quote: id })
+    .from(Tables.rating)
+    .insert([{
+      entity_id: id.toString(),
+      entity_type: 'quote',
+      id_user,
+      count: rating,
+      action,
+    }])
 
   if (error) {
     handleFailure(error)
@@ -351,37 +353,36 @@ export const updateQuoteLikes = async ({ id }: { id: number }, action: TUpdateAc
     return error
   }
 
-  const modifyData = [
-    {
-      ...data?.[0],
-      author: {
-        name: data?.[0].name,
-        path: data?.[0].path,
-      }
-    }
-  ]
-
-  Store.dispatch(quoteMethods.updateRandomQuote(modifyData, id))
+  Store.dispatch(quoteMethods.updateRandomQuote(data, id))
 
   handleSuccess()
 
-  return modifyData
+  return data
 }
 
-export const getCurrentQuoteLike = async ({ id }: { id: number }): Promise<PostgrestError | number> => {
+export const getCurrentQuoteRating = async ({
+  id,
+  id_user,
+}: {
+  id: number
+  id_user: string
+}): Promise<PostgrestError | number> => {
   const {
     data,
     error
   } = await supabase
-    .from(Tables.quotes)
+    .from(Tables.rating)
     .select('*')
-    .match({ id_quote: id })
+    .match({
+      entity_id: id.toString(),
+      entity_type: 'quote',
+    })
 
   if (error) {
     return error
   }
 
-  return data[0].likes
+  return data[0]?.rating || 0
 }
 
 export const getLikedQuote = async (id_quote: number, id_user: string) => {
@@ -404,6 +405,38 @@ export const getLikedQuote = async (id_quote: number, id_user: string) => {
   if (error) {
     handleFailure(error)
   }
+
+  handleSuccess()
+
+  return data
+}
+
+export const getActionQuote = async (id: string, list: number[]) => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses(QuotesRequests.getActionQuote)
+
+  handlePending()
+
+  const { data, error } = await supabase.from(Tables.rating).select(`entity_id, action`).match({
+    entity_type: 'quote',
+    id_user: id,
+  })
+    .in('entity_id', list)
+    .order('id_user', {
+      ascending: false,
+    })
+    .limit(1)
+
+
+  if (error) {
+    handleFailure(error)
+
+    return
+  }
+
 
   handleSuccess()
 
