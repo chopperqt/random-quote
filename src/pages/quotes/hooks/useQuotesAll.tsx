@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { QUOTES_ALL_TEXT } from '../constants'
 import decOfNum, { quoteWords } from 'helpers/decOfNum'
 import useResponse from 'helpers/useResponse'
 import {
   getQuotes,
-  searchQuote,
   getQuotesMore,
 } from 'utils/quotes'
 import useUser from 'helpers/useUser'

@@ -1,14 +1,12 @@
-import React, { useEffect } from 'react';
 import {
   Routes,
   Route
 } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { IStore } from 'services';
 
 import Home from 'pages/home/Home'
 import Profile from 'pages/profile';
-import useUser from 'helpers/useUser'
 import { routes } from 'helpers/routes'
 import AdminPanel from 'pages/admin-panel/AdminPanel';
 import Notification from 'components/notification';

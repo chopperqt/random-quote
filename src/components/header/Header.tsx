@@ -1,7 +1,3 @@
-import React from 'react'
-import cx from 'classnames'
-
-import useUser from 'helpers/useUser'
 import Tooltip from 'components/tooltip'
 import { MenuList } from './constants'
 import Icon from 'components/icon'
@@ -10,11 +6,6 @@ import Link from 'components/link'
 import styles from './Header.module.scss'
 
 const Header = () => {
-  const {
-    hasUser,
-    user,
-  } = useUser()
-
   return (
     <header className={styles.header}>
       <div className={styles.container}>

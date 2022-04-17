@@ -1,6 +1,3 @@
-import React from 'react'
-import cx from 'classnames'
-
 import { ICollapseProps } from './'
 import Icon, { IconList } from 'components/icon'
 import DefaultProps from 'helpers/defaultProps'

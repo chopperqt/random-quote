@@ -1,5 +1,3 @@
-import React, { useEffect } from 'react'
-
 import DefaultProps from 'helpers/defaultProps'
 
 interface IUseCollapse {

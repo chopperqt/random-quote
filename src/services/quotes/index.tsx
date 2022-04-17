@@ -1,4 +1,3 @@
-import { findLastIndex } from 'lodash'
 import { actions } from './actions'
 
 const {
@@ -7,7 +6,6 @@ const {
   GET_LAST_QUOTES,
   SEARCH_QUOTES,
   UPDATE_RANDOM_QUOTE,
-  UPDATE_LAST_QUOTE,
   CLEAR_QUOTES,
 } = actions
 
@@ -40,11 +38,6 @@ export interface IQuote {
   path: string
   rating: number
   action?: TQuoteAction
-}
-
-interface IAuthor {
-  name: string
-  path: string
 }
 
 const quotesStore = (state = initialState, { type, payload }: { type: string, payload: any }) => {
