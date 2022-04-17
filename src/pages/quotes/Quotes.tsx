@@ -19,7 +19,7 @@ const Quotes = () => {
     getFiltersFromUrl()
 
     return () => {
-      Store.dispatch(quoteMethods.clearQuotes())
+      Store.dispatch(clearQuotes())
     }
   }, [])
 

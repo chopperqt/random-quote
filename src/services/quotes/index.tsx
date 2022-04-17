@@ -29,6 +29,7 @@ export interface IQuotesStore {
   lastQuotesCount: number
 }
 
+export type TQuoteAction = 'like' | 'dislike'
 export interface IQuote {
   created_at: string,
   data: string,
@@ -38,6 +39,7 @@ export interface IQuote {
   name: string,
   path: string
   rating: number
+  action?: TQuoteAction
 }
 
 interface IAuthor {

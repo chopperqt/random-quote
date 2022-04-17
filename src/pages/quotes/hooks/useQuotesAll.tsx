@@ -59,6 +59,12 @@ const useQuotesAll = () => {
   }
 
   useEffect(() => {
+    if (user) {
+      getQuotes({ id: user.id })
+
+      return
+    }
+
     getQuotes({})
   }, [])
 

@@ -23,6 +23,7 @@ const Quote = ({
     path,
     name,
     rating,
+    action,
   } = quote
   const {
     handleCopyText,
@@ -34,6 +35,7 @@ const Quote = ({
   } = useQuote({
     text: quote.text,
     id: id_quote,
+    action: action,
   })
 
   return (

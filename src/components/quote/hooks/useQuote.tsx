@@ -1,24 +1,26 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import useResponse from 'helpers/useResponse'
 import { Stores } from 'services'
 import {
   updateQuoteLikes,
-  getLikedQuote
 } from 'utils/quotes'
 import useUser from 'helpers/useUser'
+import { TQuoteAction } from 'services/quotes'
 
-interface useQuote {
+interface useQuoteProps {
   text: string
   id: number
+  action: TQuoteAction | undefined
 }
 
 const useQuote = ({
   text,
   id,
-}: useQuote) => {
+  action,
+}: useQuoteProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [disableLike, setDisabledLike] = useState<boolean>(false)
-  const [disableDislike, setDisableDislike] = useState<boolean>(false)
+  const [disableLike, setDisabledLike] = useState<boolean>(action === 'like' || false)
+  const [disableDislike, setDisableDislike] = useState<boolean>(action === 'dislike' || false)
   const { NotificationStore } = Stores()
   const {
     loading,
@@ -48,29 +50,11 @@ const useQuote = ({
   }
 
   const handleClickDislike = async () => {
-    setIsLoading(true)
 
-    const isLiked = await updateQuoteLikes({ id }, 'dislike')
-
-    if (isLiked) {
-      setIsLoading(false)
-
-      return
-    }
-
-    setIsLoading(false)
   }
 
   const checkDisabledLikes = async () => {
-    if (user && id) {
-      const data = await getLikedQuote(id, user.id)
 
-      if (data) {
-        const isDisabledLike = data[0].action === 'like'
-
-        setDisabledLike(isDisabledLike)
-      }
-    }
   }
 
   useEffect(() => {
