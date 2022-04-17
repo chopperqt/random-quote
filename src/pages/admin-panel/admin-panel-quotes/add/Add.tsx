@@ -6,9 +6,9 @@ import {
 } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 
-import Input from "components/input"
+import Input from 'components/input'
 import { postQuote } from 'utils/quotes'
-import Selector from "components/selector/";
+import Selector from "components/selector";
 import Button from 'components/button'
 
 import { IStore } from 'services'

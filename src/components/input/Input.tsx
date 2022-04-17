@@ -6,9 +6,9 @@ import Icon, { IconList } from 'components/icon'
 
 import styles from './Input.module.scss'
 
-import { IInputProps } from '.'
+import { IInputProps } from './'
 
-export const Input = React.forwardRef(({
+const Input = React.forwardRef(({
   className,
   fullWidth,
   label,
@@ -52,3 +52,5 @@ export const Input = React.forwardRef(({
     )}
   </div>
 ))
+
+export default Input
