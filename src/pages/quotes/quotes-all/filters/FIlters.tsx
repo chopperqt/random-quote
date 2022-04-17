@@ -43,6 +43,7 @@ const Filters = () => {
 
                 return (
                   <Checkbox
+                    key={path}
                     checked={checked}
                     label={name}
                     onChange={(event) => handleChangeCheckbox(event, path)}

@@ -19,12 +19,10 @@ const Quote = ({
   const {
     created_at,
     text,
-    likes,
     id_quote,
-    author: {
-      path,
-      name
-    }
+    path,
+    name,
+    rating,
   } = quote
   const {
     handleCopyText,
@@ -43,7 +41,7 @@ const Quote = ({
       <Likes
         disableDislike={disableDislike}
         disableLike={disableLike}
-        count={likes}
+        count={rating}
         loading={isLoadingLike}
         onClickLike={handleClickLike}
         onClickDislike={handleClickDislike}

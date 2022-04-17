@@ -51,12 +51,18 @@ const QuotesAll = () => {
               <>
                 <div className={styles.gridColumn}>
                   {quotesFirstColumn.map((quote) => (
-                    <Quote quote={quote} />
+                    <Quote
+                      key={quote.id_quote}
+                      quote={quote}
+                    />
                   ))}
                 </div>
                 <div className={styles.gridColumn}>
                   {quotesSecondColumn.map((quote) => (
-                    <Quote quote={quote} />
+                    <Quote
+                      key={quote.id_quote}
+                      quote={quote}
+                    />
                   ))}
                 </div>
               </>

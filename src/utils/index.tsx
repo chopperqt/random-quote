@@ -21,6 +21,7 @@ export type TUpdateAction = 'like' | 'dislike'
 export interface IGetQuotes {
   from?: number
   to?: number
+  id?: string
 }
 
 export {

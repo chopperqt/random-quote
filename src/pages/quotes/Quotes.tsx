@@ -4,24 +4,24 @@ import QuotesLastUpdate from './quotes-last-update/QuotesLastUpdate'
 import QuotesAll from './quotes-all/QuotesAll'
 import Footer from 'components/footer'
 import { changeDocumentTitle, DocumentTitles } from 'helpers/documentTitle'
-import { filterMethods } from 'services'
-import { Stores } from 'services'
+import Store, { filterMethods, quoteMethods, Stores } from 'services'
 
 import styles from './Quotes.module.scss'
 
 const Quotes = () => {
   const { getFiltersFromUrl } = filterMethods
+  const { clearQuotes } = quoteMethods
   const { FilterStore: { filters } } = Stores()
 
   useEffect(() => {
     changeDocumentTitle(DocumentTitles.quotes)
 
     getFiltersFromUrl()
-  }, [])
 
-  useEffect(() => {
-    console.log(filters)
-  }, [filters])
+    return () => {
+      Store.dispatch(quoteMethods.clearQuotes())
+    }
+  }, [])
 
   return (
     <div className={styles.layout}>

@@ -19,6 +19,10 @@ const Profile = () => {
       <button onClick={signInWithGoogle}>
         Войти
       </button>
+
+      {user && (
+        <img src={user.avatar_url} alt="user-avatar" />
+      )}
     </div>
   )
 

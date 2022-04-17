@@ -5,6 +5,7 @@ export const actions = {
   SEARCH_QUOTES: 'SEARCH_QUOTES',
   UPDATE_RANDOM_QUOTE: 'UPDATE_RANDOM_QUOTE',
   UPDATE_LAST_QUOTE: 'UPDATE_LAST_QUOTE',
+  CLEAR_QUOTES: 'CLEAR_QUOTE',
 }
 
 export const methods = {
@@ -38,4 +39,10 @@ export const methods = {
       payload: { data, id },
     }
   },
+  clearQuotes() {
+    return {
+      type: actions.CLEAR_QUOTES,
+      payload: {}
+    }
+  }
 }

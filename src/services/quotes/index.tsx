@@ -8,6 +8,7 @@ const {
   SEARCH_QUOTES,
   UPDATE_RANDOM_QUOTE,
   UPDATE_LAST_QUOTE,
+  CLEAR_QUOTES,
 } = actions
 
 const initialState = {
@@ -34,8 +35,9 @@ export interface IQuote {
   id_quote: number,
   id_author: number,
   text: string,
-  author: IAuthor
-  likes: number
+  name: string,
+  path: string
+  rating: number
 }
 
 interface IAuthor {
@@ -86,14 +88,14 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
       if (typeof findLastQuoteIndex === 'number') {
         modifyLastQuote[findLastQuoteIndex] = {
           ...modifyLastQuote[findLastQuoteIndex],
-          likes: payload.data[0].likes,
+          rating: payload.data[0].rating,
         }
       }
 
       if (typeof findQuote === 'number') {
         modifyQuote[findQuote] = {
           ...modifyQuote[findQuote],
-          likes: payload.data[0].likes
+          rating: payload.data[0].rating
         }
       }
 
@@ -102,6 +104,13 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
         quote: modifyRandomQuote,
         lastQuotes: modifyLastQuote,
         quotes: modifyQuote,
+      }
+    }
+    case CLEAR_QUOTES: {
+      return {
+        ...state,
+        quotes: [],
+        lastQuotes: [],
       }
     }
     default: {

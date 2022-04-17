@@ -22,7 +22,7 @@ const AdminPanelQuotes = ({
 
   const modifyActionsQuotes = quotes.map((quote) => ({
     ...quote,
-    author: quote?.author?.name || '',
+    author: quote.name || '',
     actions: (
       <TableAction
         onDelete={() => { }}
@@ -59,7 +59,7 @@ const AdminPanelQuotes = ({
   )
 
   useEffect(() => {
-    getQuotes()
+    getQuotes({})
   }, [])
 
   return (

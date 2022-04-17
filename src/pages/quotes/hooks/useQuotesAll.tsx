@@ -8,6 +8,7 @@ import {
   searchQuote,
   getQuotesMore,
 } from 'utils/quotes'
+import useUser from 'helpers/useUser'
 
 import { Stores } from 'services'
 import { IQuote } from 'services/quotes'
@@ -15,6 +16,7 @@ import { IQuote } from 'services/quotes'
 const useQuotesAll = () => {
   const [search, setSearch] = useState<string>('')
   const [page, setPage] = useState<number>(1)
+  const { user } = useUser()
   const {
     QuoteStore: {
       quotes,
@@ -57,7 +59,7 @@ const useQuotesAll = () => {
   }
 
   useEffect(() => {
-    getQuotes()
+    getQuotes({})
   }, [])
 
   useEffect(() => {

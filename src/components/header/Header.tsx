@@ -21,6 +21,7 @@ const Header = () => {
         {MenuList.map(({ icon, path, text }) => {
           return (
             <Tooltip
+              key={path}
               text={text}
             >
               <Link

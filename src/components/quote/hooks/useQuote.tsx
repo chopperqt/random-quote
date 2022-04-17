@@ -74,7 +74,7 @@ const useQuote = ({
   }
 
   useEffect(() => {
-    checkDisabledLikes()
+    // checkDisabledLikes()
   }, [])
 
   return {
