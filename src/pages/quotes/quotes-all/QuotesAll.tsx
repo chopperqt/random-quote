@@ -7,7 +7,7 @@ import Information, { DefaultMessage } from 'components/Information'
 import Button from 'components/button'
 import Title from './partials/Title'
 import useQuotesAll from '../hooks/useQuotesAll'
-// import Filters from './filters/Filters'
+import Filters from './filters/Filters'
 import SearchInput from './partials/SearhcInput'
 import Empty from './empty/Empty'
 
@@ -41,7 +41,7 @@ const QuotesAll = () => {
         onClear={() => setSearch('')}
       />
       <div className={styles.allQuotes}>
-        {/* <Filters /> */}
+        <Filters />
         <div className={styles.allQuotesWrap}>
           <div className={styles.section}>
             {search.length > 2 && loadingSearch.isEmpty && !hasSearchQuotes && (
