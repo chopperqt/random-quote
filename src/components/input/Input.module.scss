@@ -1,0 +1,50 @@
+@import 'asset/scss/colors';
+@import 'asset/scss/common';
+@import 'asset/scss/mixin';
+
+.layout {
+  display: grid;
+  row-gap: 5px;
+  position: relative;
+}
+
+.input {
+  padding: 10px;
+  border: 1px solid $color-secondary--4;
+  border-radius: $border-radius--small;
+  outline: none;
+
+  &:focus {
+    border: 1px solid $color-secondary--5;
+  }
+
+  &--full {
+    width: 100%;
+  }
+
+  &:global(.input--error) {
+    border: 1px solid $color-warning--4;
+  }
+}
+
+.error {
+  color: $color-warning--4;
+}
+
+.label {
+  &:global(.label--error) {
+    color: $color-warning--4;
+  }
+}
+
+.loading {
+  width: 18px;
+  top: 30px;
+  position: absolute;
+  right: 15px;
+}
+
+.clear {
+  @include reset-button;
+  top: 34px;
+}
