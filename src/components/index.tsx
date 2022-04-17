@@ -1,4 +1,4 @@
-import Input from './Input'
+import { Input } from './Input'
 
 export interface IInputProps extends React.ComponentProps<'input'> {
   className?: string

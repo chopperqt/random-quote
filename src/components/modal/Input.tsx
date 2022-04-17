@@ -8,7 +8,7 @@ import styles from './Input.module.scss'
 
 import { IInputProps } from './'
 
-const Input = React.forwardRef(({
+export const Input = React.forwardRef(({
   className,
   fullWidth,
   label,
@@ -52,5 +52,3 @@ const Input = React.forwardRef(({
     )}
   </div>
 ))
-
-export default Input
