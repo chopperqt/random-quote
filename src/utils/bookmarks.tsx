@@ -6,13 +6,20 @@ import { Tables } from "./constants";
 
 const BookmarkRequests = {
   addBookmark: 'addBookmark',
+  removeBookmark: 'removeBookmark',
   getBookmarks: 'getBookmarks',
 }
 
-interface IAddBookmarkProps {
+interface IActionBookmarkProps {
   id_user: string
   id_quote: number
 }
+
+interface IActionBookmarkReturn {
+  data: any[]
+  error?: PostgrestError | null
+}
+
 
 interface IGetBookmarksProps {
   id_user: string,
@@ -63,7 +70,15 @@ export const getBookmarks = async ({
 export const addBookmark = async ({
   id_user,
   id_quote,
-}: IAddBookmarkProps) => {
+}: IActionBookmarkProps): Promise<IActionBookmarkReturn> => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses(BookmarkRequests.addBookmark)
+  let status: any = handleSuccess
+
+  handlePending()
 
   const { data, error } = await supabase
     .from(Tables.bookmarks)
@@ -72,5 +87,47 @@ export const addBookmark = async ({
       id_quote,
     })
 
-  console.log(data)
+  if (error) {
+    status = handleFailure(error)
+  }
+
+  status()
+
+  return {
+    data: data || [],
+    error,
+  }
+}
+
+export const deleteBookmark = async ({
+  id_user,
+  id_quote,
+}: IActionBookmarkProps): Promise<IActionBookmarkReturn> => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses(BookmarkRequests.removeBookmark)
+  let status: any = handleSuccess
+
+  handlePending()
+
+  const { data, error } = await supabase
+    .from(Tables.bookmarks)
+    .delete()
+    .match({
+      id_user,
+      id_quote,
+    })
+
+  if (error) {
+    status = handleFailure(error)
+  }
+
+  status()
+
+  return {
+    data: data || [],
+    error,
+  }
 }

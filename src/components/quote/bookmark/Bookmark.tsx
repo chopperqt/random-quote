@@ -24,8 +24,10 @@ const Bookmark = ({
   const {
     handleClickBookmark,
     loading,
-  } = useBookmark({ id })
-
+  } = useBookmark({
+    id,
+    bookmarked
+  })
 
   return (
     <Tooltip text={tooltipText}>
