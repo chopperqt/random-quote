@@ -10,6 +10,7 @@ import {
 } from './constants'
 import debounce from 'lodash.debounce';
 import { PostgrestError } from '@supabase/supabase-js';
+import { getBookmarks } from './bookmarks'
 import {
   IPostQuote,
   TUpdateAction,
@@ -48,7 +49,7 @@ export const getQuotes = async ({
 
   const { count } = await supabase.from(Tables.quotes).select('*', { count: 'exact', head: true })
   const quotes = await supabase.rpc(SupabaseFunctions.getQuotes)
-  let list = []
+  let list: number[] = []
 
   if (quotes.error) {
     handleFailure(quotes.error)
@@ -63,29 +64,18 @@ export const getQuotes = async ({
   let quotesData = quotes.data
 
   if (id) {
-    const action = await supabase.from(Tables.rating).select(`entity_id, action`).match({
-      entity_type: 'quote',
-      id_user: id,
-    })
-      .in('entity_id', list)
-      .order('id_user', {
-        ascending: false,
-      })
-      .limit(1)
+    const bookmarks = await getBookmarks({ id_user: id, list })
 
-
-    if (action.error) {
-      handleFailure(action.error)
-
+    if (bookmarks.error) {
       return
     }
 
     quotesData = quotes.data.map((quote: IQuote) => {
-      const filterRaring = action.data.find((item) => +item.entity_id === +quote.id_quote)?.action
+      const isBookmark = bookmarks.data.find((item: any) => +item.id_quote === +quote.id_quote)
 
       return {
         ...quote,
-        action: filterRaring
+        bookmarked: !!isBookmark
       }
     })
   }
@@ -170,7 +160,7 @@ export const getQuotesAuthors = async (id_author: string) => {
   return data
 }
 
-export const getRandomQuote = async () => {
+export const getRandomQuote = async (id?: number) => {
   const {
     handleFailure,
     handlePending,
@@ -411,7 +401,11 @@ export const getLikedQuote = async (id_quote: number, id_user: string) => {
   return data
 }
 
-export const getActionQuote = async (id: string, list: number[]) => {
+export const getActionQuote = async (
+  id: string,
+  list: number[],
+  limit: number = LIMIT_PER_PAGE
+): Promise<any[]> => {
   const {
     handleFailure,
     handlePending,
@@ -420,26 +414,21 @@ export const getActionQuote = async (id: string, list: number[]) => {
 
   handlePending()
 
-  const { data, error } = await supabase.from(Tables.rating).select(`entity_id, action`).match({
-    entity_type: 'quote',
-    id_user: id,
-  })
-    .in('entity_id', list)
-    .order('id_user', {
-      ascending: false,
-    })
-    .limit(1)
+  console.log(list)
 
+  const { data, error } = await supabase.rpc('getquotes5', {
+    id,
+    list: "{25}",
+  })
 
   if (error) {
     handleFailure(error)
 
-    return
+    return []
   }
-
 
   handleSuccess()
 
-  return data
+  return data || []
 }
 

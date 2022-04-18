@@ -21,8 +21,12 @@ const Profile = () => {
       </button>
 
       {user && (
-        <img src={user.avatar_url} alt="user-avatar" />
+        <>
+          <img src={user.avatar_url} alt="user-avatar" />
+          {user.email}
+        </>
       )}
+
     </div>
   )
 

@@ -3,7 +3,8 @@ export const Tables = {
   quotes: 'quotes',
   authorsQuotes: 'authorsQuotes',
   likes: 'likes',
-  rating: 'rating'
+  rating: 'rating',
+  bookmarks: 'bookmarks',
 }
 
 export const SupabaseFunctions = {

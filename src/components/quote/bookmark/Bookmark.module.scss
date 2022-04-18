@@ -1,0 +1,47 @@
+@import 'asset/scss/colors';
+@import 'asset/scss/mixin';
+
+.button {
+  @include reset-button;
+
+  &:hover {
+    :global(.icon-svg) {
+      fill: $color-secondary--7;
+    }
+  }
+
+  :global(.icon-svg) {
+    fill: $color-secondary--6;
+    width: 30px;
+    height: 20px;
+  }
+}
+
+
+.bookmark {
+  @extend .button;
+  
+  :global(.icon-svg) {
+    fill: $color-secondary--6;
+  }
+
+  &:global(.bookmark-active) {
+    :global(.icon-svg) {
+      fill: $color-primary--6;
+    }
+  }
+}
+
+.spinWrap {
+  background-color: $color-white--500;
+}
+
+.spin {
+  opacity: 1;
+  background-color: $color-white--500;
+
+  img {
+    width: 20px;
+    height: 20px;
+  }
+}

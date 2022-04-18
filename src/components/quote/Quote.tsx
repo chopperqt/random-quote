@@ -7,6 +7,7 @@ import Link from 'components/link'
 import Icon, { IconList } from 'components/icon'
 import useQuote from './hooks/useQuote'
 import Likes from './likes/Likes'
+import Bookmark from './bookmark/Bookmark'
 
 import styles from './Quote.module.scss'
 
@@ -21,32 +22,23 @@ const Quote = ({
     id_quote,
     path,
     name,
-    rating,
-    action,
+    bookmarked,
   } = quote
   const {
     handleCopyText,
-    raiseRating,
-    lowerRating,
-    isLoadingLike,
-    disableDislike,
-    disableLike,
   } = useQuote({
     text: quote.text,
     id: id_quote,
-    action: action,
   })
 
   return (
     <div className={cx(styles.layout, 'item-content')}>
-      <Likes
-        disableDislike={disableDislike}
-        disableLike={disableLike}
-        count={rating}
-        loading={isLoadingLike}
-        onClickLike={raiseRating}
-        onClickDislike={lowerRating}
-      />
+      <div className={styles.sectionRating}>
+        <Bookmark
+          bookmarked={!!bookmarked}
+          id={id_quote}
+        />
+      </div>
       <div className={styles.sectionQuote}>
         <div className={cx(styles.text, "heading--ls")}>
           {text}

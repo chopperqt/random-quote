@@ -37,7 +37,7 @@ export interface IQuote {
   name: string,
   path: string
   rating: number
-  action?: TQuoteAction
+  bookmarked?: boolean
 }
 
 const quotesStore = (state = initialState, { type, payload }: { type: string, payload: any }) => {
