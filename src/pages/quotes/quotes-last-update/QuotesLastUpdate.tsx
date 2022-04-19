@@ -2,16 +2,12 @@ import React from 'react'
 
 import Skeleton from './partials/Skeleton'
 import Quote from 'components/quote'
-import Button from 'components/button'
-import {
-  SHOW_MORE_TEXT,
-  EMPTY_TEXT
-} from '../constants'
+import { EMPTY_TEXT } from '../constants'
 import Information, { DefaultMessage } from 'components/Information'
 import { useQuotesLastUpdate } from '../hooks'
+import Title from './partials/Title'
 
 import styles from './QuotesLastUpdate.module.scss'
-import Title from './partials/Title'
 
 const QuotesLastUpdate = () => {
   const {
@@ -22,7 +18,6 @@ const QuotesLastUpdate = () => {
     lastQuotesDescription,
     quotesFirstColumn,
     quotesSecondColumn,
-    isMoreButton,
     hasStatus,
   } = useQuotesLastUpdate()
 
@@ -59,13 +54,6 @@ const QuotesLastUpdate = () => {
                 ))}
               </div>
             </div>
-          )}
-        </div>
-        <div className={styles.moreQuotes}>
-          {isMoreButton && (
-            <Button>
-              {SHOW_MORE_TEXT}
-            </Button>
           )}
         </div>
       </div>

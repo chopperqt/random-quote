@@ -10,6 +10,7 @@ import useQuotesAll from '../hooks/useQuotesAll'
 import Filters from './filters/Filters'
 import SearchInput from './partials/SearhcInput'
 import Empty from './empty/Empty'
+import Pagination from 'components/pagination'
 
 import styles from './QuotesAll.module.scss'
 
@@ -18,14 +19,12 @@ const QuotesAll = () => {
     description,
     quotesFirstColumn,
     quotesSecondColumn,
-    hasMoreQuotes,
     search,
     setSearch,
     loadingSearch,
-    loadingMoreQuotes,
     loadingQuotes,
     hasSearchQuotes,
-    handleLoadMore,
+    currentPage,
   } = useQuotesAll()
 
   return (
@@ -75,17 +74,10 @@ const QuotesAll = () => {
             )}
 
           </div>
-          {hasMoreQuotes && (
-            <div className={styles.button}>
-              <Button
-                disabled={loadingMoreQuotes.isLoading}
-                loading={loadingMoreQuotes.isLoading}
-                onClick={handleLoadMore}
-              >
-                {SHOW_MORE_TEXT}
-              </Button>
-            </div>
-          )}
+          <Pagination
+            page={currentPage}
+            pages={20}
+          />
         </div>
       </div>
 

@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import cx from 'classnames'
 
-import useTooltip from './hooks/useTooltip';
-
 import styles from './Tooltip.module.scss'
 
 import { ITooltip } from './'
@@ -51,8 +49,10 @@ const Tooltip = ({
     }
 
     return () => {
-      tooltipWrapRef.current?.removeEventListener('mouseenter', handleShowTooltip)
-      tooltipWrapRef.current?.removeEventListener('mouseleave', handleHideTooltip)
+      if (tooltipWrapRef.current && tooltipRef.current) {
+        tooltipWrapRef.current.removeEventListener('mouseenter', handleShowTooltip)
+        tooltipWrapRef.current.removeEventListener('mouseleave', handleHideTooltip)
+      }
     }
   }, [])
 

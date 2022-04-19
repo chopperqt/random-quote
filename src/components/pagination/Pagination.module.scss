@@ -1,0 +1,35 @@
+@import 'asset/scss/mixin';
+@import 'asset/scss/colors';
+@import 'asset/scss/common';
+
+.layout {
+  display: flex;
+  column-gap: 5px;
+  justify-content: center;
+}
+
+.button {
+  @include reset-button;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: $border-radius--small;
+  color: $text-color-primary--500;
+  cursor: pointer;
+
+  :global(.icon-svg) {
+    fill: $color-secondary--7;
+
+    &:hover {
+      fill: $color-secondary--10;
+    }
+  }
+
+  &:disabled {
+    :global(.icon-svg) {
+      fill: $color-secondary--5;
+    }
+  }
+}
