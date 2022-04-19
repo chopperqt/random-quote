@@ -343,7 +343,7 @@ export const changeRating = async ({
     return error
   }
 
-  Store.dispatch(quoteMethods.updateRandomQuote(data, id))
+  // Store.dispatch(quoteMethods.updateRandomQuote(data, id))
 
   handleSuccess()
 

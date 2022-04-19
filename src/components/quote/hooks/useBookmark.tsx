@@ -23,38 +23,29 @@ const useBookmark = ({
   const { user } = useUser()
   const [loading, setLoading] = useState<boolean>(false)
 
-  const handleAddBookmark = async (id_user: string): Promise<void> => {
-    await addBookmark({
-      id_user,
-      id_quote: id,
-    })
-
-    setLoading(false)
-  }
-
-  const handleDeleteBookmark = async (id_user: string): Promise<void> => {
-    await deleteBookmark({
-      id_user,
-      id_quote: id,
-    })
-
-    setLoading(false)
-  }
-
   const handleClickBookmark = async () => {
     if (!user) {
       return
     }
 
-    setLoading(true)
-
-    let action: any = await handleAddBookmark(user.id)
-
-    if (bookmarked) {
-      action = await handleDeleteBookmark(user.id)
+    const defaultOption = {
+      id_user: user.id,
+      id_quote: id
     }
 
-    action()
+    setLoading(true)
+
+    if (bookmarked) {
+      const status = await deleteBookmark(defaultOption)
+
+      setLoading(status)
+
+      return
+    }
+
+    await addBookmark(defaultOption)
+
+    setLoading(false)
   }
 
   return {

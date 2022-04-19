@@ -5,7 +5,7 @@ const {
   GET_QUOTES,
   GET_LAST_QUOTES,
   SEARCH_QUOTES,
-  UPDATE_RANDOM_QUOTE,
+  UPDATE_QUOTES,
   CLEAR_QUOTES,
 } = actions
 
@@ -68,14 +68,15 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
         quotesSearch: payload
       }
     }
-    case UPDATE_RANDOM_QUOTE: {
+    case UPDATE_QUOTES: {
       const findLastQuoteIndex = state.lastQuotes.findIndex((item: IQuote) => item.id_quote === payload.id)
       const findQuote = state.quotes.findIndex((item: IQuote) => item.id_quote === payload.id)
 
+      const { bookmarked } = payload
+
       const modifyRandomQuote = {
         ...state.quote,
-        rating: payload.data[0].count,
-        action: payload.data[0].action,
+        bookmarked,
       }
 
       let modifyLastQuote: IQuote[] = state.lastQuotes
@@ -84,14 +85,14 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
       if (typeof findLastQuoteIndex === 'number') {
         modifyLastQuote[findLastQuoteIndex] = {
           ...modifyLastQuote[findLastQuoteIndex],
-          rating: payload.data[0].rating,
+          bookmarked,
         }
       }
 
       if (typeof findQuote === 'number') {
         modifyQuote[findQuote] = {
           ...modifyQuote[findQuote],
-          rating: payload.data[0].rating
+          bookmarked,
         }
       }
 

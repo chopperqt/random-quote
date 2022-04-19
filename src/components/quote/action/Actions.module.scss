@@ -1,0 +1,27 @@
+@import 'asset/scss/colors';
+@import 'asset/scss/common';
+@import 'asset/scss/mixin';
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  row-gap: 10px;
+  transition: $transition--short;
+}
+
+.button {
+  @include reset-button;
+
+  &:hover {
+    :global(.icon-svg) {
+      fill: $color-secondary--7;
+    }
+  }
+
+  :global(.icon-svg) {
+    fill: $color-secondary--6;
+    width: 30px;
+    height: 20px;
+  }
+}

@@ -12,6 +12,7 @@ const Header = () => {
         {MenuList.map(({ icon, path, text }) => {
           return (
             <Tooltip
+              position='top'
               key={path}
               text={text}
             >

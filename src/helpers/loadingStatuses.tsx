@@ -19,7 +19,7 @@ const loadingStatuses = (name: string) => {
     Store.dispatch(notificationMethods.loadingRequest(name, 'SUCCESS'))
 
     if (message) {
-      notificationMethods.createNotification(SuccessMessages.createSuccess, 'SUCCESS')
+      notificationMethods.createNotification(message || SuccessMessages.createSuccess, 'SUCCESS')
     }
   }
 

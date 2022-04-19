@@ -1,6 +1,7 @@
 import { PostgrestError } from "@supabase/supabase-js";
 
 import loadingStatuses from "helpers/loadingStatuses";
+import Store, { quoteMethods } from "services";
 import supabase from "./client";
 import { Tables } from "./constants";
 
@@ -19,7 +20,6 @@ interface IActionBookmarkReturn {
   data: any[]
   error?: PostgrestError | null
 }
-
 
 interface IGetBookmarksProps {
   id_user: string,
@@ -70,17 +70,16 @@ export const getBookmarks = async ({
 export const addBookmark = async ({
   id_user,
   id_quote,
-}: IActionBookmarkProps): Promise<IActionBookmarkReturn> => {
+}: IActionBookmarkProps): Promise<boolean> => {
   const {
     handleFailure,
     handlePending,
     handleSuccess,
   } = loadingStatuses(BookmarkRequests.addBookmark)
-  let status: any = handleSuccess
 
   handlePending()
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from(Tables.bookmarks)
     .insert({
       id_user,
@@ -88,31 +87,31 @@ export const addBookmark = async ({
     })
 
   if (error) {
-    status = handleFailure(error)
+    handleFailure(error)
+
+    return false
   }
 
-  status()
+  Store.dispatch(quoteMethods.updateQuotes(true, id_quote))
 
-  return {
-    data: data || [],
-    error,
-  }
+  handleSuccess('Добавлено в закладки')
+
+  return false
 }
 
 export const deleteBookmark = async ({
   id_user,
   id_quote,
-}: IActionBookmarkProps): Promise<IActionBookmarkReturn> => {
+}: IActionBookmarkProps): Promise<boolean> => {
   const {
     handleFailure,
     handlePending,
     handleSuccess,
   } = loadingStatuses(BookmarkRequests.removeBookmark)
-  let status: any = handleSuccess
 
   handlePending()
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from(Tables.bookmarks)
     .delete()
     .match({
@@ -121,13 +120,14 @@ export const deleteBookmark = async ({
     })
 
   if (error) {
-    status = handleFailure(error)
+    handleFailure(error)
+
+    return false
   }
 
-  status()
+  Store.dispatch(quoteMethods.updateQuotes(false, id_quote))
 
-  return {
-    data: data || [],
-    error,
-  }
+  handleSuccess()
+
+  return false
 }

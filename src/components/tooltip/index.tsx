@@ -5,6 +5,7 @@ export interface ITooltip {
   className?: string
   position?: TTooltipPosition
   text: string
+  offsetY?: number
 }
 
 export type TTooltipPosition = 'top' | 'left' | 'right' | 'bottom'

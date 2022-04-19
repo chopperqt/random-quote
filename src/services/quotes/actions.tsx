@@ -3,10 +3,12 @@ export const actions = {
   GET_LAST_QUOTES: 'GET_LAST_QUOTES',
   GET_QUOTES: 'GET_QUOTES',
   SEARCH_QUOTES: 'SEARCH_QUOTES',
-  UPDATE_RANDOM_QUOTE: 'UPDATE_RANDOM_QUOTE',
+  UPDATE_QUOTES: 'UPDATE_QUOTES',
   UPDATE_LAST_QUOTE: 'UPDATE_LAST_QUOTE',
   CLEAR_QUOTES: 'CLEAR_QUOTE',
 }
+
+export type TActions = 'quotes' | 'randomQuote' | 'lastQuotes'
 
 export const methods = {
   getQuotes<T>(data: T) {
@@ -33,10 +35,10 @@ export const methods = {
       payload: data,
     }
   },
-  updateRandomQuote<T>(data: T, id: number) {
+  updateQuotes(bookmarked: boolean, id: number) {
     return {
-      type: actions.UPDATE_RANDOM_QUOTE,
-      payload: { data, id },
+      type: actions.UPDATE_QUOTES,
+      payload: { bookmarked, id },
     }
   },
   clearQuotes() {

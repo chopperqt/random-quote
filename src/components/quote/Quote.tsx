@@ -4,10 +4,9 @@ import moment from 'moment'
 
 import { routes } from 'helpers/routes'
 import Link from 'components/link'
-import Icon, { IconList } from 'components/icon'
 import useQuote from './hooks/useQuote'
-import Likes from './likes/Likes'
 import Bookmark from './bookmark/Bookmark'
+import Actions from './action/Actions'
 
 import styles from './Quote.module.scss'
 
@@ -30,6 +29,7 @@ const Quote = ({
     text: quote.text,
     id: id_quote,
   })
+  const formattedDate = moment(created_at).fromNow()
 
   return (
     <div className={cx(styles.layout, 'item-content')}>
@@ -38,30 +38,22 @@ const Quote = ({
           bookmarked={!!bookmarked}
           id={id_quote}
         />
+        <Actions
+          onCopy={handleCopyText}
+        />
       </div>
       <div className={styles.sectionQuote}>
         <div className={cx(styles.text, "heading--ls")}>
           {text}
         </div>
         <div className={styles.info}>
-          <div className="heading--sm">{moment(created_at).fromNow()}</div>
-          <div className={styles.actions}>
-            <button
-              onClick={handleCopyText}
-              className={styles.button}>
-              <Icon icon={IconList.copy} />
-            </button>
-            <button className={styles.button}>
-              <Icon icon={IconList.share} />
-            </button>
-          </div>
+          <div className="heading--sm">{formattedDate}</div>
           <Link
             to={`${routes.authors}/${path}`}
             className="heading--sm text--right"
           >{name}</Link>
         </div>
       </div>
-
     </div >
   )
 }

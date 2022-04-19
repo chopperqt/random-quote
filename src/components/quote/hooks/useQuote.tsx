@@ -1,39 +1,28 @@
-import { useEffect, useState } from 'react'
-import useResponse from 'helpers/useResponse'
-import { Stores } from 'services'
-import useUser from 'helpers/useUser'
+import { notificationMethods } from 'services'
+import { SuccessMessages } from 'helpers/successMessages'
 
 interface useQuoteProps {
   text: string
   id: number
 }
 
+interface IUseQuoteReturn {
+  handleCopyText: () => void
+}
+
 const useQuote = ({
   text,
-  id,
-}: useQuoteProps) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { NotificationStore } = Stores()
-  const {
-    loading,
-  } = NotificationStore
-
-  const loadingUpdateQuotesLike = useResponse({
-    loading: loading.changeRating,
-  })
+}: useQuoteProps): IUseQuoteReturn => {
+  const { createNotification } = notificationMethods
 
   const handleCopyText = () => {
     navigator.clipboard.writeText(text)
-  }
 
-  useEffect(() => {
-    // checkDisabledLikes()
-  }, [])
+    createNotification(SuccessMessages.copySuccess, 'SUCCESS')
+  }
 
   return {
     handleCopyText,
-    loadingUpdateQuotesLike,
-    isLoadingLike: isLoading,
   }
 }
 
