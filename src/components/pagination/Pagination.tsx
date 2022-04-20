@@ -15,7 +15,7 @@ const Pagination = ({
 }: IPaginationProps) => {
   const {
     currentPage,
-    numberOfPages,
+    numbersOfPages,
     handleClickPage,
   } = usePagination({
     pages,
@@ -31,7 +31,17 @@ const Pagination = ({
       >
         <Icon icon={IconList.chevronLeft} />
       </button>
-      {numberOfPages.map((p) => {
+      {/* {currentPage > 4 && pages > 6 && (
+        <Item
+          onClick={() => handleClickPage(1)}
+          page="1"
+          active={1 === currentPage}
+        />
+      )}
+      {currentPage > 4 && pages > 6 && (
+        <div className={styles.empty}>...</div>
+      )} */}
+      {numbersOfPages.map((p: number) => {
         const isActive = p === currentPage
 
         return (
@@ -42,6 +52,16 @@ const Pagination = ({
           />
         )
       })}
+      {/* {pages < currentPage - 2 && (
+        <div className={styles.empty}>...</div>
+      )}
+      {pages < currentPage - 2 && (
+        <Item
+          onClick={() => handleClickPage(pages)}
+          page={pages}
+          active={currentPage === pages}
+        />
+      )} */}
       <button
         disabled={currentPage === pages}
         onClick={() => handleClickPage(currentPage + 1)}

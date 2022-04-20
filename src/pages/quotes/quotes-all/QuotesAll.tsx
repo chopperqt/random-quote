@@ -76,7 +76,7 @@ const QuotesAll = () => {
           </div>
           <Pagination
             page={currentPage}
-            pages={20}
+            pages={7}
           />
         </div>
       </div>
