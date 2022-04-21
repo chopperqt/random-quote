@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { QUOTES_ALL_TEXT } from '../constants'
 import decOfNum, { quoteWords } from 'helpers/decOfNum'
+import { getRange } from 'helpers/pagination'
 import useResponse from 'helpers/useResponse'
 import {
   getQuotes,
@@ -9,12 +10,12 @@ import {
 import useUser from 'helpers/useUser'
 import { getUrlParam } from 'helpers/urlParams'
 
-
 import { Stores } from 'services'
 import { IQuote } from 'services/quotes'
 
 const useQuotesAll = () => {
   const [search, setSearch] = useState<string>('')
+  const [page, setPage] = useState<number>(Number(getUrlParam('p')) || 1)
   const { user } = useUser()
   const {
     QuoteStore: {
@@ -32,7 +33,11 @@ const useQuotesAll = () => {
   const quotesSecondColumn: IQuote[] = quoteItems.filter((quote, index) => index % 2 !== 0)
   const hasMoreQuotes = quotesCount > quotes.length
   const hasSearchQuotes = quotesSearch.length > 0
-  const currentPage = Number(getUrlParam('p')) || 1
+  const pages = Math.ceil(quotesCount / 10)
+  const {
+    from,
+    to,
+  } = getRange(page)
 
   const loadingQuotes = useResponse({
     loading: loading.getQuotes,
@@ -46,13 +51,24 @@ const useQuotesAll = () => {
 
   useEffect(() => {
     if (user) {
-      getQuotes({ id: user.id })
+      getQuotes({
+        id: user.id,
+        from,
+        to,
+      })
 
       return
     }
 
-    getQuotes({})
-  }, [])
+    getQuotes({
+      from,
+      to,
+    })
+  }, [page])
+
+  const handleChangePage = (page?: number) => {
+    setPage(page || 1)
+  }
 
   useEffect(() => {
     if (search.length > 2) {
@@ -66,12 +82,14 @@ const useQuotesAll = () => {
     quotesSecondColumn,
     hasMoreQuotes,
     setSearch,
+    handleChangePage,
     search,
     quotesSearch,
     hasSearchQuotes,
     loadingSearch,
     loadingQuotes,
-    currentPage,
+    currentPage: page,
+    pages,
   }
 }
 

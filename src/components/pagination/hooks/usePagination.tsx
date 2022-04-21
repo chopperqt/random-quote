@@ -1,27 +1,25 @@
-import { useState } from "react"
-
 import { updateUrlParams } from "helpers/urlParams"
 import { numbersOfPages } from "../helpers"
 
 interface IUsePagination {
   pages: number
   page: number
+  onClick: (page: number) => void
 }
 
 const usePagination = ({
   pages,
   page = 1,
+  onClick,
 }: IUsePagination) => {
-  const [currentPage, setCurrentPage] = useState(page)
-  const arrayPages: number[] = numbersOfPages(currentPage, pages)
+  const arrayPages: number[] = numbersOfPages(page, pages)
 
   const handleClickPage = (page: number) => {
     updateUrlParams({ p: page })
-    setCurrentPage(page)
+    onClick(page)
   }
 
   return {
-    currentPage,
     numbersOfPages: arrayPages,
     handleClickPage,
   }

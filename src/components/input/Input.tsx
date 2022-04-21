@@ -10,6 +10,7 @@ import { IInputProps } from '.'
 
 export const Input = React.forwardRef(({
   className,
+  classNameWrap,
   fullWidth,
   label,
   error,
@@ -18,7 +19,7 @@ export const Input = React.forwardRef(({
   onClear,
   ...props
 }: IInputProps, ref: any) => (
-  <div className={styles.layout}>
+  <div className={cx(styles.layout, classNameWrap)}>
     {label && (
       <label className={cx(styles.label, {
         'label--error': !!error,

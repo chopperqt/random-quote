@@ -17,7 +17,6 @@ import {
   IGetQuotes,
 } from './'
 import { IQuote } from 'services/quotes';
-import useUser from 'helpers/useUser';
 
 const LIMIT_PER_PAGE = 10
 
@@ -35,8 +34,8 @@ export const QuotesRequests = {
 }
 
 export const getQuotes = async ({
-  from,
-  to,
+  from = 1,
+  to = 10,
   id
 }: IGetQuotes) => {
   const {
@@ -48,7 +47,20 @@ export const getQuotes = async ({
   handlePending()
 
   const { count } = await supabase.from(Tables.quotes).select('*', { count: 'exact', head: true })
-  const quotes = await supabase.rpc(SupabaseFunctions.getQuotes)
+  //const quotes = await supabase.rpc(SupabaseFunctions.getQuotes)
+
+  const quotes = await supabase
+    .from(Tables.quotes)
+    .select(`*,
+      author:id_author (
+        name,
+        path
+      )
+    `, {
+      count: 'exact',
+    })
+    .range(from, to)
+
   let list: number[] = []
 
   if (quotes.error) {
@@ -61,7 +73,11 @@ export const getQuotes = async ({
     list.push(quote.id_quote)
   }
 
-  let quotesData = quotes.data
+  let quotesData = quotes.data.map((item) => ({
+    ...item,
+    ...item.author
+  }))
+
 
   if (id) {
     const bookmarks = await getBookmarks({ id_user: id, list })
@@ -75,7 +91,8 @@ export const getQuotes = async ({
 
       return {
         ...quote,
-        bookmarked: !!isBookmark
+        bookmarked: !!isBookmark,
+        ...quote.author,
       }
     })
   }
@@ -84,7 +101,6 @@ export const getQuotes = async ({
     data: quotesData,
     count: count,
   }))
-
 
   handleSuccess()
 }
@@ -413,8 +429,6 @@ export const getActionQuote = async (
   } = loadingStatuses(QuotesRequests.getActionQuote)
 
   handlePending()
-
-  console.log(list)
 
   const { data, error } = await supabase.rpc('getquotes5', {
     id,

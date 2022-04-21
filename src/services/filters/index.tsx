@@ -19,8 +19,6 @@ const initialState = {
 const filtersStore = (state = initialState, { type, payload }: { type: string, payload: any }) => {
   switch (type) {
     case GET_FILTERS_FROM_URL: {
-      console.log(payload)
-
       return {
         ...state,
         filters: payload

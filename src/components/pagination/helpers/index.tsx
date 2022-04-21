@@ -1,4 +1,4 @@
-const DEFAULT_PAGES_IN_ARRAY = 6
+const DEFAULT_PAGES_IN_ARRAY = 5
 
 export const fillArray = (from: number, to: number): number[] => {
   let array: number[] = [];
@@ -12,24 +12,15 @@ export const fillArray = (from: number, to: number): number[] => {
 
 export const numbersOfPages = (currentPage: number, pages: number) => {
   let arr: number[] = []
-  const checkPage = currentPage - 1 < 1 ? 1 : currentPage - 1
 
-  console.group('Pagination:')
-  console.log('CurrentPage: ', currentPage)
-  console.log('Pages: ', pages)
-  console.groupEnd()
-
-  if (pages < DEFAULT_PAGES_IN_ARRAY) {
-    console.log('Условие №1')
+  if (pages <= DEFAULT_PAGES_IN_ARRAY) {
     arr = fillArray(1, pages)
-  } else if (pages >= DEFAULT_PAGES_IN_ARRAY && currentPage >= pages - 2) {
-    console.log('Условие №2')
-    arr = fillArray(pages - 3, pages)
-  } else if (pages >= DEFAULT_PAGES_IN_ARRAY && currentPage <= pages - 2) {
-
+  } else if (pages > DEFAULT_PAGES_IN_ARRAY && currentPage <= pages - 4 && currentPage < DEFAULT_PAGES_IN_ARRAY - 1) {
+    arr = fillArray(1, 4)
+  } else if (pages > DEFAULT_PAGES_IN_ARRAY && currentPage >= pages - 3) {
+    arr = fillArray(pages - 4, pages)
   } else {
-    console.log('Условие №3')
-    arr = fillArray(checkPage, pages - 1)
+    arr = fillArray(currentPage - 1, currentPage + 2)
   }
 
   return arr

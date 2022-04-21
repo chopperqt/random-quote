@@ -29,6 +29,10 @@ export interface IQuotesStore {
 
 export type TQuoteAction = 'like' | 'dislike'
 export interface IQuote {
+  author: {
+    path: string,
+    name: string
+  },
   created_at: string,
   data: string,
   id_quote: number,
@@ -45,7 +49,7 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
     case GET_QUOTES: {
       return {
         ...state,
-        quotes: [...state.quotes, ...payload.data],
+        quotes: [...payload.data],
         quotesCount: payload.count,
       }
     }

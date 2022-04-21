@@ -7,26 +7,28 @@ import styles from './Pagination.module.scss'
 interface IPaginationProps {
   page: number,
   pages: number,
+  onClick: () => void
 }
 
 const Pagination = ({
   page,
   pages,
+  onClick,
 }: IPaginationProps) => {
   const {
-    currentPage,
     numbersOfPages,
     handleClickPage,
   } = usePagination({
     pages,
     page,
+    onClick,
   })
 
   return (
     <div className={styles.layout}>
       <button
-        disabled={1 === currentPage}
-        onClick={() => handleClickPage(currentPage - 1)}
+        disabled={1 === page}
+        onClick={() => handleClickPage(page - 1)}
         className={styles.button}
       >
         <Icon icon={IconList.chevronLeft} />
@@ -42,7 +44,7 @@ const Pagination = ({
         <div className={styles.empty}>...</div>
       )} */}
       {numbersOfPages.map((p: number) => {
-        const isActive = p === currentPage
+        const isActive = p === page
 
         return (
           <Item
@@ -63,8 +65,8 @@ const Pagination = ({
         />
       )} */}
       <button
-        disabled={currentPage === pages}
-        onClick={() => handleClickPage(currentPage + 1)}
+        disabled={page === pages}
+        onClick={() => handleClickPage(page + 1)}
         className={styles.button}
       >
         <Icon icon={IconList.chevronRight} />

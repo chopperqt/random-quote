@@ -12,7 +12,7 @@ const Title = ({
   text
 }: ITitleProps) => {
   return (
-    <div>
+    <div className={styles.title}>
       <div className="heading--lx text--bold">
         {ALL_QUOTES_TEXT}
       </div>

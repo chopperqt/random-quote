@@ -1,16 +1,12 @@
 
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
-import Input from 'components/input'
+import Input, { IInputProps } from 'components/input'
 import { SEARCH_TEXT } from '../../constants'
 import { updateUrlParams } from 'helpers/urlParams'
 
-interface ISearchInputProps {
-  value: string
+interface ISearchInputProps extends IInputProps {
   onChangeText: any
-  loading?: boolean
-  className?: string
-  onClear: () => void
 }
 
 const SearchInput = ({
@@ -18,7 +14,8 @@ const SearchInput = ({
   onChangeText,
   className,
   onClear,
-  loading
+  loading,
+  classNameWrap,
 }: ISearchInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -38,6 +35,7 @@ const SearchInput = ({
 
   return (
     <Input
+      classNameWrap={classNameWrap}
       onBlur={handleBlur}
       loading={loading}
       className={className}
