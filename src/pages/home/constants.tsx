@@ -1,0 +1,1 @@
+export const HELPER_HOTKEY_TEXT = 'Вы можите переключать цитаты на ⬅️➡️' 
