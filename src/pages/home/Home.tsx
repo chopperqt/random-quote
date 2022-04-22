@@ -5,6 +5,7 @@ import useHome from './hooks/useHome'
 import Footer from 'components/footer'
 import Information, { DefaultMessage } from 'components/Information'
 import { Stores } from 'services'
+import { HELPER_HOTKEY_TEXT } from './constants'
 
 import styles from './Home.module.scss'
 
@@ -19,6 +20,7 @@ const Home = () => {
   return (
     <div className={styles.home}>
       <div className={styles.quote}>
+        <div>{HELPER_HOTKEY_TEXT}</div>
         {isLoading && (
           <QuoteSkeleton />
         )}
