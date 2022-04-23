@@ -17,11 +17,14 @@ import {
   IGetQuotes,
 } from './'
 import { IQuote } from 'services/quotes';
+import { updateUrlParams } from 'helpers/urlParams';
+import { serializeQuote } from 'helpers/serialize'
 
 const LIMIT_PER_PAGE = 10
 
 export const QuotesRequests = {
   getQuotes: 'getQuotes',
+  getQuote: 'getQuote',
   getQuotesMore: 'getQuotesMore',
   getQuotesAuthor: 'getQuotesAuthor',
   getQuotesLast: 'getQuotesLast',
@@ -101,6 +104,39 @@ export const getQuotes = async ({
     data: quotesData,
     count: count,
   }))
+
+  handleSuccess()
+}
+
+export const getQuote = async (id: number) => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses('getQuote')
+
+  handlePending()
+
+  const { data, error } = await supabase
+    .from(Tables.quotes)
+    .select(`
+    *,
+    author:id_author (
+      name,
+      path
+    ) 
+  `)
+    .match({ id_quote: id })
+
+  if (error) {
+    handleFailure(error)
+
+    return
+  }
+
+  const updateData = serializeQuote(data[0])
+
+  Store.dispatch(quoteMethods.setQuote([updateData]))
 
   handleSuccess()
 }
@@ -193,7 +229,11 @@ export const getRandomQuote = async (id?: number) => {
     return
   }
 
-  Store.dispatch(quoteMethods.getRandomQuote(data))
+  Store.dispatch(quoteMethods.setQuote(data))
+
+  if (data && data[0].id_quote) {
+    updateUrlParams({ qq: data[0].id_quote })
+  }
 
   handleSuccess()
 }

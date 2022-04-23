@@ -1,3 +1,5 @@
+
+import { useEffect } from 'react';
 import {
   Routes,
   Route
@@ -16,10 +18,16 @@ import Quotes from 'pages/quotes/Quotes';
 import './asset/scss/typography.scss'
 import './asset/scss/fonts.scss'
 import './App.scss'
+import { getUrlParams } from 'helpers/urlParams';
 
 function App() {
   const notifications = useSelector((store: IStore) => store.notificationsStore.notifications)
   const hasNotifications = notifications.length > 0
+  const params = getUrlParams()
+
+  useEffect(() => {
+    console.log('params:', params)
+  }, [params])
 
   return (
     <div className="App">

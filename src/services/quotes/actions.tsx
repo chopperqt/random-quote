@@ -1,5 +1,5 @@
 export const actions = {
-  GET_RANDOM_QUOTE: 'GET_RANDOM_QUOTE',
+  SET_QUOTE: 'SET_QUOTE',
   GET_LAST_QUOTES: 'GET_LAST_QUOTES',
   GET_QUOTES: 'GET_QUOTES',
   SEARCH_QUOTES: 'SEARCH_QUOTES',
@@ -23,9 +23,9 @@ export const methods = {
       payload: data,
     }
   },
-  getRandomQuote<T>(data: T) {
+  setQuote<T>(data: T) {
     return {
-      type: actions.GET_RANDOM_QUOTE,
+      type: actions.SET_QUOTE,
       payload: data,
     }
   },

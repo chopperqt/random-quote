@@ -1,18 +1,24 @@
-import React from 'react'
+export type TFilters = 'qq' | 'q' | 'p' | 'authors'
 
 export function updateUrlParams({ ...props }) {
   const href = window.location.href
 
   const url = new URL(href)
 
-  Object.entries(props).map(([key, value]) => {
-    url.searchParams.set(key, value)
-  })
+  Object.entries(props).map(([key, value]) => url.searchParams.set(key, value))
 
   window.history.pushState('', '', url.pathname + url.search)
 }
 
-export function getUrlParam(str: string) {
+export function updateUrl(str: string | number) {
+  const href = window.location.href
+
+  const url = new URL(href)
+
+  window.history.pushState('', '', url.pathname + str)
+}
+
+export function getUrlParam(str: TFilters) {
   const url = new URL(window.location.href)
 
   return url.searchParams.get(str)

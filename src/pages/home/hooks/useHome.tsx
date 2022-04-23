@@ -1,22 +1,27 @@
-import React, { useEffect, useMemo } from 'react'
-import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
 
-import { getRandomQuote } from 'utils/quotes'
-import { IStore } from 'services'
+import { getQuote, getRandomQuote } from 'utils/quotes'
 import useResponse from 'helpers/useResponse'
-import { changeDocumentTitle, DocumentTitles } from 'helpers/documentTitle'
+import {
+  changeDocumentTitle,
+  DocumentTitles
+} from 'helpers/documentTitle'
+import { getUrlParam } from 'helpers/urlParams'
 
-const TIMER_REFRESH = 60000
+import { Stores } from 'services'
 
 const useHome = () => {
-  const loading = useSelector((store: IStore) => store.notificationsStore.loading.getRandomQuote)
+  const { NotificationStore } = Stores()
+  const { loading } = NotificationStore
+  const idFromUrl = Number(getUrlParam('qq'))
+  const loadingStatus = idFromUrl ? loading.getQuote : loading.getRandomQuote
+
   const {
+    isLoading,
     isError,
     isSuccess,
-    isLoading,
   } = useResponse({
-    loading,
-    count: 1,
+    loading: loadingStatus,
   })
 
   const handleChangeQuote = () => {
@@ -25,21 +30,20 @@ const useHome = () => {
 
   useEffect(() => {
     changeDocumentTitle(DocumentTitles.home)
+
+    if (idFromUrl) {
+      getQuote(idFromUrl)
+
+      return
+    }
+
     getRandomQuote()
-
-    const interval = setInterval(() => {
-      getRandomQuote()
-    }, TIMER_REFRESH)
-
-    return (
-      clearInterval(interval)
-    )
   }, [])
 
   return {
+    isLoading,
     isError,
     isSuccess,
-    isLoading,
     handleChangeQuote,
   }
 }

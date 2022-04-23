@@ -1,7 +1,7 @@
 import { actions } from './actions'
 
 const {
-  GET_RANDOM_QUOTE,
+  SET_QUOTE,
   GET_QUOTES,
   GET_LAST_QUOTES,
   SEARCH_QUOTES,
@@ -12,6 +12,7 @@ const {
 const initialState = {
   quote: {},
   quotes: [],
+  quotesIds: [],
   quotesCount: 0,
   quotesSearch: [],
   lastQuotes: [],
@@ -21,13 +22,12 @@ const initialState = {
 export interface IQuotesStore {
   quote: IQuote
   quotes: IQuote[]
+  quotesIds: number[]
   quotesCount: number
   quotesSearch: IQuote[]
   lastQuotes: IQuote[]
   lastQuotesCount: number
 }
-
-export type TQuoteAction = 'like' | 'dislike'
 export interface IQuote {
   author: {
     path: string,
@@ -60,10 +60,11 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
         lastQuotesCount: payload.count
       }
     }
-    case GET_RANDOM_QUOTE: {
+    case SET_QUOTE: {
       return {
         ...state,
         quote: payload[0],
+
       }
     }
     case SEARCH_QUOTES: {

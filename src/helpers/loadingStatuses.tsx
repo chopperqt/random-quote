@@ -3,10 +3,11 @@ import { ApiError, PostgrestError } from '@supabase/supabase-js'
 
 import { SuccessMessages } from './successMessages'
 import Store, { notificationMethods } from 'services'
+import { TRequests } from 'utils'
 
 export type TLoadingStatus = (() => void) | ((message?: PostgrestError) => void)
 
-const loadingStatuses = (name: string) => {
+const loadingStatuses = (name: TRequests | string) => {
   const handlePending = () => Store.dispatch(notificationMethods.loadingRequest(name, 'PENDING'))
 
   const handleFailure = ({ message }: PostgrestError | ApiError) => {

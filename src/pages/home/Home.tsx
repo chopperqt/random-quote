@@ -13,8 +13,8 @@ const Home = () => {
   const { QuoteStore: { quote } } = Stores()
   const {
     isLoading,
-    isSuccess,
     isError,
+    isSuccess,
   } = useHome()
 
   return (
