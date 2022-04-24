@@ -1,3 +1,7 @@
+import { useSelector } from "react-redux"
+import Store, { IStore, quoteMethods, Stores } from "services"
+import { getRandomQuote } from "utils/quotes"
+
 export const actions = {
   SET_QUOTE: 'SET_QUOTE',
   GET_LAST_QUOTES: 'GET_LAST_QUOTES',
@@ -6,6 +10,8 @@ export const actions = {
   UPDATE_QUOTES: 'UPDATE_QUOTES',
   UPDATE_LAST_QUOTE: 'UPDATE_LAST_QUOTE',
   CLEAR_QUOTES: 'CLEAR_QUOTE',
+  INCREASE_QUOTE_COUNTER: 'INCREASE_QUOTE_COUNTER',
+  DECREASE_QUOTE_COUNTER: 'DECREASE_QUOTE_COUNTER',
 }
 
 export type TActions = 'quotes' | 'randomQuote' | 'lastQuotes'
@@ -41,6 +47,18 @@ export const methods = {
       payload: { bookmarked, id },
     }
   },
+  increaseQuoteCounter() {
+    return {
+      type: actions.INCREASE_QUOTE_COUNTER,
+      payload: {}
+    }
+  },
+  decreaseQuoteCounter() {
+    return {
+      type: actions.DECREASE_QUOTE_COUNTER,
+      payload: {}
+    }
+  },
   clearQuotes() {
     return {
       type: actions.CLEAR_QUOTES,
@@ -48,3 +66,34 @@ export const methods = {
     }
   }
 }
+
+export const increaseQuoteCounter = async () => {
+  const { quotesStore } = Store.getState()
+  const {
+    quotes,
+    quoteCounter,
+  } = quotesStore
+  const quotesLength = [...quotes].length - 1
+
+  if (quoteCounter >= quotesLength) {
+    const isSuccess = await getRandomQuote()
+
+    if (isSuccess) {
+      Store.dispatch(quoteMethods.increaseQuoteCounter())
+    }
+
+    return
+  }
+
+  Store.dispatch(quoteMethods.increaseQuoteCounter())
+}
+
+export const decreaseQuoteCounter = () => {
+  const { quotesStore } = Store.getState()
+  const { quoteCounter } = quotesStore
+
+  if (quoteCounter !== 0) {
+    Store.dispatch(quoteMethods.decreaseQuoteCounter())
+  }
+}
+

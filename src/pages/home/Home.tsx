@@ -10,27 +10,26 @@ import { HELPER_HOTKEY_TEXT } from './constants'
 import styles from './Home.module.scss'
 
 const Home = () => {
-  const { QuoteStore: { quote } } = Stores()
+  const { QuoteStore: { quotes, quoteCounter } } = Stores()
   const {
-    isLoading,
-    isError,
-    isSuccess,
+    quoteRequestStatus,
+    randomQuoteRequestStatus,
   } = useHome()
 
   return (
     <div className={styles.home}>
       <div className={styles.quote}>
         <div>{HELPER_HOTKEY_TEXT}</div>
-        {isLoading && (
+        {(quoteRequestStatus.isLoading || randomQuoteRequestStatus.isLoading) && (
           <QuoteSkeleton />
         )}
-        {isSuccess && (
+        {(quoteRequestStatus.isSuccess || randomQuoteRequestStatus.isSuccess) && (
           <Quote
-            loading={isLoading}
-            quote={quote}
+            loading={quoteRequestStatus.isLoading || randomQuoteRequestStatus.isLoading}
+            quote={quotes[quoteCounter]}
           />
         )}
-        {isError && (
+        {(quoteRequestStatus.isError || randomQuoteRequestStatus.isError) && (
           <Information text={DefaultMessage.error} />
         )}
         <div className={styles.footer}>

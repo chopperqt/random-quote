@@ -9,20 +9,35 @@ import {
 import { getUrlParam } from 'helpers/urlParams'
 
 import { Stores } from 'services'
+import { decreaseQuoteCounter, increaseQuoteCounter } from 'services/quotes/actions'
+
+const ArrowKeys = {
+  right: 'ArrowRight',
+  left: 'ArrowLeft',
+}
 
 const useHome = () => {
   const { NotificationStore } = Stores()
   const { loading } = NotificationStore
   const idFromUrl = Number(getUrlParam('qq'))
-  const loadingStatus = idFromUrl ? loading.getQuote : loading.getRandomQuote
 
-  const {
-    isLoading,
-    isError,
-    isSuccess,
-  } = useResponse({
-    loading: loadingStatus,
+  const quoteRequestStatus = useResponse({
+    loading: loading.getQuote,
   })
+
+  const randomQuoteRequestStatus = useResponse({
+    loading: loading.getRandomQuote,
+  })
+
+  const handleClickArrow = (event: KeyboardEvent) => {
+    if (event.code === ArrowKeys.right) {
+      increaseQuoteCounter()
+    }
+
+    if (event.code === ArrowKeys.left) {
+      decreaseQuoteCounter()
+    }
+  }
 
   const handleChangeQuote = () => {
     getRandomQuote()
@@ -31,6 +46,8 @@ const useHome = () => {
   useEffect(() => {
     changeDocumentTitle(DocumentTitles.home)
 
+    window.addEventListener('keydown', handleClickArrow)
+
     if (idFromUrl) {
       getQuote(idFromUrl)
 
@@ -38,12 +55,15 @@ const useHome = () => {
     }
 
     getRandomQuote()
+
+    return () => {
+      window.removeEventListener('keydown', handleClickArrow)
+    }
   }, [])
 
   return {
-    isLoading,
-    isError,
-    isSuccess,
+    quoteRequestStatus,
+    randomQuoteRequestStatus,
     handleChangeQuote,
   }
 }

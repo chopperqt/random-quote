@@ -212,7 +212,7 @@ export const getQuotesAuthors = async (id_author: string) => {
   return data
 }
 
-export const getRandomQuote = async (id?: number) => {
+export const getRandomQuote = async (id?: number): Promise<boolean> => {
   const {
     handleFailure,
     handlePending,
@@ -226,16 +226,18 @@ export const getRandomQuote = async (id?: number) => {
   if (error) {
     handleFailure(error)
 
-    return
+    return true
   }
 
   Store.dispatch(quoteMethods.setQuote(data))
+
+  handleSuccess()
 
   if (data && data[0].id_quote) {
     updateUrlParams({ qq: data[0].id_quote })
   }
 
-  handleSuccess()
+  return true
 }
 
 export const getQuotesLast = async () => {
