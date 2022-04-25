@@ -28,7 +28,6 @@ export const QuotesRequests = {
   getQuotesMore: 'getQuotesMore',
   getQuotesAuthor: 'getQuotesAuthor',
   getQuotesLast: 'getQuotesLast',
-  getRandomQuote: 'getRandomQuote',
   searchQuote: 'searchQuote',
   changeRating: 'changeRating',
   postQuote: 'postQuotes',
@@ -50,7 +49,6 @@ export const getQuotes = async ({
   handlePending()
 
   const { count } = await supabase.from(Tables.quotes).select('*', { count: 'exact', head: true })
-  //const quotes = await supabase.rpc(SupabaseFunctions.getQuotes)
 
   const quotes = await supabase
     .from(Tables.quotes)
@@ -108,7 +106,7 @@ export const getQuotes = async ({
   handleSuccess()
 }
 
-export const getQuote = async (id: number) => {
+export const getQuote = async (id: number, idUser?: string) => {
   const {
     handleFailure,
     handlePending,
@@ -139,6 +137,34 @@ export const getQuote = async (id: number) => {
   Store.dispatch(quoteMethods.setQuote([updateData]))
 
   handleSuccess()
+}
+
+export const getRandomQuote = async (): Promise<boolean> => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses(QuotesRequests.getQuote)
+
+  handlePending()
+
+  let { data, error } = await supabase.rpc(SupabaseFunctions.getRandomQuote)
+
+  if (error) {
+    handleFailure(error)
+
+    return true
+  }
+
+  Store.dispatch(quoteMethods.setQuote(data))
+
+  handleSuccess()
+
+  if (data && data[0].id_quote) {
+    updateUrlParams({ qq: data[0].id_quote })
+  }
+
+  return true
 }
 
 export const getQuotesMore = async ({
@@ -210,34 +236,6 @@ export const getQuotesAuthors = async (id_author: string) => {
   handleSuccess()
 
   return data
-}
-
-export const getRandomQuote = async (id?: number): Promise<boolean> => {
-  const {
-    handleFailure,
-    handlePending,
-    handleSuccess,
-  } = loadingStatuses(QuotesRequests.getRandomQuote)
-
-  handlePending()
-
-  let { data, error } = await supabase.rpc(SupabaseFunctions.getRandomQuote)
-
-  if (error) {
-    handleFailure(error)
-
-    return true
-  }
-
-  Store.dispatch(quoteMethods.setQuote(data))
-
-  handleSuccess()
-
-  if (data && data[0].id_quote) {
-    updateUrlParams({ qq: data[0].id_quote })
-  }
-
-  return true
 }
 
 export const getQuotesLast = async () => {

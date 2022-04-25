@@ -12,24 +12,26 @@ import styles from './Home.module.scss'
 const Home = () => {
   const { QuoteStore: { quotes, quoteCounter } } = Stores()
   const {
-    quoteRequestStatus,
-    randomQuoteRequestStatus,
-  } = useHome()
+    isError,
+    isLoading,
+    isSuccess,
+  } = useHome({
+    quoteCounter,
+  })
 
   return (
     <div className={styles.home}>
       <div className={styles.quote}>
         <div>{HELPER_HOTKEY_TEXT}</div>
-        {(quoteRequestStatus.isLoading || randomQuoteRequestStatus.isLoading) && (
+        {isLoading && (
           <QuoteSkeleton />
         )}
-        {(quoteRequestStatus.isSuccess || randomQuoteRequestStatus.isSuccess) && (
+        {isSuccess && (
           <Quote
-            loading={quoteRequestStatus.isLoading || randomQuoteRequestStatus.isLoading}
             quote={quotes[quoteCounter]}
           />
         )}
-        {(quoteRequestStatus.isError || randomQuoteRequestStatus.isError) && (
+        {isError && (
           <Information text={DefaultMessage.error} />
         )}
         <div className={styles.footer}>

@@ -6,7 +6,7 @@ import {
   changeDocumentTitle,
   DocumentTitles
 } from 'helpers/documentTitle'
-import { getUrlParam } from 'helpers/urlParams'
+import { getUrlParam, updateUrlParams } from 'helpers/urlParams'
 
 import { Stores } from 'services'
 import { decreaseQuoteCounter, increaseQuoteCounter } from 'services/quotes/actions'
@@ -16,17 +16,23 @@ const ArrowKeys = {
   left: 'ArrowLeft',
 }
 
-const useHome = () => {
+interface IUseHome {
+  quoteCounter: number,
+}
+
+const useHome = ({
+  quoteCounter,
+}: IUseHome) => {
   const { NotificationStore } = Stores()
   const { loading } = NotificationStore
   const idFromUrl = Number(getUrlParam('qq'))
 
-  const quoteRequestStatus = useResponse({
+  const {
+    isError,
+    isLoading,
+    isSuccess,
+  } = useResponse({
     loading: loading.getQuote,
-  })
-
-  const randomQuoteRequestStatus = useResponse({
-    loading: loading.getRandomQuote,
   })
 
   const handleClickArrow = (event: KeyboardEvent) => {
@@ -61,9 +67,14 @@ const useHome = () => {
     }
   }, [])
 
+  useEffect(() => {
+
+  }, [quoteCounter])
+
   return {
-    quoteRequestStatus,
-    randomQuoteRequestStatus,
+    isLoading,
+    isSuccess,
+    isError,
     handleChangeQuote,
   }
 }
