@@ -8,6 +8,7 @@ import { Stores } from 'services'
 import { HELPER_HOTKEY_TEXT } from './constants'
 
 import styles from './Home.module.scss'
+import Icon, { IconList } from 'components/icon'
 
 const Home = () => {
   const { QuoteStore: { quotes, quoteCounter } } = Stores()
@@ -36,6 +37,14 @@ const Home = () => {
         )}
         <div className={styles.footer}>
           <Footer />
+        </div>
+        <div>
+          <button>
+            <Icon icon={IconList.chevronCircleLeft} />
+          </button>
+          <button>
+            <Icon icon={IconList.chevronCircleRight} />
+          </button>
         </div>
       </div>
     </div>
