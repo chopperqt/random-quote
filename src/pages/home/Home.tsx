@@ -5,13 +5,19 @@ import useHome from './hooks/useHome'
 import Footer from 'components/footer'
 import Information, { DefaultMessage } from 'components/Information'
 import { Stores } from 'services'
+import {
+  increaseQuoteCounter,
+  decreaseQuoteCounter,
+} from 'services/quotes/actions'
 import { HELPER_HOTKEY_TEXT } from './constants'
+import ActionButtons from './partials/ActionButtons'
 
 import styles from './Home.module.scss'
-import Icon, { IconList } from 'components/icon'
 
 const Home = () => {
   const { QuoteStore: { quotes, quoteCounter } } = Stores()
+  const isFirstQuote = quoteCounter === 0
+
   const {
     isError,
     isLoading,
@@ -38,14 +44,12 @@ const Home = () => {
         <div className={styles.footer}>
           <Footer />
         </div>
-        <div>
-          <button>
-            <Icon icon={IconList.chevronCircleLeft} />
-          </button>
-          <button>
-            <Icon icon={IconList.chevronCircleRight} />
-          </button>
-        </div>
+        <ActionButtons
+          disabled={isLoading}
+          onClickLeft={decreaseQuoteCounter}
+          onClickRight={increaseQuoteCounter}
+          disabledLeft={isFirstQuote}
+        />
       </div>
     </div>
   )
