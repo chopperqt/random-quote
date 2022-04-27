@@ -62,3 +62,33 @@
     }
   }
 }
+
+.actionsButtons {
+  display: flex;
+  column-gap: 10px;
+}
+
+.btn {
+  @include reset-button;
+
+  :global(.icon-svg) {
+    transition: $transition--short;
+    width: 30px;
+    height: 30px;
+    fill: $color-secondary--5;
+  }
+
+  &:disabled {
+    pointer-events: none;
+
+    :global(.icon-svg) {
+      fill: $color-secondary--4;
+    } 
+  }
+
+  &:hover {
+    :global(.icon-svg) {
+      fill: $color-secondary--7;
+    }
+  }
+}

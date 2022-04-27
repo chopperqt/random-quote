@@ -1,17 +1,20 @@
 import { actions } from './actions'
 
 const {
-  GET_RANDOM_QUOTE,
+  SET_QUOTE,
   GET_QUOTES,
   GET_LAST_QUOTES,
   SEARCH_QUOTES,
   UPDATE_QUOTES,
   CLEAR_QUOTES,
+  INCREASE_QUOTE_COUNTER,
+  DECREASE_QUOTE_COUNTER,
 } = actions
 
 const initialState = {
-  quote: {},
   quotes: [],
+  quoteCounter: 0,
+  quotesIds: [],
   quotesCount: 0,
   quotesSearch: [],
   lastQuotes: [],
@@ -19,15 +22,14 @@ const initialState = {
 }
 
 export interface IQuotesStore {
-  quote: IQuote
   quotes: IQuote[]
+  quoteCounter: number
+  quotesIds: number[]
   quotesCount: number
   quotesSearch: IQuote[]
   lastQuotes: IQuote[]
   lastQuotesCount: number
 }
-
-export type TQuoteAction = 'like' | 'dislike'
 export interface IQuote {
   author: {
     path: string,
@@ -60,10 +62,13 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
         lastQuotesCount: payload.count
       }
     }
-    case GET_RANDOM_QUOTE: {
+    case SET_QUOTE: {
       return {
         ...state,
-        quote: payload[0],
+        quotes: [
+          ...state.quotes,
+          payload[0],
+        ],
       }
     }
     case SEARCH_QUOTES: {
@@ -77,11 +82,6 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
       const findQuote = state.quotes.findIndex((item: IQuote) => item.id_quote === payload.id)
 
       const { bookmarked } = payload
-
-      const modifyRandomQuote = {
-        ...state.quote,
-        bookmarked,
-      }
 
       let modifyLastQuote: IQuote[] = state.lastQuotes
       let modifyQuote: IQuote[] = state.quotes
@@ -102,7 +102,6 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
 
       return {
         ...state,
-        quote: modifyRandomQuote,
         lastQuotes: modifyLastQuote,
         quotes: modifyQuote,
       }
@@ -112,6 +111,19 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
         ...state,
         quotes: [],
         lastQuotes: [],
+      }
+    }
+    case INCREASE_QUOTE_COUNTER: {
+      return {
+        ...state,
+        quoteCounter: state.quoteCounter + 1
+      }
+    }
+    case DECREASE_QUOTE_COUNTER: {
+      return {
+        ...state,
+        quoteCounter: state.quoteCounter - 1,
+
       }
     }
     default: {

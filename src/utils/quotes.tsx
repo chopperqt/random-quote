@@ -17,15 +17,17 @@ import {
   IGetQuotes,
 } from './'
 import { IQuote } from 'services/quotes';
+import { updateUrlParams } from 'helpers/urlParams';
+import { serializeQuote } from 'helpers/serialize'
 
 const LIMIT_PER_PAGE = 10
 
 export const QuotesRequests = {
   getQuotes: 'getQuotes',
+  getQuote: 'getQuote',
   getQuotesMore: 'getQuotesMore',
   getQuotesAuthor: 'getQuotesAuthor',
   getQuotesLast: 'getQuotesLast',
-  getRandomQuote: 'getRandomQuote',
   searchQuote: 'searchQuote',
   changeRating: 'changeRating',
   postQuote: 'postQuotes',
@@ -47,7 +49,6 @@ export const getQuotes = async ({
   handlePending()
 
   const { count } = await supabase.from(Tables.quotes).select('*', { count: 'exact', head: true })
-  //const quotes = await supabase.rpc(SupabaseFunctions.getQuotes)
 
   const quotes = await supabase
     .from(Tables.quotes)
@@ -103,6 +104,67 @@ export const getQuotes = async ({
   }))
 
   handleSuccess()
+}
+
+export const getQuote = async (id: number, idUser?: string) => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses('getQuote')
+
+  handlePending()
+
+  const { data, error } = await supabase
+    .from(Tables.quotes)
+    .select(`
+    *,
+    author:id_author (
+      name,
+      path
+    ) 
+  `)
+    .match({ id_quote: id })
+
+  if (error) {
+    handleFailure(error)
+
+    return
+  }
+
+  const updateData = serializeQuote(data[0])
+
+  Store.dispatch(quoteMethods.setQuote([updateData]))
+
+  handleSuccess()
+}
+
+export const getRandomQuote = async (): Promise<boolean> => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses(QuotesRequests.getQuote)
+
+  handlePending()
+
+  let { data, error } = await supabase.rpc(SupabaseFunctions.getRandomQuote)
+
+  if (error) {
+    handleFailure(error)
+
+    return true
+  }
+
+  Store.dispatch(quoteMethods.setQuote(data))
+
+  handleSuccess()
+
+  if (data && data[0].id_quote) {
+    updateUrlParams({ qq: data[0].id_quote })
+  }
+
+  return true
 }
 
 export const getQuotesMore = async ({
@@ -174,28 +236,6 @@ export const getQuotesAuthors = async (id_author: string) => {
   handleSuccess()
 
   return data
-}
-
-export const getRandomQuote = async (id?: number) => {
-  const {
-    handleFailure,
-    handlePending,
-    handleSuccess,
-  } = loadingStatuses(QuotesRequests.getRandomQuote)
-
-  handlePending()
-
-  let { data, error } = await supabase.rpc(SupabaseFunctions.getRandomQuote)
-
-  if (error) {
-    handleFailure(error)
-
-    return
-  }
-
-  Store.dispatch(quoteMethods.getRandomQuote(data))
-
-  handleSuccess()
 }
 
 export const getQuotesLast = async () => {

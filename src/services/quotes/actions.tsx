@@ -1,11 +1,18 @@
+import { updateUrlParams } from "helpers/urlParams"
+import Store, { quoteMethods } from "services"
+import { getRandomQuote } from "utils/quotes"
+import { IQuote } from "."
+
 export const actions = {
-  GET_RANDOM_QUOTE: 'GET_RANDOM_QUOTE',
+  SET_QUOTE: 'SET_QUOTE',
   GET_LAST_QUOTES: 'GET_LAST_QUOTES',
   GET_QUOTES: 'GET_QUOTES',
   SEARCH_QUOTES: 'SEARCH_QUOTES',
   UPDATE_QUOTES: 'UPDATE_QUOTES',
   UPDATE_LAST_QUOTE: 'UPDATE_LAST_QUOTE',
   CLEAR_QUOTES: 'CLEAR_QUOTE',
+  INCREASE_QUOTE_COUNTER: 'INCREASE_QUOTE_COUNTER',
+  DECREASE_QUOTE_COUNTER: 'DECREASE_QUOTE_COUNTER',
 }
 
 export type TActions = 'quotes' | 'randomQuote' | 'lastQuotes'
@@ -23,9 +30,9 @@ export const methods = {
       payload: data,
     }
   },
-  getRandomQuote<T>(data: T) {
+  setQuote<T>(data: T) {
     return {
-      type: actions.GET_RANDOM_QUOTE,
+      type: actions.SET_QUOTE,
       payload: data,
     }
   },
@@ -41,6 +48,18 @@ export const methods = {
       payload: { bookmarked, id },
     }
   },
+  increaseQuoteCounter() {
+    return {
+      type: actions.INCREASE_QUOTE_COUNTER,
+      payload: {}
+    }
+  },
+  decreaseQuoteCounter() {
+    return {
+      type: actions.DECREASE_QUOTE_COUNTER,
+      payload: {}
+    }
+  },
   clearQuotes() {
     return {
       type: actions.CLEAR_QUOTES,
@@ -48,3 +67,49 @@ export const methods = {
     }
   }
 }
+
+interface IQuoteCounter {
+  quotes: IQuote[],
+  quoteCounter: number
+}
+
+export const increaseQuoteCounter = async () => {
+  const { quotesStore } = Store.getState()
+  const {
+    quotes,
+    quoteCounter,
+  }: IQuoteCounter = quotesStore
+
+  const quotesLength = quotes.length - 1
+
+  if (quoteCounter >= quotesLength) {
+    const isSuccess = await getRandomQuote()
+
+    if (isSuccess) {
+      Store.dispatch(quoteMethods.increaseQuoteCounter())
+
+      updateUrlParams({ qq: quotes[quoteCounter + 1].id_quote })
+    }
+
+    return
+  }
+
+  Store.dispatch(quoteMethods.increaseQuoteCounter())
+
+  updateUrlParams({ qq: quotes[quoteCounter + 1].id_quote })
+}
+
+export const decreaseQuoteCounter = () => {
+  const { quotesStore } = Store.getState()
+  const {
+    quotes,
+    quoteCounter
+  }: IQuoteCounter = quotesStore
+
+  if (quoteCounter !== 0) {
+    Store.dispatch(quoteMethods.decreaseQuoteCounter())
+
+    updateUrlParams({ qq: quotes[quoteCounter - 1].id_quote })
+  }
+}
+
