@@ -132,14 +132,31 @@ export const getQuote = async (id: number, idUser?: string) => {
     return
   }
 
-  const updateData = serializeQuote(data[0])
+  let updateData = [serializeQuote(data[0])]
 
-  Store.dispatch(quoteMethods.setQuote([updateData]))
+  if (idUser) {
+    const bookmarks = await getBookmarks({ id_user: idUser, list: [data[0].id_quote] })
+
+    if (bookmarks.error) {
+      return
+    }
+
+    updateData = data.map((quote: IQuote) => {
+      const isBookmark = bookmarks.data.find((item: IQuote) => +item.id_quote === +quote.id_quote)
+
+      return {
+        ...quote,
+        bookmarked: !!isBookmark,
+      }
+    })
+  }
+
+  Store.dispatch(quoteMethods.setQuote(updateData))
 
   handleSuccess()
 }
 
-export const getRandomQuote = async (): Promise<boolean> => {
+export const getRandomQuote = async (idUser?: string): Promise<boolean> => {
   const {
     handleFailure,
     handlePending,
@@ -156,7 +173,31 @@ export const getRandomQuote = async (): Promise<boolean> => {
     return true
   }
 
-  Store.dispatch(quoteMethods.setQuote(data))
+  if (!data) {
+    return true
+  }
+
+  let updateData = [serializeQuote(data[0])]
+
+  if (idUser) {
+    const bookmarks = await getBookmarks({ id_user: idUser, list: [data[0].id_quote] })
+
+    if (bookmarks.error) {
+      return true
+    }
+
+    updateData = data.map((quote: IQuote) => {
+      const isBookmark = bookmarks.data.find((item: IQuote) => +item.id_quote === +quote.id_quote)
+
+
+      return {
+        ...quote,
+        bookmarked: !!isBookmark,
+      }
+    })
+  }
+
+  Store.dispatch(quoteMethods.setQuote(updateData))
 
   handleSuccess()
 

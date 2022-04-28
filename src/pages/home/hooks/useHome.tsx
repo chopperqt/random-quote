@@ -10,6 +10,7 @@ import { getUrlParam, updateUrlParams } from 'helpers/urlParams'
 
 import { Stores } from 'services'
 import { decreaseQuoteCounter, increaseQuoteCounter } from 'services/quotes/actions'
+import useUser from 'helpers/useUser'
 
 const ArrowKeys = {
   right: 'ArrowRight',
@@ -26,6 +27,7 @@ const useHome = ({
   const { NotificationStore } = Stores()
   const { loading } = NotificationStore
   const idFromUrl = Number(getUrlParam('qq'))
+  const { user } = useUser()
 
   const {
     isError,
@@ -34,6 +36,7 @@ const useHome = ({
   } = useResponse({
     loading: loading.getQuote,
   })
+
 
   const handleClickArrow = (event: KeyboardEvent) => {
     if (event.code === ArrowKeys.right) {
@@ -46,7 +49,7 @@ const useHome = ({
   }
 
   const handleChangeQuote = () => {
-    getRandomQuote()
+    getRandomQuote(user?.id)
   }
 
   useEffect(() => {
@@ -55,12 +58,12 @@ const useHome = ({
     window.addEventListener('keydown', handleClickArrow)
 
     if (idFromUrl) {
-      getQuote(idFromUrl)
+      getQuote(idFromUrl, user?.id)
 
       return
     }
 
-    getRandomQuote()
+    getRandomQuote(user?.id)
 
     return () => {
       window.removeEventListener('keydown', handleClickArrow)
