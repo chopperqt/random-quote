@@ -6,7 +6,7 @@ import {
   changeDocumentTitle,
   DocumentTitles
 } from 'helpers/documentTitle'
-import { getUrlParam, updateUrlParams } from 'helpers/urlParams'
+import { getUrlParam } from 'helpers/urlParams'
 
 import { Stores } from 'services'
 import { decreaseQuoteCounter, increaseQuoteCounter } from 'services/quotes/actions'

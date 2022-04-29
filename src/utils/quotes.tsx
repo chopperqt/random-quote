@@ -156,7 +156,7 @@ export const getQuote = async (id: number, idUser?: string) => {
   handleSuccess()
 }
 
-export const getRandomQuote = async (idUser?: string): Promise<boolean> => {
+export const getRandomQuote = async (idUser?: string): Promise<boolean | PostgrestError> => {
   const {
     handleFailure,
     handlePending,
@@ -165,16 +165,12 @@ export const getRandomQuote = async (idUser?: string): Promise<boolean> => {
 
   handlePending()
 
-  let { data, error } = await supabase.rpc(SupabaseFunctions.getRandomQuote)
+  const { data, error } = await supabase.rpc(SupabaseFunctions.getRandomQuote)
 
   if (error) {
     handleFailure(error)
 
-    return true
-  }
-
-  if (!data) {
-    return true
+    return error
   }
 
   let updateData = [serializeQuote(data[0])]
@@ -183,8 +179,12 @@ export const getRandomQuote = async (idUser?: string): Promise<boolean> => {
     const bookmarks = await getBookmarks({ id_user: idUser, list: [data[0].id_quote] })
 
     if (bookmarks.error) {
-      return true
+      handleFailure(bookmarks.error)
+
+      return bookmarks.error
     }
+
+    console.log(bookmarks)
 
     updateData = data.map((quote: IQuote) => {
       const isBookmark = bookmarks.data.find((item: IQuote) => +item.id_quote === +quote.id_quote)

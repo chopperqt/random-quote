@@ -47,7 +47,7 @@ const Home = () => {
         <ActionButtons
           disabled={isLoading}
           onClickLeft={decreaseQuoteCounter}
-          onClickRight={increaseQuoteCounter}
+          onClickRight={() => increaseQuoteCounter()}
           disabledLeft={isFirstQuote}
         />
       </div>
