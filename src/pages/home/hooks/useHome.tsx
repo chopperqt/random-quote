@@ -7,9 +7,14 @@ import {
   DocumentTitles
 } from 'helpers/documentTitle'
 import { getUrlParam } from 'helpers/urlParams'
-
-import { Stores } from 'services'
-import { decreaseQuoteCounter, increaseQuoteCounter } from 'services/quotes/actions'
+import Store, {
+  Stores,
+  quoteMethods,
+} from 'services'
+import {
+  decreaseQuoteCounter,
+  increaseQuoteCounter,
+} from 'services/quotes/actions'
 import useUser from 'helpers/useUser'
 
 const ArrowKeys = {
@@ -17,13 +22,7 @@ const ArrowKeys = {
   left: 'ArrowLeft',
 }
 
-interface IUseHome {
-  quoteCounter: number,
-}
-
-const useHome = ({
-  quoteCounter,
-}: IUseHome) => {
+const useHome = () => {
   const { NotificationStore } = Stores()
   const { loading } = NotificationStore
   const idFromUrl = Number(getUrlParam('qq'))
@@ -40,7 +39,7 @@ const useHome = ({
 
   const handleClickArrow = (event: KeyboardEvent) => {
     if (event.code === ArrowKeys.right) {
-      increaseQuoteCounter()
+      increaseQuoteCounter(user?.id)
     }
 
     if (event.code === ArrowKeys.left) {
@@ -67,12 +66,12 @@ const useHome = ({
 
     return () => {
       window.removeEventListener('keydown', handleClickArrow)
+
+      Store.dispatch(quoteMethods.clearQuotes())
     }
   }, [])
 
-  useEffect(() => {
 
-  }, [quoteCounter])
 
   return {
     isLoading,

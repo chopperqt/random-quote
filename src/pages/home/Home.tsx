@@ -1,5 +1,3 @@
-import React from 'react'
-
 import Quote, { QuoteSkeleton } from 'components/quote'
 import useHome from './hooks/useHome'
 import Footer from 'components/footer'
@@ -11,20 +9,25 @@ import {
 } from 'services/quotes/actions'
 import { HELPER_HOTKEY_TEXT } from './constants'
 import ActionButtons from './partials/ActionButtons'
+import useUser from 'helpers/useUser'
 
 import styles from './Home.module.scss'
 
 const Home = () => {
-  const { QuoteStore: { quotes, quoteCounter } } = Stores()
+  const {
+    QuoteStore: {
+      quotes,
+      quoteCounter
+    }
+  } = Stores()
   const isFirstQuote = quoteCounter === 0
+  const { user } = useUser()
 
   const {
     isError,
     isLoading,
     isSuccess,
-  } = useHome({
-    quoteCounter,
-  })
+  } = useHome()
 
   return (
     <div className={styles.home}>
@@ -47,7 +50,7 @@ const Home = () => {
         <ActionButtons
           disabled={isLoading}
           onClickLeft={decreaseQuoteCounter}
-          onClickRight={() => increaseQuoteCounter()}
+          onClickRight={() => increaseQuoteCounter(user?.id)}
           disabledLeft={isFirstQuote}
         />
       </div>

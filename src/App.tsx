@@ -4,9 +4,7 @@ import {
   Routes,
   Route
 } from 'react-router-dom'
-import { useSelector } from 'react-redux';
-import { IStore } from 'services';
-
+import Store, { Stores } from 'services';
 
 import Home from 'pages/home/Home'
 import Profile from 'pages/profile';
@@ -15,20 +13,15 @@ import AdminPanel from 'pages/admin-panel/AdminPanel';
 import Notification from 'components/notification';
 import Header from 'components/header'
 import Quotes from 'pages/quotes/Quotes';
-
+import { getUrlParams } from 'helpers/urlParams';
 import './asset/scss/typography.scss'
 import './asset/scss/fonts.scss'
 import './App.scss'
-import { getUrlParams } from 'helpers/urlParams';
 
 function App() {
-  const notifications = useSelector((store: IStore) => store.notificationsStore.notifications)
+  const { NotificationStore: { notifications } } = Stores()
   const hasNotifications = notifications.length > 0
   const params = getUrlParams()
-
-  useEffect(() => {
-    console.log('params:', params)
-  }, [params])
 
   return (
     <div className="App">

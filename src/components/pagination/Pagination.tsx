@@ -48,6 +48,7 @@ const Pagination = ({
 
         return (
           <Item
+            key={p}
             onClick={() => handleClickPage(p)}
             page={p}
             active={isActive}

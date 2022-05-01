@@ -1,7 +1,7 @@
 import { updateUrlParams } from "helpers/urlParams"
 import Store, { quoteMethods } from "services"
 import { getRandomQuote } from "utils/quotes"
-import { IQuotesStore } from "."
+import { QuotesStore } from "."
 
 export const actions = {
   SET_QUOTE: 'SET_QUOTE',
@@ -68,9 +68,9 @@ export const methods = {
   }
 }
 
-type QuoteCounter = Pick<IQuotesStore, 'quoteCounter' | 'quotes'>
+type QuoteCounter = Pick<QuotesStore, 'quoteCounter' | 'quotes'>
 
-export const increaseQuoteCounter = async () => {
+export const increaseQuoteCounter = async (id_user?: string) => {
   const { quotesStore } = Store.getState()
   const {
     quotes,
@@ -80,13 +80,10 @@ export const increaseQuoteCounter = async () => {
   const quotesLength = quotes.length - 1
 
   if (quoteCounter >= quotesLength) {
-    console.log(quotes)
-    const isSuccess = await getRandomQuote()
+    const isSuccess = await getRandomQuote(id_user)
 
     if (isSuccess) {
       Store.dispatch(quoteMethods.increaseQuoteCounter())
-
-      console.log(quoteCounter)
 
       updateUrlParams({ qq: quotes[quoteCounter].id_quote })
     }

@@ -1,6 +1,6 @@
-import { IQuote } from "services/quotes";
+import { QuoteData } from "services/quotes";
 
-export const serializeQuote = (quote: IQuote) => {
+export const serializeQuote = (quote: QuoteData) => {
   return {
     ...quote,
     ...quote.author,

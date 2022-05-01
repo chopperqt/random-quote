@@ -16,7 +16,7 @@ import {
   TUpdateAction,
   IGetQuotes,
 } from './'
-import { IQuote } from 'services/quotes';
+import { QuoteData } from 'services/quotes';
 import { updateUrlParams } from 'helpers/urlParams';
 import { serializeQuote } from 'helpers/serialize'
 
@@ -87,7 +87,7 @@ export const getQuotes = async ({
       return
     }
 
-    quotesData = quotes.data.map((quote: IQuote) => {
+    quotesData = quotes.data.map((quote: QuoteData) => {
       const isBookmark = bookmarks.data.find((item: any) => +item.id_quote === +quote.id_quote)
 
       return {
@@ -141,8 +141,8 @@ export const getQuote = async (id: number, idUser?: string) => {
       return
     }
 
-    updateData = data.map((quote: IQuote) => {
-      const isBookmark = bookmarks.data.find((item: IQuote) => +item.id_quote === +quote.id_quote)
+    updateData = data.map((quote: QuoteData) => {
+      const isBookmark = bookmarks.data.find((item: QuoteData) => +item.id_quote === +quote.id_quote)
 
       return {
         ...quote,
@@ -184,10 +184,8 @@ export const getRandomQuote = async (idUser?: string): Promise<boolean | Postgre
       return bookmarks.error
     }
 
-    console.log(bookmarks)
-
-    updateData = data.map((quote: IQuote) => {
-      const isBookmark = bookmarks.data.find((item: IQuote) => +item.id_quote === +quote.id_quote)
+    updateData = data.map((quote: QuoteData) => {
+      const isBookmark = bookmarks.data.find((item: QuoteData) => +item.id_quote === +quote.id_quote)
 
 
       return {
