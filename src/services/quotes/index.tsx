@@ -13,24 +13,26 @@ const {
 
 const initialState = {
   quotes: [],
-  quoteCounter: 0,
+  quotesAll: [],
   quotesIds: [],
-  quotesCount: 0,
-  quotesSearch: [],
   lastQuotes: [],
+  quotesSearch: [],
+  quoteCounter: 0,
+  quotesCount: 0,
   lastQuotesCount: 0,
 }
 
-export interface IQuotesStore {
-  quotes: IQuote[]
+export interface QuotesStore {
+  quotes: QuoteData[]
+  quotesAll: QuoteData[]
   quoteCounter: number
   quotesIds: number[]
   quotesCount: number
-  quotesSearch: IQuote[]
-  lastQuotes: IQuote[]
+  quotesSearch: QuoteData[]
+  lastQuotes: QuoteData[]
   lastQuotesCount: number
 }
-export interface IQuote {
+export interface QuoteData {
   author: {
     path: string,
     name: string
@@ -78,13 +80,13 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
       }
     }
     case UPDATE_QUOTES: {
-      const findLastQuoteIndex = state.lastQuotes.findIndex((item: IQuote) => item.id_quote === payload.id)
-      const findQuote = state.quotes.findIndex((item: IQuote) => item.id_quote === payload.id)
+      const findLastQuoteIndex: number = state.lastQuotes.findIndex((item: QuoteData) => item.id_quote === payload.id)
+      const findQuote: number = state.quotes.findIndex((item: QuoteData) => item.id_quote === payload.id)
 
       const { bookmarked } = payload
 
-      let modifyLastQuote: IQuote[] = state.lastQuotes
-      let modifyQuote: IQuote[] = state.quotes
+      let modifyLastQuote: QuoteData[] = state.lastQuotes
+      let modifyQuote: QuoteData[] = state.quotes
 
       if (typeof findLastQuoteIndex === 'number') {
         modifyLastQuote[findLastQuoteIndex] = {

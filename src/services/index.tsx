@@ -7,8 +7,8 @@ import thunk from 'redux-thunk'
 import { useSelector } from 'react-redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
-import quotesStore, { IQuotesStore } from './quotes'
-import userStore, { IUserStore } from './user/reducer'
+import quotesStore, { QuotesStore } from './quotes'
+import userStore, { UserStore } from './user/reducer'
 import notificationsStore, { INotificationsStore } from './notifications/reducer'
 import authorsStore, { IAuthorsStore } from './authors'
 import filtersStore, { IFilterStore } from './filters'
@@ -29,6 +29,10 @@ import {
   actions as filterActions,
   methods as filterMethods,
 } from './filters/actions'
+import {
+  actions as UserActions,
+  methods as UserMethods,
+} from './user/actions'
 
 const rootStore = combineReducers({
   quotesStore,
@@ -63,11 +67,13 @@ export {
   authorsMethods,
   filterActions,
   filterMethods,
+  UserActions,
+  UserMethods,
 }
 
 export interface IStore {
-  quotesStore: IQuotesStore
-  userStore: IUserStore
+  quotesStore: QuotesStore
+  userStore: UserStore
   notificationsStore: INotificationsStore
   authorsStore: IAuthorsStore
   filtersStore: IFilterStore

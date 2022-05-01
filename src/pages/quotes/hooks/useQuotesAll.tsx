@@ -10,8 +10,8 @@ import {
 import useUser from 'helpers/useUser'
 import { getUrlParam } from 'helpers/urlParams'
 
-import { Stores } from 'services'
-import { IQuote } from 'services/quotes'
+import Store, { quoteMethods, Stores } from 'services'
+import { QuoteData } from 'services/quotes'
 
 const useQuotesAll = () => {
   const [search, setSearch] = useState<string>('')
@@ -29,8 +29,8 @@ const useQuotesAll = () => {
   } = Stores()
   const description = `${QUOTES_ALL_TEXT} ${quotesCount} ${decOfNum(quotesCount, quoteWords)} от 4 авторов`
   const quoteItems = quotesSearch.length > 0 && search.length > 2 ? quotesSearch : quotes
-  const quotesFirstColumn: IQuote[] = quoteItems.filter((quote, index) => index % 2 === 0)
-  const quotesSecondColumn: IQuote[] = quoteItems.filter((quote, index) => index % 2 !== 0)
+  const quotesFirstColumn: QuoteData[] = quoteItems.filter((quote, index) => index % 2 === 0)
+  const quotesSecondColumn: QuoteData[] = quoteItems.filter((quote, index) => index % 2 !== 0)
   const hasMoreQuotes = quotesCount > quotes.length
   const hasSearchQuotes = quotesSearch.length > 0
   const pages = Math.ceil(quotesCount / 10)
@@ -75,6 +75,12 @@ const useQuotesAll = () => {
       // searchQuote(search)
     }
   }, [search])
+
+  useEffect(() => {
+    return () => {
+      Store.dispatch(quoteMethods.clearQuotes())
+    }
+  }, [])
 
   return {
     description,
