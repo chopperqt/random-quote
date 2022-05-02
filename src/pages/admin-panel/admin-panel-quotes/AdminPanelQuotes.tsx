@@ -1,5 +1,7 @@
-import React, { useEffect, useMemo } from 'react'
-import { useSelector } from 'react-redux'
+import {
+  useEffect,
+  useMemo,
+} from 'react'
 
 import Button from 'components/button'
 import Spin from 'components/spin'
@@ -7,7 +9,7 @@ import Table, { TableAction } from 'components/table'
 import Icon, { IconList } from 'components/icon'
 import { getQuotes } from 'utils/quotes'
 
-import { IStore } from 'services'
+import { Stores } from 'services'
 import { IAdminPanelQuotes } from '../constants'
 
 import styles from './AdminPanelQuotes.module.scss'
@@ -17,8 +19,16 @@ const BUTTON_TEXT = 'Создать цитату'
 const AdminPanelQuotes = ({
   onOpenAddModal,
 }: IAdminPanelQuotes) => {
-  const hasLoading = useSelector((store: IStore) => store.notificationsStore.loading?.getQuotes)
-  const quotes = useSelector((store: IStore) => store.quotesStore.quotes)
+  const {
+    QuoteStore: {
+      quotes,
+    },
+    NotificationStore: {
+      loading: {
+        getQuotes: loading
+      }
+    }
+  } = Stores()
 
   const modifyActionsQuotes = quotes.map((quote) => ({
     ...quote,
@@ -73,7 +83,7 @@ const AdminPanelQuotes = ({
           {BUTTON_TEXT}
         </>
       </Button>
-      <Spin loading={hasLoading === 'PENDING'}>
+      <Spin loading={loading === 'PENDING'}>
         <Table
           data={modifyActionsQuotes}
           columns={columns}

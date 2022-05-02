@@ -1,8 +1,6 @@
-import React from 'react'
-
 import { actions } from './actions'
 
-export interface IFilterStore {
+export interface FiltersStore {
   filters: {
     [key: string]: string
   }

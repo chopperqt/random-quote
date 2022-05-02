@@ -9,9 +9,9 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 
 import quotesStore, { QuotesStore } from './quotes'
 import userStore, { UserStore } from './user/reducer'
-import notificationsStore, { INotificationsStore } from './notifications/reducer'
-import authorsStore, { IAuthorsStore } from './authors'
-import filtersStore, { IFilterStore } from './filters'
+import notificationsStore, { NotificationsStore } from './notifications/reducer'
+import authorsStore, { AuthorsStore } from './authors'
+import filtersStore, { FiltersStore } from './filters'
 
 import {
   actions as quoteActions,
@@ -45,10 +45,10 @@ const rootStore = combineReducers({
 const Store = createStore(rootStore, composeWithDevTools(applyMiddleware(thunk)))
 
 export const Stores = () => {
-  const NotificationStore = useSelector((store: IStore) => store.notificationsStore)
-  const AuthorStore = useSelector((store: IStore) => store.authorsStore)
-  const QuoteStore = useSelector((store: IStore) => store.quotesStore)
-  const FilterStore = useSelector((store: IStore) => store.filtersStore)
+  const NotificationStore = useSelector((store: StoreData) => store.notificationsStore)
+  const AuthorStore = useSelector((store: StoreData) => store.authorsStore)
+  const QuoteStore = useSelector((store: StoreData) => store.quotesStore)
+  const FilterStore = useSelector((store: StoreData) => store.filtersStore)
 
   return {
     NotificationStore,
@@ -71,12 +71,12 @@ export {
   UserMethods,
 }
 
-export interface IStore {
+export interface StoreData {
   quotesStore: QuotesStore
   userStore: UserStore
-  notificationsStore: INotificationsStore
-  authorsStore: IAuthorsStore
-  filtersStore: IFilterStore
+  notificationsStore: NotificationsStore
+  authorsStore: AuthorsStore
+  filtersStore: FiltersStore
 }
 
 export default Store

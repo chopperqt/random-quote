@@ -8,7 +8,7 @@ const Requests = {
 
 export type TQuotesRequest = keyof typeof QuotesRequests
 export type TAuthorsRequests = keyof typeof AuthorsRequests
-export type TRequests = keyof typeof Requests
+export type RequestsData = keyof typeof Requests
 
 export interface IPostQuote {
   text: string

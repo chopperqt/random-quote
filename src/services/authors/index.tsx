@@ -9,7 +9,7 @@ const initialState = {
   authorsCount: 0,
 }
 
-export interface IAuthorsStore {
+export interface AuthorsStore {
   authors: IAuthor[]
   authorsCount: number
 }

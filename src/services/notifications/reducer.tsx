@@ -1,10 +1,10 @@
-import { TNotification } from "components/notification/Notification"
+import { NotificationType } from "components/notification/Notification"
 import { actions } from "./actions"
-import { TRequests, Requests } from 'utils'
+import { RequestsData } from 'utils'
 
-const initialState: INotificationsStore = {
+const initialState: NotificationsStore = {
   notifications: [],
-  loading: {} as any
+  loading: {} as LoadingData,
 }
 
 const {
@@ -13,22 +13,22 @@ const {
   CREATE_LOADING,
 } = actions
 
-export interface INotificationsStore {
-  notifications: INotification[]
-  loading: ILoading
+export interface NotificationsStore {
+  notifications: NotificationData[]
+  loading: LoadingData
 }
 
-export interface INotification {
+export interface NotificationData {
   text: string
   id: string
-  type: TNotification
+  type: NotificationType
 }
 
-type ILoading = {
-  [key in TRequests]: TLoading
+type LoadingData = {
+  [key in RequestsData]: StatusData
 }
 
-export type TLoading = 'PENDING' | 'SUCCESS' | 'FAILURE' | undefined
+export type StatusData = 'PENDING' | 'SUCCESS' | 'FAILURE' | undefined
 
 const notificationsStore = (
   state = initialState,

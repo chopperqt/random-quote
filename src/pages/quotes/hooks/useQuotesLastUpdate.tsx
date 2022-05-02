@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
 
 import { getQuotesLast } from 'utils/quotes'
 import decOfNum, { quoteWords } from 'helpers/decOfNum'
@@ -8,18 +7,25 @@ import {
   LAST_QUOTES_PER_PAGE,
 } from '../constants'
 import useResponse from 'helpers/useResponse'
-
-import { IStore } from 'services'
+import { Stores } from 'services'
 import { QuoteData } from 'services/quotes'
 
 const useQuotesLastUpdate = () => {
-  const loadingLastQuotes = useSelector((store: IStore) => store.notificationsStore.loading.getQuotesLast)
-  const lastQuotes = useSelector((store: IStore) => store.quotesStore.lastQuotes)
-  const lastQuotesCount = useSelector((store: IStore) => store.quotesStore.lastQuotesCount)
+  const {
+    NotificationStore: {
+      loading: {
+        getQuotesLast: loading,
+      }
+    },
+    QuoteStore: {
+      lastQuotes,
+      lastQuotesCount: count,
+    }
+  } = Stores()
 
   const quotesFirstColumn: QuoteData[] = lastQuotes.filter((quote, index) => index % 2 === 0)
   const quotesSecondColumn: QuoteData[] = lastQuotes.filter((quote, index) => index % 2 !== 0)
-  const lastQuotesDescription = `${lastQuotesCount} ${decOfNum(lastQuotesCount, quoteWords)} ${LAST_UPDATE_QUOTES_DESCRIPTION}`
+  const lastQuotesDescription = `${count} ${decOfNum(count, quoteWords)} ${LAST_UPDATE_QUOTES_DESCRIPTION}`
 
   const {
     isEmpty,
@@ -28,11 +34,11 @@ const useQuotesLastUpdate = () => {
     isSuccess,
     hasStatus,
   } = useResponse({
-    loading: loadingLastQuotes,
-    count: lastQuotesCount,
+    loading,
+    count,
   })
 
-  const isMoreButton = lastQuotesCount > LAST_QUOTES_PER_PAGE
+  const isMoreButton = count > LAST_QUOTES_PER_PAGE
 
   useEffect(() => {
     getQuotesLast()

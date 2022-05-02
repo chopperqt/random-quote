@@ -1,5 +1,3 @@
-
-
 export const actions = {
   GET_AUTHORS: 'GET_AUTHORS',
 }

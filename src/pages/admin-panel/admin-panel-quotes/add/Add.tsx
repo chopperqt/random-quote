@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   useForm,
   SubmitHandler,
@@ -11,7 +10,7 @@ import { postQuote } from 'utils/quotes'
 import Selector from "components/selector";
 import Button from 'components/button'
 
-import { IStore } from 'services'
+import { Stores } from 'services'
 import {
   IAdminPanelAdd,
   IAdminPanelAddField
@@ -40,7 +39,11 @@ const MOCK_DATA = [
 const Add = ({
   onClose = () => { },
 }: IAdminPanelAdd) => {
-  const postQuoteStatus = useSelector((store: IStore) => store.notificationsStore.loading)
+  const {
+    NotificationStore: {
+      loading: postQuoteStatus,
+    }
+  } = Stores()
   const hasLoading = postQuoteStatus.postQuote === 'PENDING'
   const {
     register,

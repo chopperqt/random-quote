@@ -6,19 +6,19 @@ import Icon, { IconList } from 'components/icon'
 import styles from './Notification.module.scss'
 import useNotification from './hooks/useNotification'
 
-interface INotifications {
+interface NotificationsProps {
   text: string,
   id: string
-  type: TNotification
+  type: NotificationType
 }
 
-export type TNotification = 'SUCCESS' | 'ERROR'
+export type NotificationType = 'SUCCESS' | 'ERROR'
 
 const Notification = ({
   text,
   id,
   type,
-}: INotifications) => {
+}: NotificationsProps) => {
   const {
     visibility,
     handleHide,

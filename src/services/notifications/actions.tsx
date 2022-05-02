@@ -1,8 +1,8 @@
 import Store from 'services'
 import { v4 as uuid } from 'uuid'
 
-import { INotification, TLoading } from './reducer'
-import { TNotification } from "components/notification/Notification"
+import { NotificationData, StatusData } from './reducer'
+import { NotificationType } from "components/notification/Notification"
 
 const DELAY_AFTER_DELETE = 3000
 
@@ -13,7 +13,7 @@ export const actions = {
 }
 
 export const methods = {
-  loadingRequest: (name: string, status: TLoading) => {
+  loadingRequest: (name: string, status: StatusData) => {
     return {
       type: actions.CREATE_LOADING,
       payload: {
@@ -22,7 +22,7 @@ export const methods = {
       }
     }
   },
-  addNotification: ({ text, type, id }: INotification) => {
+  addNotification: ({ text, type, id }: NotificationData) => {
     return {
       type: actions.CREATE_NOTIFICATION,
       payload: {
@@ -42,7 +42,7 @@ export const methods = {
 
 }
 
-function createNotification(text: string, type: TNotification) {
+function createNotification(text: string, type: NotificationType) {
   const id = uuid()
 
   Store.dispatch(methods.addNotification({

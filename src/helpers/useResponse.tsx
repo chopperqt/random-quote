@@ -1,14 +1,14 @@
-import { TLoading } from "services/notifications/reducer"
+import { StatusData } from "services/notifications/reducer"
 
-export interface IUseResponse {
-  loading: TLoading
+export interface UseResponseProps {
+  loading: StatusData
   count?: number
 }
 
 const useResponse = ({
   loading,
   count,
-}: IUseResponse) => {
+}: UseResponseProps) => {
   const isError = loading === 'FAILURE'
   const isEmpty = loading === 'SUCCESS' && count === 0
   const isSuccess = loading === 'SUCCESS'
