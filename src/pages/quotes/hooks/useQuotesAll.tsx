@@ -9,11 +9,7 @@ import {
 } from 'utils/quotes'
 import useUser from 'helpers/useUser'
 import { getUrlParam } from 'helpers/urlParams'
-
-import Store, {
-  quoteMethods,
-  Stores,
-} from 'services'
+import { Stores } from 'services'
 import { QuoteData } from 'services/quotes'
 
 const useQuotesAll = () => {
@@ -78,12 +74,6 @@ const useQuotesAll = () => {
       // searchQuote(search)
     }
   }, [search])
-
-  useEffect(() => {
-    return () => {
-      Store.dispatch(quoteMethods.clearQuotes())
-    }
-  }, [])
 
   return {
     description,

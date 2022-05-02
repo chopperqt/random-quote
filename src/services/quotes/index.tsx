@@ -9,6 +9,7 @@ const {
   CLEAR_QUOTES,
   INCREASE_QUOTE_COUNTER,
   DECREASE_QUOTE_COUNTER,
+  SET_COUNTER,
 } = actions
 
 const initialState = {
@@ -23,17 +24,21 @@ const initialState = {
   quotesAllCount: 0,
 }
 
-export interface QuotesStore {
+export interface QuotesStore extends QuotesCounters {
   quotes: QuoteData[]
   quotesAll: QuoteData[]
-  quotesAllCount: number
-  quoteCounter: number
   quotesIds: number[]
-  quotesCount: number
   quotesSearch: QuoteData[]
   lastQuotes: QuoteData[]
+}
+
+export interface QuotesCounters {
+  quotesAllCount: number
+  quoteCounter: number
+  quotesCount: number
   lastQuotesCount: number
 }
+
 export interface QuoteData {
   author: {
     path: string,
@@ -128,6 +133,12 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
         ...state,
         quoteCounter: state.quoteCounter - 1,
 
+      }
+    }
+    case SET_COUNTER: {
+      return {
+        ...state,
+        [payload.type]: payload.data
       }
     }
     default: {

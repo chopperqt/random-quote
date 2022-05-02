@@ -2,7 +2,7 @@ import loadingStatuses from "helpers/loadingStatuses";
 import supabase from "./client";
 
 const AuthRequests = {
-  loginWidthGoogle: 'loginWithGoogle',
+  loginWithGoogle: 'loginWithGoogle',
 }
 
 export const signInWithGoogle = async () => {
@@ -10,7 +10,7 @@ export const signInWithGoogle = async () => {
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(AuthRequests.loginWidthGoogle)
+  } = loadingStatuses(AuthRequests.loginWithGoogle)
 
   handlePending()
 
@@ -25,6 +25,6 @@ export const signInWithGoogle = async () => {
   handleSuccess()
 }
 
-export const signOut = async () => {
+export const logOut = async () => {
   const { error } = await supabase.auth.signOut()
 }

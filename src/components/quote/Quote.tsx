@@ -1,4 +1,3 @@
-import React from 'react'
 import cx from 'classnames'
 import moment from 'moment'
 
@@ -7,6 +6,7 @@ import Link from 'components/link'
 import useQuote from './hooks/useQuote'
 import Bookmark from './bookmark/Bookmark'
 import Actions from './action/Actions'
+import Modal from 'components/modal'
 
 import styles from './Quote.module.scss'
 

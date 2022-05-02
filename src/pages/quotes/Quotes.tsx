@@ -10,16 +10,11 @@ import styles from './Quotes.module.scss'
 
 const Quotes = () => {
   const { getFiltersFromUrl } = filterMethods
-  const { clearQuotes } = quoteMethods
 
   useEffect(() => {
     changeDocumentTitle(DocumentTitles.quotes)
 
     getFiltersFromUrl()
-
-    return () => {
-      Store.dispatch(clearQuotes())
-    }
   }, [])
 
   return (

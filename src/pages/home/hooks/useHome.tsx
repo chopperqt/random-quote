@@ -13,7 +13,7 @@ import {
   getUrlParam,
   updateUrlParams,
 } from 'helpers/urlParams'
-import { Stores } from 'services'
+import Store, { quoteMethods, Stores } from 'services'
 import {
   decreaseQuoteCounter,
   increaseQuoteCounter,
@@ -68,6 +68,14 @@ const useHome = () => {
     changeDocumentTitle(DocumentTitles.home)
 
     window.addEventListener('keydown', handleClickArrow)
+
+    if (quotes.length) {
+      console.log(quotes)
+
+      Store.dispatch(quoteMethods.setCounter(quotes.length - 1, 'quotesCount'))
+
+      return
+    }
 
     if (idFromUrl) {
       getQuote(idFromUrl, user?.id)

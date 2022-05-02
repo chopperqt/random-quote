@@ -1,7 +1,9 @@
-import { updateUrlParams } from "helpers/urlParams"
 import Store, { quoteMethods } from "services"
 import { getRandomQuote } from "utils/quotes"
-import { QuotesStore } from "."
+import {
+  QuotesCounters,
+  QuotesStore,
+} from "."
 
 export const actions = {
   SET_QUOTE: 'SET_QUOTE',
@@ -13,6 +15,7 @@ export const actions = {
   CLEAR_QUOTES: 'CLEAR_QUOTE',
   INCREASE_QUOTE_COUNTER: 'INCREASE_QUOTE_COUNTER',
   DECREASE_QUOTE_COUNTER: 'DECREASE_QUOTE_COUNTER',
+  SET_COUNTER: 'SET_COUNTER',
 }
 
 export type TActions = 'quotes' | 'randomQuote' | 'lastQuotes'
@@ -65,6 +68,15 @@ export const methods = {
       type: actions.CLEAR_QUOTES,
       payload: {}
     }
+  },
+  setCounter(data: number, type: keyof QuotesCounters) {
+    return {
+      type: actions.SET_COUNTER,
+      payload: {
+        data,
+        type,
+      },
+    }
   }
 }
 
@@ -103,7 +115,6 @@ export const increaseQuoteCounter = async (id_user?: string) => {
 export const decreaseQuoteCounter = () => {
   const { quotesStore } = Store.getState()
   const {
-    quotes,
     quoteCounter
   }: QuoteCounter = quotesStore
 

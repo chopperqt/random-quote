@@ -6,25 +6,23 @@ import {
   deleteBookmark,
 } from "utils/bookmarks"
 
-interface IBookmarkProps {
+interface UseBookmarkProps {
   id: number
   bookmarked: boolean
-}
-
-interface IBookmarkReturn {
-  handleClickBookmark: () => void
-  loading: boolean
 }
 
 const useBookmark = ({
   id,
   bookmarked = false,
-}: IBookmarkProps): IBookmarkReturn => {
+}: UseBookmarkProps) => {
   const { user } = useUser()
   const [loading, setLoading] = useState<boolean>(false)
+  const [opened, setOpened] = useState<boolean>(false)
 
   const handleClickBookmark = async () => {
     if (!user) {
+      setOpened(true)
+
       return
     }
 
@@ -48,8 +46,14 @@ const useBookmark = ({
     setLoading(false)
   }
 
+  const handleClose = () => {
+    setOpened(false)
+  }
+
   return {
     handleClickBookmark,
+    handleClose,
+    opened,
     loading,
   }
 }

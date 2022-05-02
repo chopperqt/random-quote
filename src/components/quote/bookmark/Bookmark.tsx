@@ -10,6 +10,7 @@ import {
 } from './constants'
 
 import styles from './Bookmark.module.scss'
+import AuthModal from 'components/AuthModal'
 
 interface IBookmarkProps {
   id: number
@@ -23,6 +24,8 @@ const Bookmark = ({
   const tooltipText = bookmarked ? BOOKMARKED : ADD_BOOKMARK
   const {
     handleClickBookmark,
+    handleClose,
+    opened,
     loading,
   } = useBookmark({
     id,
@@ -30,23 +33,28 @@ const Bookmark = ({
   })
 
   return (
-    <Tooltip text={tooltipText}>
-      <button
-        className={cx(styles.bookmark, {
-          'bookmark-active': bookmarked,
-        })}
-        onClick={handleClickBookmark}
-      >
-        <Spin
-          className={styles.spinWrap}
-          classNameSpin={styles.spin}
-          loading={loading}
+    <>
+      <Tooltip text={tooltipText}>
+        <button
+          className={cx(styles.bookmark, {
+            'bookmark-active': bookmarked,
+          })}
+          onClick={handleClickBookmark}
         >
-          <Icon icon={IconList.bookmark} />
-        </Spin>
-      </button>
-
-    </Tooltip>
+          <Spin
+            className={styles.spinWrap}
+            classNameSpin={styles.spin}
+            loading={loading}
+          >
+            <Icon icon={IconList.bookmark} />
+          </Spin>
+        </button>
+      </Tooltip>
+      <AuthModal
+        onClose={handleClose}
+        opened={opened}
+      />
+    </>
   )
 }
 
