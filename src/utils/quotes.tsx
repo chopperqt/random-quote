@@ -25,6 +25,7 @@ const LIMIT_PER_PAGE = 10
 export const QuotesRequests = {
   getQuotes: 'getQuotes',
   getQuote: 'getQuote',
+  getRandomQuote: 'getRandomQuote',
   getQuotesMore: 'getQuotesMore',
   getQuotesAuthor: 'getQuotesAuthor',
   getQuotesLast: 'getQuotesLast',
@@ -33,6 +34,56 @@ export const QuotesRequests = {
   postQuote: 'postQuotes',
   getLikedQuote: 'getLikedQuote',
   getActionQuote: 'getActionQuote',
+}
+
+export const getQuote = async (id: number, idUser?: string) => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses('getQuote')
+
+  handlePending()
+
+  const { data, error } = await supabase
+    .from(Tables.quotes)
+    .select(`
+    *,
+    author:id_author (
+      name,
+      path
+    ) 
+  `)
+    .match({ id_quote: id })
+
+  if (error) {
+    handleFailure(error)
+
+    return
+  }
+
+  let updateData = [serializeQuote(data[0])]
+
+  if (idUser) {
+    const bookmarks = await getBookmarks({ id_user: idUser, list: [data[0].id_quote] })
+
+    if (bookmarks.error) {
+      return
+    }
+
+    updateData = updateData.map((quote: QuoteData) => {
+      const isBookmark = bookmarks.data.find((item: QuoteData) => +item.id_quote === +quote.id_quote)
+
+      return {
+        ...quote,
+        bookmarked: !!isBookmark,
+      }
+    })
+  }
+
+  Store.dispatch(quoteMethods.setQuote(updateData))
+
+  handleSuccess()
 }
 
 export const getQuotes = async ({
@@ -98,60 +149,10 @@ export const getQuotes = async ({
     })
   }
 
-  Store.dispatch(quoteMethods.getQuotes({
+  Store.dispatch(quoteMethods.setAllQuotes({
     data: quotesData,
     count: count,
   }))
-
-  handleSuccess()
-}
-
-export const getQuote = async (id: number, idUser?: string) => {
-  const {
-    handleFailure,
-    handlePending,
-    handleSuccess,
-  } = loadingStatuses('getQuote')
-
-  handlePending()
-
-  const { data, error } = await supabase
-    .from(Tables.quotes)
-    .select(`
-    *,
-    author:id_author (
-      name,
-      path
-    ) 
-  `)
-    .match({ id_quote: id })
-
-  if (error) {
-    handleFailure(error)
-
-    return
-  }
-
-  let updateData = [serializeQuote(data[0])]
-
-  if (idUser) {
-    const bookmarks = await getBookmarks({ id_user: idUser, list: [data[0].id_quote] })
-
-    if (bookmarks.error) {
-      return
-    }
-
-    updateData = data.map((quote: QuoteData) => {
-      const isBookmark = bookmarks.data.find((item: QuoteData) => +item.id_quote === +quote.id_quote)
-
-      return {
-        ...quote,
-        bookmarked: !!isBookmark,
-      }
-    })
-  }
-
-  Store.dispatch(quoteMethods.setQuote(updateData))
 
   handleSuccess()
 }
@@ -199,10 +200,6 @@ export const getRandomQuote = async (idUser?: string): Promise<boolean | Postgre
 
   handleSuccess()
 
-  if (data && data[0].id_quote) {
-    updateUrlParams({ qq: data[0].id_quote })
-  }
-
   return true
 }
 
@@ -241,7 +238,7 @@ export const getQuotesMore = async ({
     return
   }
 
-  Store.dispatch(quoteMethods.getQuotes({ data, count }))
+  Store.dispatch(quoteMethods.setAllQuotes({ data, count }))
 
   handleSuccess()
 }
@@ -277,7 +274,7 @@ export const getQuotesAuthors = async (id_author: string) => {
   return data
 }
 
-export const getQuotesLast = async () => {
+export const getLastQuotes = async () => {
   const {
     handleFailure,
     handlePending,
@@ -305,7 +302,7 @@ export const getQuotesLast = async () => {
 
   handleSuccess()
 
-  Store.dispatch(quoteMethods.getLastQuotes({ data, count }))
+  Store.dispatch(quoteMethods.setLastQuotes({ data, count }))
 }
 
 export const searchQuote = debounce(async (search) => {

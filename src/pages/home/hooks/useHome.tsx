@@ -1,16 +1,19 @@
 import { useEffect } from 'react'
 
-import { getQuote, getRandomQuote } from 'utils/quotes'
+import {
+  getQuote,
+  getRandomQuote,
+} from 'utils/quotes'
 import useResponse from 'helpers/useResponse'
 import {
   changeDocumentTitle,
   DocumentTitles
 } from 'helpers/documentTitle'
-import { getUrlParam } from 'helpers/urlParams'
-import Store, {
-  Stores,
-  quoteMethods,
-} from 'services'
+import {
+  getUrlParam,
+  updateUrlParams,
+} from 'helpers/urlParams'
+import { Stores } from 'services'
 import {
   decreaseQuoteCounter,
   increaseQuoteCounter,
@@ -23,8 +26,15 @@ const ArrowKeys = {
 }
 
 const useHome = () => {
-  const { NotificationStore } = Stores()
-  const { loading } = NotificationStore
+  const {
+    NotificationStore: {
+      loading,
+    },
+    QuoteStore: {
+      quoteCounter,
+      quotes,
+    }
+  } = Stores()
   const idFromUrl = Number(getUrlParam('qq'))
   const { user } = useUser()
 
@@ -35,7 +45,6 @@ const useHome = () => {
   } = useResponse({
     loading: loading.getQuote,
   })
-
 
   const handleClickArrow = (event: KeyboardEvent) => {
     if (event.code === ArrowKeys.right) {
@@ -48,6 +57,10 @@ const useHome = () => {
   }
 
   const handleChangeQuote = () => {
+    if (isLoading || loading.getRandomQuote === 'PENDING') {
+      return
+    }
+
     getRandomQuote(user?.id)
   }
 
@@ -66,12 +79,14 @@ const useHome = () => {
 
     return () => {
       window.removeEventListener('keydown', handleClickArrow)
-
-      Store.dispatch(quoteMethods.clearQuotes())
     }
   }, [])
 
-
+  useEffect(() => {
+    if (quotes[quoteCounter]?.id_quote) {
+      updateUrlParams({ qq: quotes[quoteCounter].id_quote })
+    }
+  }, [quotes, quoteCounter])
 
   return {
     isLoading,

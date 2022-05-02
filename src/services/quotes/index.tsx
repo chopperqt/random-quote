@@ -2,8 +2,8 @@ import { actions } from './actions'
 
 const {
   SET_QUOTE,
-  GET_QUOTES,
-  GET_LAST_QUOTES,
+  SET_ALL_QUOTES,
+  SET_LAST_QUOTES,
   SEARCH_QUOTES,
   UPDATE_QUOTES,
   CLEAR_QUOTES,
@@ -20,11 +20,13 @@ const initialState = {
   quoteCounter: 0,
   quotesCount: 0,
   lastQuotesCount: 0,
+  quotesAllCount: 0,
 }
 
 export interface QuotesStore {
   quotes: QuoteData[]
   quotesAll: QuoteData[]
+  quotesAllCount: number
   quoteCounter: number
   quotesIds: number[]
   quotesCount: number
@@ -50,14 +52,14 @@ export interface QuoteData {
 
 const quotesStore = (state = initialState, { type, payload }: { type: string, payload: any }) => {
   switch (type) {
-    case GET_QUOTES: {
+    case SET_ALL_QUOTES: {
       return {
         ...state,
-        quotes: [...payload.data],
-        quotesCount: payload.count,
+        quotesAll: [...payload.data],
+        quotesAllCount: payload.count,
       }
     }
-    case GET_LAST_QUOTES: {
+    case SET_LAST_QUOTES: {
       return {
         ...state,
         lastQuotes: payload.data,

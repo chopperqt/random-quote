@@ -5,8 +5,8 @@ import { QuotesStore } from "."
 
 export const actions = {
   SET_QUOTE: 'SET_QUOTE',
-  GET_LAST_QUOTES: 'GET_LAST_QUOTES',
-  GET_QUOTES: 'GET_QUOTES',
+  SET_LAST_QUOTES: 'SET_LAST_QUOTES',
+  SET_ALL_QUOTES: 'SET_ALL_QUOTES',
   SEARCH_QUOTES: 'SEARCH_QUOTES',
   UPDATE_QUOTES: 'UPDATE_QUOTES',
   UPDATE_LAST_QUOTE: 'UPDATE_LAST_QUOTE',
@@ -18,15 +18,15 @@ export const actions = {
 export type TActions = 'quotes' | 'randomQuote' | 'lastQuotes'
 
 export const methods = {
-  getQuotes<T>(data: T) {
+  setAllQuotes<T>(data: T) {
     return {
-      type: actions.GET_QUOTES,
+      type: actions.SET_ALL_QUOTES,
       payload: data,
     }
   },
-  getLastQuotes<T>(data: T) {
+  setLastQuotes<T>(data: T) {
     return {
-      type: actions.GET_LAST_QUOTES,
+      type: actions.SET_LAST_QUOTES,
       payload: data,
     }
   },
@@ -71,11 +71,19 @@ export const methods = {
 type QuoteCounter = Pick<QuotesStore, 'quoteCounter' | 'quotes'>
 
 export const increaseQuoteCounter = async (id_user?: string) => {
-  const { quotesStore } = Store.getState()
+  const {
+    quotesStore,
+    notificationsStore,
+  } = Store.getState()
   const {
     quotes,
     quoteCounter,
   }: QuoteCounter = quotesStore
+  const { loading } = notificationsStore
+
+  if (loading.getQuote === 'PENDING') {
+    return
+  }
 
   const quotesLength = quotes.length - 1
 
@@ -84,16 +92,12 @@ export const increaseQuoteCounter = async (id_user?: string) => {
 
     if (isSuccess) {
       Store.dispatch(quoteMethods.increaseQuoteCounter())
-
-      updateUrlParams({ qq: quotes[quoteCounter].id_quote })
     }
 
     return
   }
 
   Store.dispatch(quoteMethods.increaseQuoteCounter())
-
-  updateUrlParams({ qq: quotes[quoteCounter + 1].id_quote })
 }
 
 export const decreaseQuoteCounter = () => {
@@ -105,8 +109,6 @@ export const decreaseQuoteCounter = () => {
 
   if (quoteCounter !== 0) {
     Store.dispatch(quoteMethods.decreaseQuoteCounter())
-
-    updateUrlParams({ qq: quotes[quoteCounter - 1].id_quote })
   }
 }
 

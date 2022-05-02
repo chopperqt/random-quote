@@ -10,7 +10,10 @@ import {
 import useUser from 'helpers/useUser'
 import { getUrlParam } from 'helpers/urlParams'
 
-import Store, { quoteMethods, Stores } from 'services'
+import Store, {
+  quoteMethods,
+  Stores,
+} from 'services'
 import { QuoteData } from 'services/quotes'
 
 const useQuotesAll = () => {
@@ -19,7 +22,7 @@ const useQuotesAll = () => {
   const { user } = useUser()
   const {
     QuoteStore: {
-      quotes,
+      quotesAll,
       quotesSearch,
       quotesCount,
     },
@@ -28,10 +31,10 @@ const useQuotesAll = () => {
     }
   } = Stores()
   const description = `${QUOTES_ALL_TEXT} ${quotesCount} ${decOfNum(quotesCount, quoteWords)} от 4 авторов`
-  const quoteItems = quotesSearch.length > 0 && search.length > 2 ? quotesSearch : quotes
+  const quoteItems = quotesSearch.length > 0 && search.length > 2 ? quotesSearch : quotesAll
   const quotesFirstColumn: QuoteData[] = quoteItems.filter((quote, index) => index % 2 === 0)
   const quotesSecondColumn: QuoteData[] = quoteItems.filter((quote, index) => index % 2 !== 0)
-  const hasMoreQuotes = quotesCount > quotes.length
+  const hasMoreQuotes = quotesCount > quotesAll.length
   const hasSearchQuotes = quotesSearch.length > 0
   const pages = Math.ceil(quotesCount / 10)
   const {
