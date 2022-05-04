@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import product from 'immer'
 
 import {
   getQuote,
@@ -38,6 +39,27 @@ const useHome = () => {
   const idFromUrl = Number(getUrlParam('qq'))
   const { user } = useUser()
 
+  const baseState = [
+    {
+      title: 'Learn TypeScript',
+      done: true,
+    },
+    {
+      title: 'Try Immer',
+      done: false,
+    }
+  ]
+
+  const nextState = product(baseState, draftState => {
+    draftState.push({
+      title: 'Tween about it',
+      done: false,
+    })
+    draftState[1].done = true
+  })
+
+  console.log(baseState, nextState)
+
   const {
     isError,
     isLoading,
@@ -70,8 +92,6 @@ const useHome = () => {
     window.addEventListener('keydown', handleClickArrow)
 
     if (quotes.length) {
-      console.log(quotes)
-
       Store.dispatch(quoteMethods.setCounter(quotes.length - 1, 'quotesCount'))
 
       return

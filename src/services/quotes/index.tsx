@@ -1,4 +1,5 @@
 import { actions } from './actions'
+import produce from 'immer'
 
 const {
   SET_QUOTE,
@@ -58,17 +59,21 @@ export interface QuoteData {
 const quotesStore = (state = initialState, { type, payload }: { type: string, payload: any }) => {
   switch (type) {
     case SET_ALL_QUOTES: {
+      const { data, count } = payload
+
       return {
         ...state,
-        quotesAll: [...payload.data],
-        quotesAllCount: payload.count,
+        quotesAll: [...data],
+        quotesAllCount: count,
       }
     }
     case SET_LAST_QUOTES: {
+      const { data, count } = payload
+
       return {
         ...state,
-        lastQuotes: payload.data,
-        lastQuotesCount: payload.count
+        lastQuotes: data,
+        lastQuotesCount: count,
       }
     }
     case SET_QUOTE: {
@@ -87,32 +92,18 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
       }
     }
     case UPDATE_QUOTES: {
-      const findLastQuoteIndex: number = state.lastQuotes.findIndex((item: QuoteData) => item.id_quote === payload.id)
-      const findQuote: number = state.quotes.findIndex((item: QuoteData) => item.id_quote === payload.id)
-
       const { bookmarked } = payload
 
-      let modifyLastQuote: QuoteData[] = state.lastQuotes
-      let modifyQuote: QuoteData[] = state.quotes
+      const setBookmark = produce((draft, id) => {
+        const quote = draft.find((q: QuoteData) => q.id_quote === id)
 
-      if (typeof findLastQuoteIndex === 'number') {
-        modifyLastQuote[findLastQuoteIndex] = {
-          ...modifyLastQuote[findLastQuoteIndex],
-          bookmarked,
-        }
-      }
-
-      if (typeof findQuote === 'number') {
-        modifyQuote[findQuote] = {
-          ...modifyQuote[findQuote],
-          bookmarked,
-        }
-      }
+        quote.bookmarked = bookmarked
+      })
 
       return {
         ...state,
-        lastQuotes: modifyLastQuote,
-        quotes: modifyQuote,
+        lastQuotes: setBookmark(state.lastQuotes, payload.id),
+        quotes: setBookmark(state.quotes, payload.id),
       }
     }
     case CLEAR_QUOTES: {

@@ -1,4 +1,5 @@
 import moment from 'moment'
+import produce from 'immer';
 
 import supabase from "./client";
 import Store, { quoteMethods, notificationMethods } from 'services'
@@ -129,7 +130,6 @@ export const getQuotes = async ({
     ...item,
     ...item.author
   }))
-
 
   if (id) {
     const bookmarks = await getBookmarks({ id_user: id, list })
