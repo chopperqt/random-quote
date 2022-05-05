@@ -94,10 +94,12 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
     case UPDATE_QUOTES: {
       const { bookmarked } = payload
 
-      const setBookmark = produce((draft, id) => {
-        const quote = draft.find((q: QuoteData) => q.id_quote === id)
+      const setBookmark = produce((draft: QuoteData[], id) => {
+        const quote = draft.find((q) => q.id_quote === id)
 
-        quote.bookmarked = bookmarked
+        if (quote) {
+          quote.bookmarked = bookmarked
+        }
       })
 
       return {

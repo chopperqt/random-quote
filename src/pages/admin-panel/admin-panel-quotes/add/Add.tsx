@@ -3,7 +3,6 @@ import {
   SubmitHandler,
   Controller,
 } from 'react-hook-form'
-import { useSelector } from 'react-redux'
 
 import Input from 'components/input'
 import { postQuote } from 'utils/quotes'
@@ -55,6 +54,7 @@ const Add = ({
       errors,
     },
   } = useForm<IAdminPanelAddField>();
+
   const onSubmit: SubmitHandler<IAdminPanelAddField> = async (data) => {
     const response = await postQuote({
       text: data.quote,
