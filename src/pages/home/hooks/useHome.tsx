@@ -14,7 +14,7 @@ import {
   getUrlParam,
   updateUrlParams,
 } from 'helpers/urlParams'
-import Store, { quoteMethods, Stores } from 'services'
+import Store, { quoteMethods, Stores, UserMethods } from 'services'
 import {
   decreaseQuoteCounter,
   increaseQuoteCounter,
@@ -38,27 +38,6 @@ const useHome = () => {
   } = Stores()
   const idFromUrl = Number(getUrlParam('qq'))
   const { user } = useUser()
-
-  const baseState = [
-    {
-      title: 'Learn TypeScript',
-      done: true,
-    },
-    {
-      title: 'Try Immer',
-      done: false,
-    }
-  ]
-
-  const nextState = product(baseState, draftState => {
-    draftState.push({
-      title: 'Tween about it',
-      done: false,
-    })
-    draftState[1].done = true
-  })
-
-  console.log(baseState, nextState)
 
   const {
     isError,
@@ -88,6 +67,22 @@ const useHome = () => {
 
   useEffect(() => {
     changeDocumentTitle(DocumentTitles.home)
+    Store.dispatch(UserMethods.setUser({
+      email: 'test',
+      id: 'test',
+      role: 'test',
+      avatar_url: 'https://',
+    }))
+
+
+    setTimeout(() => {
+      Store.dispatch(UserMethods.setUser({
+        email: 'test2',
+        id: 'tes2t',
+        role: 'test2',
+        avatar_url: 'https://',
+      }))
+    }, 5000)
 
     window.addEventListener('keydown', handleClickArrow)
 

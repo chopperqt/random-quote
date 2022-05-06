@@ -1,3 +1,4 @@
+import produce from 'immer'
 
 import { actions } from './actions'
 
@@ -14,20 +15,20 @@ const initialState = {
 
 export type UserStore = typeof initialState
 
-const userStore = (state = initialState, { type, payload }: { type: string, payload: any }) => {
+const userStore = (state = initialState, { type, payload }: { type: string, payload: any }) => produce(state, draft => {
   switch (type) {
     case SET_USER: {
-      return {
-        ...state,
-        ...payload,
-      }
+      draft.email = payload.email
+      draft.id = payload.id
+      draft.role = payload.role
+      draft.avatar_url = payload.avatar_url
+
+      break;
     }
     default: {
-      return {
-        ...state,
-      }
+      break;
     }
   }
-}
+})
 
 export default userStore
