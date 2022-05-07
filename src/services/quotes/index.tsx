@@ -56,90 +56,80 @@ export interface QuoteData {
   bookmarked?: boolean
 }
 
-const quotesStore = (state = initialState, { type, payload }: { type: string, payload: any }) => {
+const quotesStore = (state = initialState, { type, payload }: { type: string, payload: any }) => produce(state, (draft: QuotesStore) => {
   switch (type) {
     case SET_ALL_QUOTES: {
       const { data, count } = payload
 
-      return {
-        ...state,
-        quotesAll: [...data],
-        quotesAllCount: count,
-      }
+      draft.quotesAll = data
+      draft.quoteCounter = count
+
+      break;
     }
     case SET_LAST_QUOTES: {
       const { data, count } = payload
 
-      return {
-        ...state,
-        lastQuotes: data,
-        lastQuotesCount: count,
-      }
+      draft.lastQuotes = data
+      draft.lastQuotesCount = count
+
+      break;
     }
     case SET_QUOTE: {
-      return {
-        ...state,
-        quotes: [
-          ...state.quotes,
-          payload[0],
-        ],
-      }
+      draft.quotes.push(payload[0])
+
+      break;
     }
     case SEARCH_QUOTES: {
-      return {
-        ...state,
-        quotesSearch: payload
-      }
+      draft.quotesSearch = payload
+
+      break;
     }
     case UPDATE_QUOTES: {
-      const { bookmarked } = payload
+      const {
+        bookmarked,
+        id,
+      } = payload
 
-      const setBookmark = produce((draft: QuoteData[], id) => {
-        const quote = draft.find((q) => q.id_quote === id)
+      const updateLastQuotes = draft.lastQuotes.find((q) => q.id_quote === id)
+      const updateQuotes = draft.quotes.find((q) => q.id_quote === id)
 
-        if (quote) {
-          quote.bookmarked = bookmarked
-        }
-      })
-
-      return {
-        ...state,
-        lastQuotes: setBookmark(state.lastQuotes, payload.id),
-        quotes: setBookmark(state.quotes, payload.id),
+      if (updateLastQuotes) {
+        updateLastQuotes.bookmarked = bookmarked
       }
-    }
-    case CLEAR_QUOTES: {
-      return {
-        ...state,
-        quotes: [],
-        lastQuotes: [],
+
+      if (updateQuotes) {
+        updateQuotes.bookmarked = bookmarked
       }
+
+      break;
     }
     case INCREASE_QUOTE_COUNTER: {
-      return {
-        ...state,
-        quoteCounter: state.quoteCounter + 1
-      }
+      draft.quoteCounter++
+
+      break;
     }
     case DECREASE_QUOTE_COUNTER: {
-      return {
-        ...state,
-        quoteCounter: state.quoteCounter - 1,
+      draft.quoteCounter--
 
-      }
+      break;
     }
     case SET_COUNTER: {
-      return {
-        ...state,
-        [payload.type]: payload.data
-      }
+      // TODO: Отрефакторить
+      // @ts-ignore
+      draft[payload.type] = payload.data
+
+      break;
+    }
+    case CLEAR_QUOTES: {
+      draft.quotes = []
+      draft.lastQuotes = []
+
+      break;
     }
     default: {
-      return {
-        ...state,
-      }
+      break;
     }
   }
-}
+})
 
 export default quotesStore
