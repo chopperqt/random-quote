@@ -77,7 +77,6 @@ const QuotesAll = () => {
           />
         </div>
       </div>
-
     </div>
   )
 }

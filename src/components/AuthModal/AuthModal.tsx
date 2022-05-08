@@ -1,7 +1,6 @@
 import {
   useForm,
   SubmitHandler,
-  Controller,
 } from 'react-hook-form'
 
 import Button from "components/button"
@@ -9,6 +8,7 @@ import Icon, { IconList } from "components/icon"
 import Input from 'components/input'
 import Modal from "components/modal"
 import { signInWithGoogle } from 'utils/auth'
+import Link from 'components/link'
 
 import styles from './AuthModal.module.scss'
 
@@ -21,6 +21,7 @@ const LOGIN_PLEASE_TEXT = 'Войдите что бы добавить в зак
 const LOGIN_TEXT = 'Войти'
 const LOGIN_PLACEHOLDER = 'Логин'
 const PASSWORD_PLACEHOLDER = 'Пароль'
+const SIGN_UP = 'Зарегистрироваться ?'
 
 interface FormFields {
   login: string,
@@ -34,8 +35,6 @@ const AuthModal = ({
   const {
     register,
     handleSubmit,
-    resetField,
-    control,
     formState: {
       errors,
     }
@@ -80,6 +79,14 @@ const AuthModal = ({
           >
             <Icon icon={IconList.google} />
           </Button>
+        </div>
+        <div>
+          <Link
+            to="/#"
+            className={styles.link}
+          >
+            {SIGN_UP}
+          </Link>
         </div>
       </div>
 

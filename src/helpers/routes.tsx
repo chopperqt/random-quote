@@ -6,4 +6,5 @@ export const routes = {
   profile: '/profile',
   logIn: '/user/login',
   signIn: '/user/signIn',
+  signUp: '/signUp',
 }

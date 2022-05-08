@@ -10,7 +10,6 @@ import {
 import useUser from 'helpers/useUser'
 import { getUrlParam } from 'helpers/urlParams'
 import { Stores } from 'services'
-import { QuoteData } from 'services/quotes'
 
 const useQuotesAll = () => {
   const [search, setSearch] = useState<string>('')
@@ -21,6 +20,7 @@ const useQuotesAll = () => {
       quotesAll,
       quotesSearch,
       quotesCount,
+      quotesAllCount,
     },
     NotificationStore: {
       loading,
@@ -29,7 +29,7 @@ const useQuotesAll = () => {
   const description = `${QUOTES_ALL_TEXT} ${quotesCount} ${decOfNum(quotesCount, quoteWords)} от 4 авторов`
   const hasMoreQuotes = quotesCount > quotesAll.length
   const hasSearchQuotes = quotesSearch.length > 0
-  const pages = Math.ceil(quotesCount / 10)
+  const pages = Math.ceil(quotesAllCount / 10)
   const {
     from,
     to,

@@ -1,10 +1,9 @@
 
-import { useEffect } from 'react';
 import {
   Routes,
   Route
 } from 'react-router-dom'
-import Store, { Stores } from 'services';
+import { Stores } from 'services';
 
 import Home from 'pages/home/Home'
 import Profile from 'pages/profile';
@@ -13,7 +12,9 @@ import AdminPanel from 'pages/admin-panel/AdminPanel';
 import Notification from 'components/notification';
 import Header from 'components/header'
 import Quotes from 'pages/quotes/Quotes';
+import SignUp from 'pages/signup/SignUp';
 import { getUrlParams } from 'helpers/urlParams';
+
 import './asset/scss/typography.scss'
 import './asset/scss/fonts.scss'
 import './App.scss'
@@ -34,6 +35,7 @@ function App() {
           <Route path={routes.quotes} element={<Quotes />} />
           <Route path={routes.profile} element={<Profile />} />
           <Route path={routes.logIn} element={<div>ЛОгин</div>} />
+          <Route path={routes.signUp} element={<SignUp />} />
         </Routes>
       </div>
       {hasNotifications && (
