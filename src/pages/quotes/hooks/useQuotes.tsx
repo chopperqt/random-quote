@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 import { QuoteData } from 'services/quotes'
-import { getQuotesLast } from 'utils/quotes'
+import { getLastQuotes } from 'utils/quotes'
 import decOfNum, { quoteWords } from 'helpers/decOfNum'
 import { LAST_UPDATE_QUOTES_DESCRIPTION } from '../constants'
 
@@ -20,7 +20,7 @@ const useQuotes = ({
   const lastQuotesDescription = `${lastQuotesCount} ${decOfNum(lastQuotesCount, quoteWords)} ${LAST_UPDATE_QUOTES_DESCRIPTION}`
 
   useEffect(() => {
-    getQuotesLast()
+    getLastQuotes()
   }, [])
 
   return {

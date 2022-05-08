@@ -17,10 +17,10 @@ const Home = () => {
   const {
     QuoteStore: {
       quotes,
-      quoteCounter
+      quotesCount,
     }
   } = Stores()
-  const isFirstQuote = quoteCounter === 0
+  const isFirstQuote = quotesCount === 0
   const { user } = useUser()
 
   const {
@@ -38,7 +38,7 @@ const Home = () => {
         )}
         {isSuccess && (
           <Quote
-            quote={quotes[quoteCounter]}
+            quote={quotes[quotesCount]}
           />
         )}
         {isError && (

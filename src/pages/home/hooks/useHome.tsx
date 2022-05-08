@@ -1,15 +1,21 @@
 import { useEffect } from 'react'
 
-import { getQuote, getRandomQuote } from 'utils/quotes'
+import {
+  getQuote,
+  getRandomQuote,
+} from 'utils/quotes'
 import useResponse from 'helpers/useResponse'
 import {
   changeDocumentTitle,
   DocumentTitles
 } from 'helpers/documentTitle'
-import { getUrlParam } from 'helpers/urlParams'
+import {
+  getUrlParam,
+  updateUrlParams,
+} from 'helpers/urlParams'
 import Store, {
-  Stores,
   quoteMethods,
+  Stores,
 } from 'services'
 import {
   decreaseQuoteCounter,
@@ -23,8 +29,15 @@ const ArrowKeys = {
 }
 
 const useHome = () => {
-  const { NotificationStore } = Stores()
-  const { loading } = NotificationStore
+  const {
+    NotificationStore: {
+      loading,
+    },
+    QuoteStore: {
+      quotesCount,
+      quotes,
+    }
+  } = Stores()
   const idFromUrl = Number(getUrlParam('qq'))
   const { user } = useUser()
 
@@ -35,7 +48,6 @@ const useHome = () => {
   } = useResponse({
     loading: loading.getQuote,
   })
-
 
   const handleClickArrow = (event: KeyboardEvent) => {
     if (event.code === ArrowKeys.right) {
@@ -48,6 +60,10 @@ const useHome = () => {
   }
 
   const handleChangeQuote = () => {
+    if (isLoading || loading.getRandomQuote === 'PENDING') {
+      return
+    }
+
     getRandomQuote(user?.id)
   }
 
@@ -55,6 +71,12 @@ const useHome = () => {
     changeDocumentTitle(DocumentTitles.home)
 
     window.addEventListener('keydown', handleClickArrow)
+
+    if (quotes.length) {
+      Store.dispatch(quoteMethods.setCounter(quotes.length - 1, 'quotesCount'))
+
+      return
+    }
 
     if (idFromUrl) {
       getQuote(idFromUrl, user?.id)
@@ -66,12 +88,17 @@ const useHome = () => {
 
     return () => {
       window.removeEventListener('keydown', handleClickArrow)
-
-      Store.dispatch(quoteMethods.clearQuotes())
     }
   }, [])
 
-
+  useEffect(() => {
+    if (quotes[quotesCount]?.id_quote) {
+      updateUrlParams({ qq: quotes[quotesCount].id_quote })
+    }
+  }, [
+    quotes,
+    quotesCount,
+  ])
 
   return {
     isLoading,

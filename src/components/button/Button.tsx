@@ -12,8 +12,6 @@ import styles from './Button.module.scss'
 
 const LOADING_ALT = 'Loading...'
 
-
-
 const Button = ({
   className,
   children,

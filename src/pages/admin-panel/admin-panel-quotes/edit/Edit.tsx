@@ -1,17 +1,15 @@
-import React, { useState } from "react";
 import {
   useForm,
   SubmitHandler,
   Controller,
 } from 'react-hook-form'
-import { useSelector } from 'react-redux'
 
 import Input from "components/input"
 import { postQuote } from 'utils/quotes'
 import Selector from "components/selector/";
 import Button from 'components/button'
 
-import { IStore } from 'services'
+import { Stores } from 'services'
 import {
   IAdminPanelAdd,
   IAdminPanelAddField
@@ -40,8 +38,15 @@ const MOCK_DATA = [
 const Edit = ({
   onClose = () => { },
 }: IAdminPanelAdd) => {
-  const postQuoteStatus = useSelector((store: IStore) => store.notificationsStore.loading)
-  const hasLoading = postQuoteStatus.postQuote === 'PENDING'
+  const {
+    NotificationStore: {
+      loading: {
+        postQuote: loading
+      }
+    }
+  } = Stores()
+  const hasLoading = loading === 'PENDING'
+
   const {
     register,
     handleSubmit,

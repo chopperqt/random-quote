@@ -4,7 +4,10 @@ import { useNavigate } from 'react-router-dom'
 
 import useUser from 'helpers/useUser'
 import { routes } from 'helpers/routes'
-import { signInWithGoogle } from 'utils/auth'
+import {
+  signInWithGoogle,
+  logOut,
+} from 'utils/auth'
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -18,6 +21,9 @@ const Profile = () => {
     <div>
       <button onClick={signInWithGoogle}>
         Войти
+      </button>
+      <button onClick={logOut}>
+        Выйти
       </button>
 
       {user && (

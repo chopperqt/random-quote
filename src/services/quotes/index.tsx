@@ -1,14 +1,16 @@
 import { actions } from './actions'
+import produce from 'immer'
 
 const {
   SET_QUOTE,
-  GET_QUOTES,
-  GET_LAST_QUOTES,
+  SET_ALL_QUOTES,
+  SET_LAST_QUOTES,
   SEARCH_QUOTES,
   UPDATE_QUOTES,
   CLEAR_QUOTES,
   INCREASE_QUOTE_COUNTER,
   DECREASE_QUOTE_COUNTER,
+  SET_COUNTER,
 } = actions
 
 const initialState = {
@@ -17,21 +19,25 @@ const initialState = {
   quotesIds: [],
   lastQuotes: [],
   quotesSearch: [],
-  quoteCounter: 0,
   quotesCount: 0,
   lastQuotesCount: 0,
+  quotesAllCount: 0,
 }
 
-export interface QuotesStore {
+export interface QuotesStore extends QuotesCounters {
   quotes: QuoteData[]
   quotesAll: QuoteData[]
-  quoteCounter: number
   quotesIds: number[]
-  quotesCount: number
   quotesSearch: QuoteData[]
   lastQuotes: QuoteData[]
+}
+
+export interface QuotesCounters {
+  quotesAllCount: number
+  quotesCount: number
   lastQuotesCount: number
 }
+
 export interface QuoteData {
   author: {
     path: string,
@@ -48,92 +54,80 @@ export interface QuoteData {
   bookmarked?: boolean
 }
 
-const quotesStore = (state = initialState, { type, payload }: { type: string, payload: any }) => {
+const quotesStore = (state = initialState, { type, payload }: { type: string, payload: any }) => produce(state, (draft: QuotesStore) => {
   switch (type) {
-    case GET_QUOTES: {
-      return {
-        ...state,
-        quotes: [...payload.data],
-        quotesCount: payload.count,
-      }
+    case SET_ALL_QUOTES: {
+      const { data, count } = payload
+
+      draft.quotesAll = data
+      draft.quotesAllCount = count
+
+      break;
     }
-    case GET_LAST_QUOTES: {
-      return {
-        ...state,
-        lastQuotes: payload.data,
-        lastQuotesCount: payload.count
-      }
+    case SET_LAST_QUOTES: {
+      const { data, count } = payload
+
+      draft.lastQuotes = data
+      draft.lastQuotesCount = count
+
+      break;
     }
     case SET_QUOTE: {
-      return {
-        ...state,
-        quotes: [
-          ...state.quotes,
-          payload[0],
-        ],
-      }
+      draft.quotes.push(payload[0])
+
+      break;
     }
     case SEARCH_QUOTES: {
-      return {
-        ...state,
-        quotesSearch: payload
-      }
+      draft.quotesSearch = payload
+
+      break;
     }
     case UPDATE_QUOTES: {
-      const findLastQuoteIndex: number = state.lastQuotes.findIndex((item: QuoteData) => item.id_quote === payload.id)
-      const findQuote: number = state.quotes.findIndex((item: QuoteData) => item.id_quote === payload.id)
+      const {
+        bookmarked,
+        id,
+      } = payload
 
-      const { bookmarked } = payload
+      const updateLastQuotes = draft.lastQuotes.find((q) => q.id_quote === id)
+      const updateQuotes = draft.quotes.find((q) => q.id_quote === id)
 
-      let modifyLastQuote: QuoteData[] = state.lastQuotes
-      let modifyQuote: QuoteData[] = state.quotes
-
-      if (typeof findLastQuoteIndex === 'number') {
-        modifyLastQuote[findLastQuoteIndex] = {
-          ...modifyLastQuote[findLastQuoteIndex],
-          bookmarked,
-        }
+      if (updateLastQuotes) {
+        updateLastQuotes.bookmarked = bookmarked
       }
 
-      if (typeof findQuote === 'number') {
-        modifyQuote[findQuote] = {
-          ...modifyQuote[findQuote],
-          bookmarked,
-        }
+      if (updateQuotes) {
+        updateQuotes.bookmarked = bookmarked
       }
 
-      return {
-        ...state,
-        lastQuotes: modifyLastQuote,
-        quotes: modifyQuote,
-      }
-    }
-    case CLEAR_QUOTES: {
-      return {
-        ...state,
-        quotes: [],
-        lastQuotes: [],
-      }
+      break;
     }
     case INCREASE_QUOTE_COUNTER: {
-      return {
-        ...state,
-        quoteCounter: state.quoteCounter + 1
-      }
+      draft.quotesCount++
+
+      break;
     }
     case DECREASE_QUOTE_COUNTER: {
-      return {
-        ...state,
-        quoteCounter: state.quoteCounter - 1,
+      draft.quotesCount--
 
-      }
+      break;
+    }
+    case SET_COUNTER: {
+      // TODO: Отрефакторить
+      // @ts-ignore
+      draft[payload.type] = payload.data
+
+      break;
+    }
+    case CLEAR_QUOTES: {
+      draft.quotes = []
+      draft.lastQuotes = []
+
+      break;
     }
     default: {
-      return {
-        ...state,
-      }
+      break;
     }
   }
-}
+})
 
 export default quotesStore

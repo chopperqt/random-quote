@@ -1,0 +1,21 @@
+@import 'asset/scss/colors';
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+}
+
+.button {
+  :global(.icon-svg) {
+    fill: $color-white--500;
+    width: 25px;
+    height: 25px;
+  }
+}

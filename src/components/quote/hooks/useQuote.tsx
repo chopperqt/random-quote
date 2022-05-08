@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { notificationMethods } from 'services'
 import { SuccessMessages } from 'helpers/successMessages'
 
@@ -6,13 +8,9 @@ interface useQuoteProps {
   id: number
 }
 
-interface IUseQuoteReturn {
-  handleCopyText: () => void
-}
-
 const useQuote = ({
   text,
-}: useQuoteProps): IUseQuoteReturn => {
+}: useQuoteProps) => {
   const { createNotification } = notificationMethods
 
   const handleCopyText = () => {

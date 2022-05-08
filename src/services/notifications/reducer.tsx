@@ -1,10 +1,11 @@
-import { TNotification } from "components/notification/Notification"
+import { NotificationType } from "components/notification/Notification"
 import { actions } from "./actions"
-import { TRequests, Requests } from 'utils'
+import { RequestsData } from 'utils'
+import produce from "immer"
 
-const initialState: INotificationsStore = {
+const initialState: NotificationsStore = {
   notifications: [],
-  loading: {} as any
+  loading: {} as LoadingData,
 }
 
 const {
@@ -13,22 +14,22 @@ const {
   CREATE_LOADING,
 } = actions
 
-export interface INotificationsStore {
-  notifications: INotification[]
-  loading: ILoading
+export interface NotificationsStore {
+  notifications: NotificationData[]
+  loading: LoadingData
 }
 
-export interface INotification {
+export interface NotificationData {
   text: string
   id: string
-  type: TNotification
+  type: NotificationType
 }
 
-type ILoading = {
-  [key in TRequests]: TLoading
+type LoadingData = {
+  [key in RequestsData]: StatusData
 }
 
-export type TLoading = 'PENDING' | 'SUCCESS' | 'FAILURE' | undefined
+export type StatusData = 'PENDING' | 'SUCCESS' | 'FAILURE' | undefined
 
 const notificationsStore = (
   state = initialState,
@@ -38,38 +39,29 @@ const notificationsStore = (
   }: {
     type: string,
     payload: any
-  }) => {
-  switch (type) {
-    case CREATE_LOADING: {
-      return {
-        ...state,
-        loading: {
-          ...state.loading,
-          [payload.name]: payload.status
-        }
+  }) => produce(state, (draft: NotificationsStore) => {
+    switch (type) {
+      case CREATE_LOADING: {
+        // TODO Отрефакторить
+        // @ts-ignore
+        draft.loading[payload.name] = payload.status
+
+        break;
+      }
+      case CREATE_NOTIFICATION: {
+        draft.notifications.push(payload)
+
+        break;
+      }
+      case DELETE_NOTIFICATION: {
+        draft.notifications = draft.notifications.filter(({ id }) => id !== payload)
+
+        break
+      }
+      default: {
+        break;
       }
     }
-    case CREATE_NOTIFICATION: {
-      return {
-        ...state,
-        notifications: [
-          ...state.notifications,
-          { ...payload }
-        ]
-      }
-    }
-    case DELETE_NOTIFICATION: {
-      return {
-        ...state,
-        notifications: state.notifications.filter(({ id }) => id !== payload)
-      }
-    }
-    default: {
-      return {
-        ...state,
-      }
-    }
-  }
-}
+  })
 
 export default notificationsStore
