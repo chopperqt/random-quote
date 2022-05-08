@@ -19,7 +19,6 @@ const initialState = {
   quotesIds: [],
   lastQuotes: [],
   quotesSearch: [],
-  quoteCounter: 0,
   quotesCount: 0,
   lastQuotesCount: 0,
   quotesAllCount: 0,
@@ -35,7 +34,6 @@ export interface QuotesStore extends QuotesCounters {
 
 export interface QuotesCounters {
   quotesAllCount: number
-  quoteCounter: number
   quotesCount: number
   lastQuotesCount: number
 }
@@ -62,7 +60,7 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
       const { data, count } = payload
 
       draft.quotesAll = data
-      draft.quoteCounter = count
+      draft.quotesAllCount = count
 
       break;
     }
@@ -104,12 +102,12 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
       break;
     }
     case INCREASE_QUOTE_COUNTER: {
-      draft.quoteCounter++
+      draft.quotesCount++
 
       break;
     }
     case DECREASE_QUOTE_COUNTER: {
-      draft.quoteCounter--
+      draft.quotesCount--
 
       break;
     }

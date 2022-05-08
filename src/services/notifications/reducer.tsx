@@ -1,6 +1,7 @@
 import { NotificationType } from "components/notification/Notification"
 import { actions } from "./actions"
 import { RequestsData } from 'utils'
+import produce from "immer"
 
 const initialState: NotificationsStore = {
   notifications: [],
@@ -38,38 +39,29 @@ const notificationsStore = (
   }: {
     type: string,
     payload: any
-  }) => {
-  switch (type) {
-    case CREATE_LOADING: {
-      return {
-        ...state,
-        loading: {
-          ...state.loading,
-          [payload.name]: payload.status
-        }
+  }) => produce(state, (draft: NotificationsStore) => {
+    switch (type) {
+      case CREATE_LOADING: {
+        // TODO Отрефакторить
+        // @ts-ignore
+        draft.loading[payload.name] = payload.status
+
+        break;
+      }
+      case CREATE_NOTIFICATION: {
+        draft.notifications.push(payload)
+
+        break;
+      }
+      case DELETE_NOTIFICATION: {
+        draft.notifications = draft.notifications.filter(({ id }) => id !== payload)
+
+        break
+      }
+      default: {
+        break;
       }
     }
-    case CREATE_NOTIFICATION: {
-      return {
-        ...state,
-        notifications: [
-          ...state.notifications,
-          { ...payload }
-        ]
-      }
-    }
-    case DELETE_NOTIFICATION: {
-      return {
-        ...state,
-        notifications: state.notifications.filter(({ id }) => id !== payload)
-      }
-    }
-    default: {
-      return {
-        ...state,
-      }
-    }
-  }
-}
+  })
 
 export default notificationsStore

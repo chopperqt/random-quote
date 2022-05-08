@@ -80,7 +80,7 @@ export const methods = {
   }
 }
 
-type QuoteCounter = Pick<QuotesStore, 'quoteCounter' | 'quotes'>
+type QuoteCounter = Pick<QuotesStore, 'quotesCount' | 'quotes'>
 
 export const increaseQuoteCounter = async (id_user?: string) => {
   const {
@@ -89,7 +89,7 @@ export const increaseQuoteCounter = async (id_user?: string) => {
   } = Store.getState()
   const {
     quotes,
-    quoteCounter,
+    quotesCount,
   }: QuoteCounter = quotesStore
   const { loading } = notificationsStore
 
@@ -99,7 +99,7 @@ export const increaseQuoteCounter = async (id_user?: string) => {
 
   const quotesLength = quotes.length - 1
 
-  if (quoteCounter >= quotesLength) {
+  if (quotesCount >= quotesLength) {
     const isSuccess = await getRandomQuote(id_user)
 
     if (isSuccess) {
@@ -115,10 +115,10 @@ export const increaseQuoteCounter = async (id_user?: string) => {
 export const decreaseQuoteCounter = () => {
   const { quotesStore } = Store.getState()
   const {
-    quoteCounter
+    quotesCount
   }: QuoteCounter = quotesStore
 
-  if (quoteCounter !== 0) {
+  if (quotesCount !== 0) {
     Store.dispatch(quoteMethods.decreaseQuoteCounter())
   }
 }

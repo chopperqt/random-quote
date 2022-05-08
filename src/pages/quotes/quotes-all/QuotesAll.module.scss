@@ -48,7 +48,6 @@
 
 .section {
   display: grid;
-  grid-template-columns: 485px 485px;
   grid-gap: 15px;
   margin-bottom: 15px;
 
@@ -64,4 +63,9 @@
 
 .title {
   margin-top: 15px;
+}
+
+.skeletonSection {
+  @extend .section;
+  grid-template-columns: 485px 485px;
 }

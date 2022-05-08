@@ -1,4 +1,5 @@
 import React from 'react'
+import Masonry from 'react-masonry-css'
 
 import Skeleton from './partials/Skeleton'
 import Quote from 'components/quote'
@@ -9,14 +10,16 @@ import Filters from './filters/Filters'
 import SearchInput from './partials/SearhcInput'
 import Empty from './empty/Empty'
 import Pagination from 'components/pagination'
+import { Stores } from 'services'
 
 import styles from './QuotesAll.module.scss'
+import './Grid.scss'
 
 const QuotesAll = () => {
+  const { QuoteStore } = Stores()
+  const { quotesAll } = QuoteStore
   const {
     description,
-    quotesFirstColumn,
-    quotesSecondColumn,
     search,
     setSearch,
     loadingSearch,
@@ -47,24 +50,18 @@ const QuotesAll = () => {
               <Empty />
             )}
             {search.length < 3 && loadingQuotes.isSuccess && (
-              <>
-                <div className={styles.gridColumn}>
-                  {quotesFirstColumn.map((quote) => (
-                    <Quote
-                      key={quote.id_quote}
-                      quote={quote}
-                    />
-                  ))}
-                </div>
-                <div className={styles.gridColumn}>
-                  {quotesSecondColumn.map((quote) => (
-                    <Quote
-                      key={quote.id_quote}
-                      quote={quote}
-                    />
-                  ))}
-                </div>
-              </>
+              <Masonry
+                breakpointCols={2}
+                className="my-masonry-grid"
+                columnClassName='my-masonry-grid_column'
+              >
+                {quotesAll.map((quote) => (
+                  <Quote
+                    key={quote.id_quote}
+                    quote={quote}
+                  />
+                ))}
+              </Masonry>
             )}
             {loadingQuotes.isLoading && (
               <Skeleton />
@@ -72,7 +69,6 @@ const QuotesAll = () => {
             {loadingQuotes.isError && (
               <Information text={DefaultMessage.error} />
             )}
-
           </div>
           <Pagination
             onClick={handleChangePage}
