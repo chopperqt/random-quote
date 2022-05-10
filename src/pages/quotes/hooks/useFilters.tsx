@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
 
 import { getAuthors } from 'utils/authors'
 import {
@@ -9,7 +8,6 @@ import useResponse from 'helpers/useResponse'
 import {
   getUrlParam,
   updateUrlParams,
-  deleteUrlParam,
 } from 'helpers/urlParams'
 
 import { Stores } from 'services'

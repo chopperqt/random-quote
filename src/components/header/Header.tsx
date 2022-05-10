@@ -17,6 +17,7 @@ const Header = () => {
               text={text}
             >
               <Link
+                alt={text}
                 to={path}
                 className={styles.link}
                 activeLink="active-menu-item"

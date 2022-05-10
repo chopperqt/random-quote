@@ -14,7 +14,7 @@ export const signInWithGoogle = async () => {
 
   handlePending()
 
-  const { user, session, error } = await supabase.auth.signIn({
+  const { error } = await supabase.auth.signIn({
     provider: 'google',
   })
 
@@ -26,5 +26,5 @@ export const signInWithGoogle = async () => {
 }
 
 export const logOut = async () => {
-  const { error } = await supabase.auth.signOut()
+  await supabase.auth.signOut()
 }

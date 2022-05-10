@@ -1,4 +1,3 @@
-import React from 'react'
 import { ApiError, PostgrestError } from '@supabase/supabase-js'
 
 import { SuccessMessages } from './successMessages'

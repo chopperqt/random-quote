@@ -13,7 +13,6 @@ import Notification from 'components/notification';
 import Header from 'components/header'
 import Quotes from 'pages/quotes/Quotes';
 import SignUp from 'pages/signup/SignUp';
-import { getUrlParams } from 'helpers/urlParams';
 
 import './asset/scss/typography.scss'
 import './asset/scss/fonts.scss'
@@ -22,7 +21,6 @@ import './App.scss'
 function App() {
   const { NotificationStore: { notifications } } = Stores()
   const hasNotifications = notifications.length > 0
-  const params = getUrlParams()
 
   return (
     <div className="App">

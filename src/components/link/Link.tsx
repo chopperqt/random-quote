@@ -12,12 +12,14 @@ const Link = ({
   to,
   className,
   activeLink = '',
+  alt = '',
 }: ILink) => {
   const resolved = useResolvedPath(to)
   const match = useMatch({ path: resolved.pathname, end: true })
 
   return (
     <NavLink
+      aria-label={alt}
       className={cx(styles.link, className, {
         [activeLink]: match
       })}

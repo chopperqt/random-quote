@@ -36,6 +36,7 @@ const Bookmark = ({
     <>
       <Tooltip text={tooltipText}>
         <button
+          aria-label={ADD_BOOKMARK}
           className={cx(styles.bookmark, {
             'bookmark-active': bookmarked,
           })}

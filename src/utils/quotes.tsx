@@ -1,5 +1,4 @@
 import moment from 'moment'
-import produce from 'immer';
 
 import supabase from "./client";
 import Store, { quoteMethods, notificationMethods } from 'services'
@@ -18,7 +17,6 @@ import {
   IGetQuotes,
 } from './'
 import { QuoteData } from 'services/quotes';
-import { updateUrlParams } from 'helpers/urlParams';
 import { serializeQuote } from 'helpers/serialize'
 
 const LIMIT_PER_PAGE = 10
@@ -308,8 +306,6 @@ export const getLastQuotes = async () => {
 export const searchQuote = debounce(async (search) => {
   const {
     handleFailure,
-    handlePending,
-    handleSuccess,
   } = loadingStatuses(QuotesRequests.searchQuote)
 
   // handlePending()

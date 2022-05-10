@@ -7,7 +7,7 @@ import styles from './Footer.module.scss'
 import { IFooterProps } from './'
 
 const FOOTER_TEXT = 'Create with ❤️ by Chopper'
-
+const PROFILE = 'Chopperxx Profile'
 
 const Footer = ({
   className,
@@ -15,6 +15,7 @@ const Footer = ({
   <div className={cx(styles.footer, className)}>
     <div>{FOOTER_TEXT}</div>
     <a
+      aria-label={PROFILE}
       href="https://github.com/chopperqt"
       target="_blank"
       rel="noreferrer"

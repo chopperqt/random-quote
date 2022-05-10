@@ -21,6 +21,7 @@ const Actions = ({
       text={COPY_TEXT}
     >
       <button
+        aria-label={COPY_TEXT}
         onClick={onCopy}
         className={styles.button}>
         <Icon icon={IconList.copy} />
@@ -30,7 +31,10 @@ const Actions = ({
       position='left'
       text={SHARING_TEXT}
     >
-      <button className={styles.button}>
+      <button
+        aria-label={SHARING_TEXT}
+        className={styles.button}
+      >
         <Icon icon={IconList.share} />
       </button>
     </Tooltip>
