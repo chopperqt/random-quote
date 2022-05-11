@@ -13,6 +13,7 @@ import {
   REQUITE_FIELD,
   EMAIL_ERROR,
   REPEAT_PASSWORD_ERROR,
+  VALIDATE_PASSWORD_ERROR,
 } from 'helpers/validateMessages'
 
 import styles from './SignUp.module.scss'
@@ -21,6 +22,8 @@ const EMAIL_TEXT = 'Электронная почта'
 const NICKNAME_TEXT = 'Ник'
 const PASSWORD_TEXT = 'Пароль'
 const REPEAT_PASSWORD_TEXT = 'Подтверждение пароля'
+const SIGN_UP = 'Зарегистрироваться'
+const SIGN_UP_TEXT = 'Регистрация'
 
 interface SignUpFields {
   email: string
@@ -50,6 +53,7 @@ const SignUp = () => {
         onSubmit={handleSubmit(onSubmit)}
         className={styles.section}
       >
+        <h3 className={styles.title}>{SIGN_UP_TEXT}</h3>
         <Input
           {...register('email', {
             required: REQUITE_FIELD,
@@ -60,6 +64,7 @@ const SignUp = () => {
           })}
           placeholder={EMAIL_TEXT}
           error={errors.email?.message}
+          loading={true}
         />
         <Input
           {...register('nickname', {
@@ -67,13 +72,14 @@ const SignUp = () => {
           })}
           placeholder={NICKNAME_TEXT}
           error={errors.nickname?.message}
+          loading={true}
         />
         <Input
           {...register('password', {
             required: REQUITE_FIELD,
             pattern: {
               value: PASSWORD_PATTERN,
-              message: 'awd'
+              message: VALIDATE_PASSWORD_ERROR,
             },
           })}
           placeholder={PASSWORD_TEXT}
@@ -84,7 +90,7 @@ const SignUp = () => {
             required: REQUITE_FIELD,
             pattern: {
               value: PASSWORD_PATTERN,
-              message: 'dawd'
+              message: VALIDATE_PASSWORD_ERROR,
             },
             validate: {
               validateSamePassword: value => value === watch('password') || REPEAT_PASSWORD_ERROR
@@ -97,7 +103,7 @@ const SignUp = () => {
         <Button
           type="submit"
         >
-          Зарег
+          {SIGN_UP}
         </Button>
       </form>
     </div>
