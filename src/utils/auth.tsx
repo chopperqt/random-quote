@@ -1,8 +1,9 @@
 import loadingStatuses from "helpers/loadingStatuses";
 import supabase from "./client";
 
-const AuthRequests = {
+export const AuthRequests = {
   loginWithGoogle: 'loginWithGoogle',
+  signUp: 'signUp',
 }
 
 export const signInWithGoogle = async () => {
@@ -27,4 +28,29 @@ export const signInWithGoogle = async () => {
 
 export const logOut = async () => {
   await supabase.auth.signOut()
+}
+
+export const signUp = async (email: string, password: string, data: any) => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess
+  } = loadingStatuses(AuthRequests.signUp)
+
+  handlePending()
+
+  const { user, session, error } = await supabase.auth.signUp({
+    email,
+    password,
+  }, {
+    data,
+  })
+
+  if (error) {
+    handleFailure(error)
+
+    return
+  }
+
+  handleSuccess()
 }

@@ -1,9 +1,11 @@
 import { QuotesRequests } from './quotes'
 import { AuthorsRequests } from './authors'
+import { AuthRequests } from './auth'
 
 const Requests = {
   ...QuotesRequests,
   ...AuthorsRequests,
+  ...AuthRequests,
 }
 
 export type TQuotesRequest = keyof typeof QuotesRequests

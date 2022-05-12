@@ -1,0 +1,7 @@
+export const EMAIL_TEXT = 'Электронная почта'
+export const NICKNAME_TEXT = 'Ник'
+export const PASSWORD_TEXT = 'Пароль'
+export const REPEAT_PASSWORD_TEXT = 'Подтверждение пароля'
+export const SIGN_UP = 'Зарегистрироваться'
+export const SIGN_UP_TEXT = 'Регистрация'
+export const QUESTION_TEXT = 'Вы уже зарегистрированы?'
