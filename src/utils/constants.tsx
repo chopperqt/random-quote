@@ -5,6 +5,7 @@ export const Tables = {
   likes: 'likes',
   rating: 'rating',
   bookmarks: 'bookmarks',
+  users: 'users',
 }
 
 export const SupabaseFunctions = {

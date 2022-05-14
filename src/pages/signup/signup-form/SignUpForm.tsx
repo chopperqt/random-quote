@@ -24,12 +24,16 @@ import {
   SIGN_UP,
   QUESTION_TEXT,
 } from '../constants'
-import { signUp } from 'utils/auth'
+import {
+  signUp,
+  validateEmail,
+} from 'utils/auth'
 import Link from 'components/link'
 import { Stores } from 'services'
 
 import styles from './SignUpForm.module.scss'
 import useResponse from 'helpers/useResponse'
+import { useEffect } from 'react'
 
 interface SignUpFields {
   email: string
@@ -63,6 +67,10 @@ const SignUpForm = () => {
       nickname: data.nickname,
     })
   }
+
+  useEffect(() => {
+    validateEmail('ilua292010@gmail.com')
+  }, [])
 
   return (
     <form
