@@ -7,6 +7,7 @@ import { routes } from 'helpers/routes'
 import {
   signInWithGoogle,
   logOut,
+  deleteUser,
 } from 'utils/auth'
 
 const Profile = () => {
@@ -25,7 +26,9 @@ const Profile = () => {
       <button onClick={logOut}>
         Выйти
       </button>
-
+      <button onClick={() => deleteUser(user!.id)}>
+        Удалить аккаунт
+      </button>
       {user && (
         <>
           <img src={user.avatar_url} alt="user-avatar" />

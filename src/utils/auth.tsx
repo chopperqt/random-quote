@@ -8,6 +8,7 @@ export const AuthRequests = {
   loginWithGoogle: 'loginWithGoogle',
   signUp: 'signUp',
   validateEmail: 'validateEmail',
+  deleteUser: 'deleteUser',
 }
 
 export const signInWithGoogle = async () => {
@@ -59,27 +60,29 @@ export const signUp = async (email: string, password: string, data: any) => {
   handleSuccess()
 }
 
-export const validateEmail = debounce(async (email: string) => {
+export const deleteUser = async (id: string) => {
   const {
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(AuthRequests.validateEmail)
+  } = loadingStatuses(AuthRequests.deleteUser)
 
   handlePending()
 
-  const { data, error } = await supabase
-    .from(Tables.users)
-    .select(`email`)
-    .textSearch('email', `'${email}`)
+  const {
+    data: user,
+    error,
+  } = await supabase.auth.api.deleteUser(id)
 
   if (error) {
     handleFailure(error)
-
-    return
   }
 
-  handleSuccess()
+  console.log(user)
 
-  console.log(data)
+  handleSuccess()
+}
+
+export const validateEmail = debounce(async (email: string) => {
+  console.log(email)
 })
