@@ -3,6 +3,13 @@ import supabase from "./client";
 import debounce from 'lodash.debounce'
 
 import { Tables } from "./constants";
+import {
+  SuccessMessages
+} from 'helpers/successMessages'
+
+const {
+  signUpSuccess,
+} = SuccessMessages
 
 export const AuthRequests = {
   loginWithGoogle: 'loginWithGoogle',
@@ -35,7 +42,7 @@ export const logOut = async () => {
   await supabase.auth.signOut()
 }
 
-export const signUp = async (email: string, password: string, data: any) => {
+export const signUp = async (email: string, password: string, data: any): Promise<boolean> => {
   const {
     handleFailure,
     handlePending,
@@ -44,7 +51,7 @@ export const signUp = async (email: string, password: string, data: any) => {
 
   handlePending()
 
-  const { user, session, error } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     email,
     password,
   }, {
@@ -54,10 +61,12 @@ export const signUp = async (email: string, password: string, data: any) => {
   if (error) {
     handleFailure(error)
 
-    return
+    return false
   }
 
-  handleSuccess()
+  handleSuccess(signUpSuccess)
+
+  return true
 }
 
 export const deleteUser = async (id: string) => {
@@ -83,6 +92,27 @@ export const deleteUser = async (id: string) => {
   handleSuccess()
 }
 
-export const validateEmail = debounce(async (email: string) => {
-  console.log(email)
+export const validateEmail = debounce(async (email: string): Promise<any[]> => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses(AuthRequests.validateEmail)
+
+  handlePending()
+
+  const { data, error } = await supabase
+    .from(Tables.users)
+    .select('email')
+    .like('email', email)
+
+  if (error) {
+    handleFailure(error)
+
+    return []
+  }
+
+  handleSuccess()
+
+  return data
 })

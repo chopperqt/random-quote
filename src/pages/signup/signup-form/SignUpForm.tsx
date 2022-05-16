@@ -2,6 +2,7 @@ import {
   useForm,
   SubmitHandler,
 } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 
 import Input from 'components/input'
 import Button from 'components/button'
@@ -14,6 +15,7 @@ import {
   EMAIL_ERROR,
   REPEAT_PASSWORD_ERROR,
   VALIDATE_PASSWORD_ERROR,
+  EMAIL_ALREADY_EXIST,
 } from 'helpers/validateMessages'
 import {
   EMAIL_TEXT,
@@ -30,10 +32,10 @@ import {
 } from 'utils/auth'
 import Link from 'components/link'
 import { Stores } from 'services'
+import useResponse from 'helpers/useResponse'
+import { routes } from 'helpers/routes'
 
 import styles from './SignUpForm.module.scss'
-import useResponse from 'helpers/useResponse'
-import { useEffect } from 'react'
 
 interface SignUpFields {
   email: string
@@ -43,6 +45,7 @@ interface SignUpFields {
 }
 
 const SignUpForm = () => {
+  const navigate = useNavigate()
   const {
     NotificationStore: {
       loading,
@@ -51,7 +54,6 @@ const SignUpForm = () => {
   const {
     register,
     handleSubmit,
-    resetField,
     watch,
     formState: {
       errors
@@ -63,14 +65,15 @@ const SignUpForm = () => {
   } = useResponse({ loading: loading.signUp })
 
   const onSubmit: SubmitHandler<SignUpFields> = async (data) => {
-    signUp(data.email, data.password, {
+    const response = await signUp(data.email, data.password, {
       nickname: data.nickname,
     })
-  }
 
-  useEffect(() => {
-    validateEmail('ilua292010@gmail.com')
-  }, [])
+    if (response) {
+      navigate(routes.logIn)
+    }
+
+  }
 
   return (
     <form
@@ -85,9 +88,15 @@ const SignUpForm = () => {
             value: EMAIL_PATTERN,
             message: EMAIL_ERROR,
           },
+          validate: async (value) => {
+            const response = await validateEmail(value)
+
+            return response?.length !== 0 || EMAIL_ALREADY_EXIST
+          }
         })}
         placeholder={EMAIL_TEXT}
         error={errors.email?.message}
+        loading={loading.validateEmail === 'PENDING'}
       />
       <Input
         {...register('nickname', {
