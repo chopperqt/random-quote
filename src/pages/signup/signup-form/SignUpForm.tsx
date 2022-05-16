@@ -72,7 +72,6 @@ const SignUpForm = () => {
     if (response) {
       navigate(routes.logIn)
     }
-
   }
 
   return (

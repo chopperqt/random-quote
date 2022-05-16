@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 
@@ -14,9 +14,11 @@ const Profile = () => {
   const navigate = useNavigate();
   const { user } = useUser()
 
-  if (!user) {
-    navigate(routes.logIn)
-  }
+  useEffect(() => {
+    if (!user) {
+      navigate(routes.logIn)
+    }
+  }, [])
 
   return (
     <div>

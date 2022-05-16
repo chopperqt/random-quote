@@ -13,6 +13,7 @@ import Notification from 'components/notification';
 import Header from 'components/header'
 import Quotes from 'pages/quotes/Quotes';
 import SignUp from 'pages/signup/SignUp';
+import Login from 'pages/login/Login';
 
 import './asset/scss/typography.scss'
 import './asset/scss/fonts.scss'
@@ -32,7 +33,7 @@ function App() {
           <Route path={`${routes.default}/:id`} element={<Home />} />
           <Route path={routes.quotes} element={<Quotes />} />
           <Route path={routes.profile} element={<Profile />} />
-          <Route path={routes.logIn} element={<div>ЛОгин</div>} />
+          <Route path={routes.logIn} element={<Login />} />
           <Route path={routes.signUp} element={<SignUp />} />
         </Routes>
       </div>

@@ -16,6 +16,7 @@ export const AuthRequests = {
   signUp: 'signUp',
   validateEmail: 'validateEmail',
   deleteUser: 'deleteUser',
+  login: 'login',
 }
 
 export const signInWithGoogle = async () => {
@@ -33,6 +34,33 @@ export const signInWithGoogle = async () => {
 
   if (error) {
     handleFailure(error)
+  }
+
+  handleSuccess()
+}
+
+export const login = async (email: string, password: string) => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses(AuthRequests.login)
+
+  handlePending()
+
+  const {
+    session,
+    error,
+  } = await supabase.auth
+    .signIn({
+      email,
+      password,
+    })
+
+  if (error) {
+    handleFailure(error)
+
+    return
   }
 
   handleSuccess()
