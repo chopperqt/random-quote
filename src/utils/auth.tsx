@@ -6,7 +6,10 @@ import { Tables } from "./constants";
 import {
   SuccessMessages
 } from 'helpers/successMessages'
-
+import {
+  LOGIN_ERROR_EU,
+  LOGIN_ERROR,
+} from 'helpers/validateMessages'
 const {
   signUpSuccess,
 } = SuccessMessages
@@ -39,7 +42,7 @@ export const signInWithGoogle = async () => {
   handleSuccess()
 }
 
-export const login = async (email: string, password: string) => {
+export const login = async (email: string, password: string): Promise<string | undefined> => {
   const {
     handleFailure,
     handlePending,
@@ -58,6 +61,12 @@ export const login = async (email: string, password: string) => {
     })
 
   if (error) {
+    if (error.message === LOGIN_ERROR_EU) {
+      handleSuccess()
+
+      return LOGIN_ERROR
+    }
+
     handleFailure(error)
 
     return

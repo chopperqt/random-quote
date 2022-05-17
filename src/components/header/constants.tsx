@@ -3,6 +3,9 @@ import { IconList } from 'components/icon'
 
 import { IMenuList } from './'
 
+export const PROFILE_TEXT = 'Профиль'
+export const LOGIN_TEXT = 'Вход'
+
 export const MenuList: IMenuList[] = [
   {
     path: routes.default,
@@ -19,9 +22,4 @@ export const MenuList: IMenuList[] = [
     icon: IconList.author,
     text: 'Авторы',
   },
-  {
-    path: routes.profile,
-    icon: IconList.user,
-    text: 'Профиль',
-  }
 ]
