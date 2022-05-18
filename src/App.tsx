@@ -1,7 +1,8 @@
-
+import { useEffect } from 'react'
 import {
   Routes,
-  Route
+  Route,
+  Navigate,
 } from 'react-router-dom'
 import { Stores } from 'services';
 
@@ -14,14 +15,27 @@ import Header from 'components/header'
 import Quotes from 'pages/quotes/Quotes';
 import SignUp from 'pages/signup/SignUp';
 import Login from 'pages/login/Login';
+import useUser from 'helpers/useUser';
 
 import './asset/scss/typography.scss'
 import './asset/scss/fonts.scss'
 import './App.scss'
 
 function App() {
-  const { NotificationStore: { notifications } } = Stores()
+  const { user } = useUser()
+  const {
+    NotificationStore: { notifications } } = Stores()
   const hasNotifications = notifications.length > 0
+
+  let ComponentLogin = <Navigate to={routes.profile} />
+  let ComponentSignup = <Navigate to={routes.profile} />
+  let ComponentProfile = <Profile />
+
+  if (!user) {
+    ComponentLogin = <Login />
+    ComponentSignup = <SignUp />
+    ComponentProfile = <Navigate to={routes.logIn} />
+  }
 
   return (
     <div className="App">
@@ -32,9 +46,9 @@ function App() {
           <Route path={routes.default} element={<Home />} />
           <Route path={`${routes.default}/:id`} element={<Home />} />
           <Route path={routes.quotes} element={<Quotes />} />
-          <Route path={routes.profile} element={<Profile />} />
-          <Route path={routes.logIn} element={<Login />} />
-          <Route path={routes.signUp} element={<SignUp />} />
+          <Route path={routes.profile} element={ComponentProfile} />
+          <Route path={routes.logIn} element={ComponentLogin} />
+          <Route path={routes.signUp} element={ComponentSignup} />
         </Routes>
       </div>
       {hasNotifications && (

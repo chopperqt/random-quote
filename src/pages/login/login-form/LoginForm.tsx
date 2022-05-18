@@ -6,6 +6,7 @@ import {
   useForm,
   SubmitHandler,
 } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import cx from 'classnames'
 
 import {
@@ -38,6 +39,7 @@ interface LoginFields {
   password: string
 }
 const LoginForm = () => {
+  const navigate = useNavigate()
   const {
     NotificationStore: {
       loading,
@@ -67,7 +69,11 @@ const LoginForm = () => {
       setShowError(true)
       setMessage(response)
       resetField('password')
+
+      return
     }
+
+    navigate(routes.profile)
   }
 
   useEffect(() => {
