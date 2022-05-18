@@ -20,6 +20,7 @@ export const AuthRequests = {
   validateEmail: 'validateEmail',
   deleteUser: 'deleteUser',
   login: 'login',
+  getUser: 'getUser',
 }
 
 export const signInWithGoogle = async () => {
@@ -52,8 +53,9 @@ export const login = async (email: string, password: string): Promise<string | u
   handlePending()
 
   const {
-    session,
     error,
+    user,
+    session,
   } = await supabase.auth
     .signIn({
       email,
@@ -71,6 +73,9 @@ export const login = async (email: string, password: string): Promise<string | u
 
     return
   }
+
+  console.log(
+    user, session)
 
   handleSuccess()
 }
@@ -153,3 +158,26 @@ export const validateEmail = debounce(async (email: string): Promise<any[]> => {
 
   return data
 })
+
+export const getUser = async (token: string) => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses(AuthRequests.getUser)
+
+  handlePending()
+
+  const {
+    user,
+    error,
+  } = await supabase.auth.api.getUser(token)
+
+  if (error) {
+    handleFailure(error)
+
+    return
+  }
+
+  handleSuccess()
+}

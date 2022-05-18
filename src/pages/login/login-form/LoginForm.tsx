@@ -13,7 +13,10 @@ import {
   EMAIL_ERROR,
   VALIDATE_PASSWORD_ERROR,
 } from 'helpers/validateMessages'
-import { EMAIL_PATTERN, PASSWORD_PATTERN } from 'helpers/patterns'
+import {
+  EMAIL_PATTERN,
+  PASSWORD_PATTERN,
+} from 'helpers/patterns'
 import Button from 'components/button'
 import Input from 'components/input'
 import Link from 'components/link'
@@ -53,6 +56,7 @@ const LoginForm = () => {
   } = useForm<LoginFields>()
 
   const passwordValue = watch('password')
+
   const onSubmit: SubmitHandler<LoginFields> = async ({
     email,
     password
