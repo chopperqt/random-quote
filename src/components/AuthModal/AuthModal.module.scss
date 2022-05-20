@@ -21,6 +21,12 @@
 }
 
 .link {
+  width: 100%;
+  text-align: right;
+}
+
+.error {
   display: flex;
   justify-content: center;
+  color: $color-warning--4;
 }

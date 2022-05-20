@@ -2,7 +2,8 @@ import { actions } from './actions'
 
 export interface FiltersStore {
   filters: {
-    [key: string]: string
+    p?: string
+    authors?: string[]
   }
 }
 
@@ -22,6 +23,7 @@ const filtersStore = (state = initialState, { type, payload }: { type: string, p
         filters: payload
       }
     }
+    case 
     default: {
       return {
         ...state,

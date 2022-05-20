@@ -4,7 +4,7 @@ import Store from 'services'
 
 const actions = {
   GET_FILTERS_FROM_URL: 'GET_FILTERS_FROM_URL',
-  UPDATE_FILTERS: 'UPDATE_FILTERS'
+  UPDATE_FILTERS: 'UPDATE_FILTERS',
 }
 
 const methods = {

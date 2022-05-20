@@ -8,6 +8,7 @@ import useResponse from 'helpers/useResponse'
 import {
   getUrlParam,
   updateUrlParams,
+  deleteUrlParam,
 } from 'helpers/urlParams'
 
 import { Stores } from 'services'
@@ -44,12 +45,11 @@ const useFilters = ({
   })
 
   const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>, path: string) => {
-    let authors: any = getUrlParam('authors')
+    let authorsFromUrl: string | null = getUrlParam('authors')
+    let authors: string[] = []
 
-    if (authors) {
-      authors = JSON.parse(authors)
-    } else {
-      authors = []
+    if (authorsFromUrl) {
+      authors = JSON.parse(authorsFromUrl)
     }
 
     if (event.currentTarget.checked) {
@@ -58,6 +58,12 @@ const useFilters = ({
       updateUrlParams({
         authors: JSON.stringify(authors),
       })
+
+      return
+    }
+
+    if (authors.length < 2) {
+      deleteUrlParam('authors')
 
       return
     }

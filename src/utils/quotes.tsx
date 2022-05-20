@@ -13,7 +13,6 @@ import { PostgrestError } from '@supabase/supabase-js';
 import { getBookmarks } from './bookmarks'
 import {
   IPostQuote,
-  TUpdateAction,
   IGetQuotes,
 } from './'
 import { QuoteData } from 'services/quotes';
@@ -29,9 +28,7 @@ export const QuotesRequests = {
   getQuotesAuthor: 'getQuotesAuthor',
   getQuotesLast: 'getQuotesLast',
   searchQuote: 'searchQuote',
-  changeRating: 'changeRating',
   postQuote: 'postQuotes',
-  getLikedQuote: 'getLikedQuote',
   getActionQuote: 'getActionQuote',
 }
 
@@ -241,7 +238,7 @@ export const getQuotesMore = async ({
   handleSuccess()
 }
 
-export const getQuotesAuthors = async (id_author: string) => {
+export const getQuotesAuthors = async (authors: string[]) => {
   const {
     handleFailure,
     handlePending,
@@ -259,7 +256,7 @@ export const getQuotesAuthors = async (id_author: string) => {
         text
       )
     `)
-    .eq('id_author', +id_author);
+    .in('id_author', authors);
 
   if (error) {
     handleFailure(error)
@@ -384,60 +381,6 @@ export const postQuote = async ({
   }
 }
 
-export const changeRating = async ({
-  id,
-  id_user,
-}: {
-  id: number
-  id_user: string
-}, action: TUpdateAction) => {
-  const {
-    handleFailure,
-    handlePending,
-    handleSuccess,
-  } = loadingStatuses(QuotesRequests.changeRating)
-
-  handlePending()
-
-  const currentLikes = await getCurrentQuoteRating({ id, id_user })
-  const isNumberCurrentLikes = typeof currentLikes === 'number'
-
-  if (!isNumberCurrentLikes) {
-    handleFailure(currentLikes)
-  }
-
-  let rating = +currentLikes + 1
-
-  if (action === 'dislike') {
-    rating = +currentLikes - 1
-  }
-
-  const {
-    data,
-    error,
-  } = await supabase
-    .from(Tables.rating)
-    .insert([{
-      entity_id: id.toString(),
-      entity_type: 'quote',
-      id_user,
-      count: rating,
-      action,
-    }])
-
-  if (error) {
-    handleFailure(error)
-
-    return error
-  }
-
-  // Store.dispatch(quoteMethods.updateRandomQuote(data, id))
-
-  handleSuccess()
-
-  return data
-}
-
 export const getCurrentQuoteRating = async ({
   id,
   id_user,
@@ -461,32 +404,6 @@ export const getCurrentQuoteRating = async ({
   }
 
   return data[0]?.rating || 0
-}
-
-export const getLikedQuote = async (id_quote: number, id_user: string) => {
-  const {
-    handleSuccess,
-    handleFailure,
-    handlePending,
-  } = loadingStatuses(QuotesRequests.getLikedQuote)
-
-  handlePending()
-
-  const { data, error } = await supabase
-    .from(Tables.rating)
-    .select("*")
-    .match({
-      id_quote,
-      id_user,
-    })
-
-  if (error) {
-    handleFailure(error)
-  }
-
-  handleSuccess()
-
-  return data
 }
 
 export const getActionQuote = async (
@@ -517,4 +434,3 @@ export const getActionQuote = async (
 
   return data || []
 }
-

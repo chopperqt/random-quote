@@ -5,3 +5,4 @@ export const VALIDATE_PASSWORD_ERROR = 'Пароль должен содержа
 export const EMAIL_ALREADY_EXIST = 'Электронная почта уже занята!'
 export const LOGIN_ERROR = 'Ошибка в электронной почте или пароле!'
 export const LOGIN_ERROR_EU = 'Invalid login credentials'
+export const PASSWORD_MIN_LENGTH = 'Минимально 3 символа!'

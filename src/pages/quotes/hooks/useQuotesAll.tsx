@@ -14,6 +14,7 @@ import { Stores } from 'services'
 const useQuotesAll = () => {
   const [search, setSearch] = useState<string>('')
   const [page, setPage] = useState<number>(Number(getUrlParam('p')) || 1)
+  const authors = getUrlParam('authors')
   const { user } = useUser()
   const {
     QuoteStore: {
@@ -47,30 +48,17 @@ const useQuotesAll = () => {
 
   useEffect(() => {
     if (user) {
-      getQuotes({
-        id: user.id,
-        from,
-        to,
-      })
+      getQuotes({ id: user.id, from, to })
 
       return
     }
 
-    getQuotes({
-      from,
-      to,
-    })
+    getQuotes({ from, to })
   }, [page])
 
   const handleChangePage = (page?: number) => {
     setPage(page || 1)
   }
-
-  useEffect(() => {
-    if (search.length > 2) {
-      // searchQuote(search)
-    }
-  }, [search])
 
   return {
     description,

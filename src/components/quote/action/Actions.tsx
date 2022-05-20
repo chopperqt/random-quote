@@ -9,7 +9,7 @@ interface IActionsProps {
   onCopy: () => void
 }
 
-const COPY_TEXT = 'Купировать'
+const COPY_TEXT = 'Копировать'
 const SHARING_TEXT = 'Поделиться'
 
 const Actions = ({

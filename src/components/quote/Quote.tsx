@@ -50,7 +50,7 @@ const Quote = ({
           <div className="heading--sm">{formattedDate}</div>
           <Link
             to={`${routes.authors}/${path}`}
-            className="heading--sm text--right"
+            className="heading--sm text--right text--bold"
           >{name}</Link>
         </div>
       </div>
