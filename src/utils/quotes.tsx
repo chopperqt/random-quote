@@ -1,7 +1,11 @@
 import moment from 'moment'
 
 import supabase from "./client";
-import Store, { quoteMethods, notificationMethods } from 'services'
+import Store, {
+  quoteMethods,
+  notificationMethods,
+  Stores,
+} from 'services'
 import { SuccessMessages } from 'helpers/successMessages'
 import loadingStatuses from "helpers/loadingStatuses";
 import {
@@ -9,7 +13,10 @@ import {
   SupabaseFunctions,
 } from './constants'
 import debounce from 'lodash.debounce';
-import { PostgrestError } from '@supabase/supabase-js';
+import {
+  PostgrestError,
+  PostgrestResponse,
+} from '@supabase/supabase-js';
 import { getBookmarks } from './bookmarks'
 import {
   IPostQuote,
@@ -17,8 +24,10 @@ import {
 } from './'
 import { QuoteData } from 'services/quotes';
 import { serializeQuote } from 'helpers/serialize'
+import DefaultProps from 'helpers/defaultProps';
 
 const LIMIT_PER_PAGE = 10
+const QUERY_QUOTES = '*, author: id_author (name, path)'
 
 export const QuotesRequests = {
   getQuotes: 'getQuotes',
@@ -85,7 +94,8 @@ export const getQuote = async (id: number, idUser?: string) => {
 export const getQuotes = async ({
   from = 1,
   to = 10,
-  id
+  id,
+  authors = DefaultProps.array,
 }: IGetQuotes) => {
   const {
     handleFailure,
@@ -95,33 +105,29 @@ export const getQuotes = async ({
 
   handlePending()
 
-  const { count } = await supabase.from(Tables.quotes).select('*', { count: 'exact', head: true })
+  let response: PostgrestResponse<any>;
 
-  const quotes = await supabase
-    .from(Tables.quotes)
-    .select(`*,
-      author:id_author (
-        name,
-        path
-      )
-    `, {
-      count: 'exact',
-    })
-    .range(from, to)
+  if (authors.length) {
+    response = await supabase.from(Tables.quotes).select(QUERY_QUOTES, { count: 'exact' }).in('id_author', authors).range(from, to)
+  } else {
+    response = await supabase.from(Tables.quotes).select(QUERY_QUOTES, { count: 'exact' }).range(from, to)
+  }
+
+  const { data, error, count } = response
 
   let list: number[] = []
 
-  if (quotes.error) {
-    handleFailure(quotes.error)
+  if (error) {
+    handleFailure(error)
 
     return
   }
 
-  for (let quote of quotes!.data) {
+  for (let quote of data) {
     list.push(quote.id_quote)
   }
 
-  let quotesData = quotes.data.map((item) => ({
+  let quotesData = data!.map((item) => ({
     ...item,
     ...item.author
   }))
@@ -133,7 +139,7 @@ export const getQuotes = async ({
       return
     }
 
-    quotesData = quotes.data.map((quote: QuoteData) => {
+    quotesData = data!.map((quote: QuoteData) => {
       const isBookmark = bookmarks.data.find((item: any) => +item.id_quote === +quote.id_quote)
 
       return {

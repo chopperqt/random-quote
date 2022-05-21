@@ -1,11 +1,23 @@
 export type TFilters = 'qq' | 'q' | 'p' | 'authors'
 
+function fixedEncodeURI(str: string): string {
+  return encodeURI(str).replace(/%5B/g, '[').replace(/%5D/g, ']');
+}
+
 export function updateUrlParams({ ...props }) {
   const href = window.location.href
 
   const url = new URL(href)
 
-  Object.entries(props).map(([key, value]) => url.searchParams.set(key, value))
+  Object.entries(props).map(([key, value]) => {
+    let params = url.searchParams.set(key, value)
+
+    if (Array.isArray(value)) {
+      params = url.searchParams.set(key, JSON.stringify(value))
+    }
+
+    return params
+  })
 
   window.history.pushState('', '', url.pathname + url.search)
 }
@@ -26,7 +38,7 @@ export function getUrlParam(str: TFilters) {
 
 export function getUrlParams() {
   const url = new URL(window.location.href)
-  const params: { [key: string]: string } = {}
+  const params: Record<string, string> = {}
 
   url.searchParams.forEach((value, key) => {
     params[key] = value

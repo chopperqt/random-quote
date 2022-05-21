@@ -5,7 +5,9 @@ import { useFilters } from '../../hooks'
 import Skeleton from './partials/Skeleton'
 import Checkbox from 'components/checkbox'
 import Button from 'components/button'
-import { RESET_FILTERS } from '../constants'
+import {
+  RESET_FILTERS,
+} from '../constants'
 import { Stores } from 'services'
 
 import styles from './Filters.module.scss'
@@ -20,7 +22,7 @@ const Filters = () => {
     isSuccess,
     authors,
     handleChangeCheckbox,
-  } = useFilters({})
+  } = useFilters()
   const {
     FilterStore
   } = Stores()
@@ -38,21 +40,31 @@ const Filters = () => {
             text={authorsTitle}
           >
             <div className={styles.authors}>
-              {authors.map(({ name, path }) => {
-                const checked = filters?.authors?.includes(path)
+              {authors.map(({
+                name,
+                path,
+                id_author,
+              }) => {
+                const checked = filters.authors?.includes(id_author)
 
                 return (
                   <Checkbox
                     key={path}
                     checked={checked}
                     label={name}
-                    onChange={(event) => handleChangeCheckbox(event, path)}
+                    onChange={(event) => handleChangeCheckbox(event, id_author)}
                   />
                 )
               })}
             </div>
           </Collapse>
           <Button className={styles.button}>
+
+          </Button>
+          <Button
+            color='warning'
+            className={styles.button}
+          >
             {RESET_FILTERS}
           </Button>
         </>

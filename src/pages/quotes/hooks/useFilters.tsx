@@ -5,21 +5,11 @@ import {
   AUTHORS_TEXT,
 } from 'pages/quotes/quotes-all/constants'
 import useResponse from 'helpers/useResponse'
-import {
-  getUrlParam,
-  updateUrlParams,
-  deleteUrlParam,
-} from 'helpers/urlParams'
+import { filterMethods } from 'services'
 
-import { Stores } from 'services'
+import Store, { Stores } from 'services'
 
-interface IUseFilters {
-
-}
-
-const useFilters = ({
-
-}: IUseFilters) => {
+const useFilters = () => {
   const [openedAuthors, setOpenedAuthors] = useState<boolean>(false)
   const {
     NotificationStore: {
@@ -28,6 +18,9 @@ const useFilters = ({
     AuthorStore: {
       authorsCount,
       authors
+    },
+    FilterStore: {
+      filters,
     }
   } = Stores()
 
@@ -44,35 +37,21 @@ const useFilters = ({
     count: authorsCount,
   })
 
-  const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>, path: string) => {
-    let authorsFromUrl: string | null = getUrlParam('authors')
-    let authors: string[] = []
-
-    if (authorsFromUrl) {
-      authors = JSON.parse(authorsFromUrl)
-    }
+  const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
+    let authors = filters.authors || []
 
     if (event.currentTarget.checked) {
-      authors.push(path)
+      authors = [...authors, id]
 
-      updateUrlParams({
-        authors: JSON.stringify(authors),
-      })
+      Store.dispatch(filterMethods.updateFilters({ authors: authors }))
 
       return
     }
 
-    if (authors.length < 2) {
-      deleteUrlParam('authors')
+    authors = authors.filter((author: number) => author !== id)
 
-      return
-    }
+    Store.dispatch(filterMethods.updateFilters({ authors: authors }))
 
-    authors = authors.filter((author: string) => author !== path)
-
-    updateUrlParams({
-      authors: JSON.stringify(authors)
-    })
   }
 
   useEffect(() => {

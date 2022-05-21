@@ -27,7 +27,7 @@ const QuotesAll = () => {
     hasSearchQuotes,
     currentPage,
     pages,
-    handleChangePage,
+    handleSetPage,
   } = useQuotesAll()
 
   return (
@@ -71,7 +71,7 @@ const QuotesAll = () => {
             )}
           </div>
           <Pagination
-            onClick={handleChangePage}
+            onClick={handleSetPage}
             page={currentPage}
             pages={pages}
           />

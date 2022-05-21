@@ -1,4 +1,4 @@
-import { updateUrlParams } from "helpers/urlParams"
+import Store, { filterMethods } from "services"
 import { numbersOfPages } from "../helpers"
 
 interface IUsePagination {
@@ -15,7 +15,10 @@ const usePagination = ({
   const arrayPages: number[] = numbersOfPages(page, pages)
 
   const handleClickPage = (page: number) => {
-    updateUrlParams({ p: page })
+    Store.dispatch(filterMethods.updateFilters({
+      p: page
+    }))
+
     onClick(page)
   }
 

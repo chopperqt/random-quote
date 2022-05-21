@@ -24,6 +24,7 @@ export interface IGetQuotes {
   from?: number
   to?: number
   id?: string
+  authors?: number[]
 }
 
 export {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { QUOTES_ALL_TEXT } from '../constants'
 import decOfNum, { quoteWords } from 'helpers/decOfNum'
@@ -8,13 +8,11 @@ import {
   getQuotes,
 } from 'utils/quotes'
 import useUser from 'helpers/useUser'
-import { getUrlParam } from 'helpers/urlParams'
-import { Stores } from 'services'
+import Store, { filterMethods, Stores } from 'services'
+import produce from 'immer'
 
 const useQuotesAll = () => {
   const [search, setSearch] = useState<string>('')
-  const [page, setPage] = useState<number>(Number(getUrlParam('p')) || 1)
-  const authors = getUrlParam('authors')
   const { user } = useUser()
   const {
     QuoteStore: {
@@ -25,16 +23,20 @@ const useQuotesAll = () => {
     },
     NotificationStore: {
       loading,
+    },
+    FilterStore: {
+      filters
     }
   } = Stores()
   const description = `${QUOTES_ALL_TEXT} ${quotesCount} ${decOfNum(quotesCount, quoteWords)} от 4 авторов`
+  const currentPage = +(filters?.p || 1)
   const hasMoreQuotes = quotesCount > quotesAll.length
   const hasSearchQuotes = quotesSearch.length > 0
   const pages = Math.ceil(quotesAllCount / 10)
   const {
     from,
     to,
-  } = getRange(page)
+  } = getRange(currentPage)
 
   const loadingQuotes = useResponse({
     loading: loading.getQuotes,
@@ -47,30 +49,31 @@ const useQuotesAll = () => {
   })
 
   useEffect(() => {
-    if (user) {
-      getQuotes({ id: user.id, from, to })
+    getQuotes({
+      id: user?.id,
+      from,
+      to,
+      authors: filters.authors || [],
+    })
+  }, [currentPage, filters.authors])
 
-      return
-    }
-
-    getQuotes({ from, to })
-  }, [page])
-
-  const handleChangePage = (page?: number) => {
-    setPage(page || 1)
+  const handleSetPage = (page: number) => {
+    Store.dispatch(filterMethods.updateFilters({
+      p: page
+    }))
   }
 
   return {
     description,
     hasMoreQuotes,
     setSearch,
-    handleChangePage,
+    handleSetPage,
     search,
     quotesSearch,
     hasSearchQuotes,
     loadingSearch,
     loadingQuotes,
-    currentPage: page,
+    currentPage,
     pages,
   }
 }

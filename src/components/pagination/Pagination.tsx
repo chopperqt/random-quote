@@ -7,7 +7,7 @@ import styles from './Pagination.module.scss'
 interface IPaginationProps {
   page: number,
   pages: number,
-  onClick: () => void
+  onClick: (page: number) => void
 }
 
 const Pagination = ({

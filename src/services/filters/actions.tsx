@@ -9,6 +9,12 @@ const actions = {
 
 const methods = {
   getFiltersFromUrl,
+  updateFilters(data: any) {
+    return {
+      type: actions.UPDATE_FILTERS,
+      payload: data
+    }
+  }
 }
 
 function getFiltersFromUrl() {
