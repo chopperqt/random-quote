@@ -22,6 +22,9 @@ const Filters = () => {
     isSuccess,
     authors,
     handleChangeCheckbox,
+    handleClickButton,
+    handleReset,
+    buttonText,
   } = useFilters()
   const {
     FilterStore
@@ -58,10 +61,14 @@ const Filters = () => {
               })}
             </div>
           </Collapse>
-          <Button className={styles.button}>
-
+          <Button
+            onClick={handleClickButton}
+            className={styles.button}
+          >
+            {buttonText}
           </Button>
           <Button
+            onClick={handleReset}
             color='warning'
             className={styles.button}
           >

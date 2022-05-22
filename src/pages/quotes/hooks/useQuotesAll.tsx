@@ -1,15 +1,14 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { QUOTES_ALL_TEXT } from '../constants'
 import decOfNum, { quoteWords } from 'helpers/decOfNum'
 import { getRange } from 'helpers/pagination'
 import useResponse from 'helpers/useResponse'
-import {
-  getQuotes,
-} from 'utils/quotes'
+import { getQuotes } from 'utils/quotes'
 import useUser from 'helpers/useUser'
 import Store, { filterMethods, Stores } from 'services'
-import produce from 'immer'
+import { getUrlParam } from 'helpers/urlParams'
+
 
 const useQuotesAll = () => {
   const [search, setSearch] = useState<string>('')
@@ -30,13 +29,19 @@ const useQuotesAll = () => {
   } = Stores()
   const description = `${QUOTES_ALL_TEXT} ${quotesCount} ${decOfNum(quotesCount, quoteWords)} от 4 авторов`
   const currentPage = +(filters?.p || 1)
+  const authorsQuery = getUrlParam('authors')
   const hasMoreQuotes = quotesCount > quotesAll.length
   const hasSearchQuotes = quotesSearch.length > 0
   const pages = Math.ceil(quotesAllCount / 10)
+  let authors: number[] = []
   const {
     from,
     to,
   } = getRange(currentPage)
+
+  if (authorsQuery) {
+    authors = JSON.parse(authorsQuery)
+  }
 
   const loadingQuotes = useResponse({
     loading: loading.getQuotes,
@@ -48,20 +53,18 @@ const useQuotesAll = () => {
     count: quotesSearch.length,
   })
 
+  const handleSetPage = (p: number) => {
+    Store.dispatch(filterMethods.updateFilters({ p }))
+  }
+
   useEffect(() => {
     getQuotes({
       id: user?.id,
       from,
       to,
-      authors: filters.authors || [],
+      authors,
     })
-  }, [currentPage, filters.authors])
-
-  const handleSetPage = (page: number) => {
-    Store.dispatch(filterMethods.updateFilters({
-      p: page
-    }))
-  }
+  }, [])
 
   return {
     description,

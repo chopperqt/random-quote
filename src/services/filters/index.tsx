@@ -7,16 +7,19 @@ export interface FiltersStore {
   filters: {
     authors?: number[]
     p?: string
-  }
+  },
+  count: number
 }
 
 const {
   GET_FILTERS_FROM_URL,
   UPDATE_FILTERS,
+  UPDATE_FILTERS_COUNT,
 } = actions
 
 const initialState = {
-  filters: {}
+  filters: {},
+  count: 0,
 }
 
 const filtersStore = (state = initialState, { type, payload }: { type: string, payload: any }) => produce(state, (draft: FiltersStore) => {
@@ -38,6 +41,11 @@ const filtersStore = (state = initialState, { type, payload }: { type: string, p
         deleteUrlParam('authors')
 
       }
+
+      break;
+    }
+    case UPDATE_FILTERS_COUNT: {
+      draft.count = payload
 
       break;
     }

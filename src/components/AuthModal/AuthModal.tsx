@@ -26,6 +26,7 @@ import { EMAIL_PATTERN } from 'helpers/patterns'
 
 import styles from './AuthModal.module.scss'
 import { Stores } from 'services'
+import { routes } from 'helpers/routes'
 
 interface AuthModalProps {
   opened: boolean
@@ -36,7 +37,6 @@ const LOGIN_PLEASE_TEXT = 'Войдите что бы добавить в зак
 const LOGIN_TEXT = 'Войти'
 const LOGIN_PLACEHOLDER = 'Логин'
 const PASSWORD_PLACEHOLDER = 'Пароль'
-const SIGN_UP = 'Зарегистрироваться ?'
 const QUESTION_TEXT = 'Вы еще не зарегистрированы ?'
 
 interface FormFields {
@@ -116,7 +116,7 @@ const AuthModal = ({
             }))}
           />
           <Link
-            to="/#"
+            to={routes.signUp}
             className={styles.link}
           >
             {QUESTION_TEXT}

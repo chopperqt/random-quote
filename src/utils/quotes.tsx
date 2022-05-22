@@ -4,7 +4,7 @@ import supabase from "./client";
 import Store, {
   quoteMethods,
   notificationMethods,
-  Stores,
+  filterMethods,
 } from 'services'
 import { SuccessMessages } from 'helpers/successMessages'
 import loadingStatuses from "helpers/loadingStatuses";
@@ -39,6 +39,7 @@ export const QuotesRequests = {
   searchQuote: 'searchQuote',
   postQuote: 'postQuotes',
   getActionQuote: 'getActionQuote',
+  getFilterQuotes: 'getFilterQuotes',
 }
 
 export const getQuote = async (id: number, idUser?: string) => {
@@ -439,4 +440,40 @@ export const getActionQuote = async (
   handleSuccess()
 
   return data || []
+}
+
+export const getFilterQuotes = async ({
+  from = 1,
+  to = 10,
+  authors = DefaultProps.array,
+}: IGetQuotes) => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses(QuotesRequests.getFilterQuotes)
+
+  handlePending()
+
+  let response: PostgrestResponse<any>;
+
+  if (authors.length) {
+    response = await supabase.from(Tables.quotes).select(QUERY_QUOTES, { count: 'exact', head: false }).in('id_author', authors).range(from, to)
+  } else {
+    response = await supabase.from(Tables.quotes).select(QUERY_QUOTES, { count: 'exact', head: false }).range(from, to)
+  }
+
+  const { count, error } = response
+
+  if (error) {
+    handleFailure(error)
+
+    return
+  }
+
+  const formattedCounter = count || 0
+
+  Store.dispatch(filterMethods.updateFiltersCount(formattedCounter))
+
+  handleSuccess()
 }
