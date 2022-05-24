@@ -27,6 +27,10 @@ export interface IGetQuotes {
   authors?: number[]
 }
 
+export interface SearchQuotesProps extends IGetQuotes {
+  search?: string
+}
+
 export {
   Requests
 }

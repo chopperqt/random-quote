@@ -1,4 +1,4 @@
-export type TFilters = 'qq' | 'q' | 'p' | 'authors'
+export type TFilters = 'qq' | 'q' | 'p' | 'authors' | 'search'
 
 function fixedEncodeURI(str: string): string {
   return encodeURI(str).replace(/%5B/g, '[').replace(/%5D/g, ']');

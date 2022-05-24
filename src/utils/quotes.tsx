@@ -21,6 +21,7 @@ import { getBookmarks } from './bookmarks'
 import {
   IPostQuote,
   IGetQuotes,
+  SearchQuotesProps,
 } from './'
 import { QuoteData } from 'services/quotes';
 import { serializeQuote } from 'helpers/serialize'
@@ -307,22 +308,24 @@ export const getLastQuotes = async () => {
   Store.dispatch(quoteMethods.setLastQuotes({ data, count }))
 }
 
-export const searchQuote = debounce(async (search) => {
+export const searchQuote = debounce(async ({
+  id,
+  authors,
+  from,
+  to,
+  search,
+}: SearchQuotesProps) => {
   const {
+    handlePending,
+    handleSuccess,
     handleFailure,
   } = loadingStatuses(QuotesRequests.searchQuote)
 
-  // handlePending()
+  handlePending()
 
   const { data, error } = await supabase
     .from(Tables.quotes)
-    .select(`
-      *,
-      author:id_author(
-        path,
-        name
-      )
-    `)
+    .select(QUERY_QUOTES)
     .textSearch('text', `'${search}'`)
 
   if (error) {
@@ -333,7 +336,7 @@ export const searchQuote = debounce(async (search) => {
 
   Store.dispatch(quoteMethods.quotesSearch(data))
 
-  // handleSuccess()
+  handleSuccess()
 }, 800)
 
 export const postQuote = async ({

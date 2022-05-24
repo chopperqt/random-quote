@@ -27,5 +27,6 @@
   &:global(.active-item) {
     background-color: $color-primary--5;
     color: $color-white--500;
+    pointer-events: none;
   }
 }

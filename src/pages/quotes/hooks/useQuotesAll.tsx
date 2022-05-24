@@ -4,14 +4,14 @@ import { QUOTES_ALL_TEXT } from '../constants'
 import decOfNum, { quoteWords } from 'helpers/decOfNum'
 import { getRange } from 'helpers/pagination'
 import useResponse from 'helpers/useResponse'
-import { getQuotes } from 'utils/quotes'
+import { getQuotes, searchQuote } from 'utils/quotes'
 import useUser from 'helpers/useUser'
 import Store, { filterMethods, Stores } from 'services'
 import { getUrlParam } from 'helpers/urlParams'
 
 
 const useQuotesAll = () => {
-  const [search, setSearch] = useState<string>('')
+  const [search, setSearch] = useState<string>(JSON.parse(getUrlParam('search') || ''))
   const { user } = useUser()
   const {
     QuoteStore: {
@@ -65,6 +65,21 @@ const useQuotesAll = () => {
       authors,
     })
   }, [])
+
+  useEffect(() => {
+    getQuotes({
+      id: user?.id,
+      from,
+      to,
+      authors,
+    })
+  }, [filters.p])
+
+  useEffect(() => {
+    searchQuote({
+
+    })
+  }, [search])
 
   return {
     description,
