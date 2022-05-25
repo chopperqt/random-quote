@@ -11,7 +11,9 @@ import { getUrlParam } from 'helpers/urlParams'
 
 
 const useQuotesAll = () => {
-  const [search, setSearch] = useState<string>(JSON.parse(getUrlParam('search') || ''))
+  const searchParam = getUrlParam('search')
+  const formattedSearchParam = searchParam ? JSON.parse(searchParam) : ''
+  const [search, setSearch] = useState<string>(formattedSearchParam)
   const { user } = useUser()
   const {
     QuoteStore: {
@@ -45,7 +47,7 @@ const useQuotesAll = () => {
 
   const loadingQuotes = useResponse({
     loading: loading.getQuotes,
-    count: quotesCount,
+    count: quotesAll.length,
   })
 
   const loadingSearch = useResponse({
@@ -76,9 +78,11 @@ const useQuotesAll = () => {
   }, [filters.p])
 
   useEffect(() => {
-    searchQuote({
-
-    })
+    if (search) {
+      searchQuote({
+        search,
+      })
+    }
   }, [search])
 
   return {

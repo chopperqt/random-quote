@@ -19,6 +19,7 @@ const initialState = {
   quotesIds: [],
   lastQuotes: [],
   quotesSearch: [],
+  quotesSearchCount: 0,
   quotesCount: 0,
   lastQuotesCount: 0,
   quotesAllCount: 0,
@@ -36,6 +37,7 @@ export interface QuotesCounters {
   quotesAllCount: number
   quotesCount: number
   lastQuotesCount: number
+  quotesSearchCount: number
 }
 
 export interface QuoteData {
