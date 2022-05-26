@@ -4,7 +4,6 @@ import Title from './partials/Title'
 import useQuotesAll from '../hooks/useQuotesAll'
 import Filters from './filters/Filters'
 import SearchInput from './partials/SearhcInput'
-import Pagination from 'components/pagination'
 import { Stores } from 'services'
 import QuotesAllList from './quotes-all-list/QuotesAllList'
 import QuotesAllSearch from './quotes-all-search/QuotesAllSearch'
@@ -14,30 +13,39 @@ import './Grid.scss'
 
 const QuotesAll = () => {
   const { QuoteStore } = Stores()
-  const { quotesAll } = QuoteStore
+  const {
+    quotesAll,
+    quotesSearch,
+  } = QuoteStore
   const {
     description,
     search,
     setSearch,
     loadingSearch,
     loadingQuotes,
-    hasSearchQuotes,
     currentPage,
     pages,
     handleSetPage,
+    handleClearInput,
   } = useQuotesAll()
+
+  const defaultOptions = {
+    page: currentPage,
+    onClick: handleSetPage,
+    pages: pages,
+  }
 
   return (
     <div className="container">
       <Title text={description} />
       <SearchInput
         classNameWrap={styles.field}
-        loading={loadingSearch.isLoading}
+        loading={!!search.length && loadingSearch.isLoading}
         value={search}
         onChangeText={(e: React.ChangeEvent<HTMLInputElement>) => {
           setSearch(e.target.value)
         }}
-        onClear={() => setSearch('')}
+        onClear={handleClearInput}
       />
       <div className={styles.allQuotes}>
         <Filters />
@@ -49,22 +57,18 @@ const QuotesAll = () => {
               isEmpty={loadingQuotes.isEmpty}
               isError={loadingQuotes.isError}
               isSuccess={loadingQuotes.isSuccess}
+              {...defaultOptions}
             />
           )}
           {search && (
             <QuotesAllSearch
-              items={quotesAll}
+              items={quotesSearch}
               isSuccess={loadingSearch.isSuccess}
               isError={loadingSearch.isError}
               isEmpty={loadingSearch.isEmpty}
               isLoading={loadingSearch.isLoading}
             />
           )}
-          <Pagination
-            onClick={handleSetPage}
-            page={currentPage}
-            pages={pages}
-          />
         </div>
       </div>
     </div>

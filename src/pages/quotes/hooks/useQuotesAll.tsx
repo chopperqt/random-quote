@@ -4,15 +4,15 @@ import { QUOTES_ALL_TEXT } from '../constants'
 import decOfNum, { quoteWords } from 'helpers/decOfNum'
 import { getRange } from 'helpers/pagination'
 import useResponse from 'helpers/useResponse'
-import { getQuotes, searchQuote } from 'utils/quotes'
+import { getQuotes, QuotesRequests, searchQuote } from 'utils/quotes'
 import useUser from 'helpers/useUser'
-import Store, { filterMethods, Stores } from 'services'
-import { getUrlParam } from 'helpers/urlParams'
+import Store, { filterMethods, notificationMethods, Stores } from 'services'
+import { deleteUrlParam, getUrlParam, updateUrl, updateUrlParams } from 'helpers/urlParams'
 
 
 const useQuotesAll = () => {
   const searchParam = getUrlParam('search')
-  const formattedSearchParam = searchParam ? JSON.parse(searchParam) : ''
+  const formattedSearchParam = searchParam ? searchParam : ''
   const [search, setSearch] = useState<string>(formattedSearchParam)
   const { user } = useUser()
   const {
@@ -43,6 +43,12 @@ const useQuotesAll = () => {
 
   if (authorsQuery) {
     authors = JSON.parse(authorsQuery)
+  }
+
+  const handleClearInput = () => {
+    setSearch('')
+
+    deleteUrlParam('search')
   }
 
   const loadingQuotes = useResponse({
@@ -82,7 +88,13 @@ const useQuotesAll = () => {
       searchQuote({
         search,
       })
+
+      return
     }
+
+    deleteUrlParam('p')
+
+    Store.dispatch(notificationMethods.loadingRequest(QuotesRequests.searchQuote, 'PENDING'))
   }, [search])
 
   return {
@@ -90,6 +102,7 @@ const useQuotesAll = () => {
     hasMoreQuotes,
     setSearch,
     handleSetPage,
+    handleClearInput,
     search,
     quotesSearch,
     hasSearchQuotes,

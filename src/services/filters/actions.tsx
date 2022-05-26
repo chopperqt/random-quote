@@ -1,6 +1,6 @@
 import { getUrlParams } from 'helpers/urlParams'
+import { Filters } from 'react-table'
 import Store from 'services'
-
 
 const actions = {
   GET_FILTERS_FROM_URL: 'GET_FILTERS_FROM_URL',
@@ -28,7 +28,13 @@ function getFiltersFromUrl() {
   const filters = getUrlParams() || {}
 
   Object.entries(filters).forEach(([key, value]) => {
-    filters[key] = JSON.parse(value)
+    if (key === 'authors') {
+      filters[key] = JSON.parse(value)
+
+      return
+    }
+
+    filters[key] = value
   })
 
   Store.dispatch({

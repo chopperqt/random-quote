@@ -1,20 +1,15 @@
 import Icon, { IconList } from 'components/icon'
 import usePagination from './hooks/usePagination'
 import Item from './item/Item'
+import { PaginationProps } from '.'
 
 import styles from './Pagination.module.scss'
-
-interface IPaginationProps {
-  page: number,
-  pages: number,
-  onClick: (page: number) => void
-}
 
 const Pagination = ({
   page,
   pages,
   onClick,
-}: IPaginationProps) => {
+}: PaginationProps) => {
   const {
     numbersOfPages,
     handleClickPage,
