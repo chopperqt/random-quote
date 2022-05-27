@@ -1,5 +1,4 @@
 import { getUrlParams } from 'helpers/urlParams'
-import { Filters } from 'react-table'
 import Store from 'services'
 
 const actions = {
