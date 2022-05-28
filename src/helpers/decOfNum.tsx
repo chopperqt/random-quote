@@ -1,5 +1,3 @@
-import React from 'react'
-
 export const quoteWords: [string, string, string] = [
   'цитата',
   'цитаты',

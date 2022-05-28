@@ -1,0 +1,26 @@
+@import 'asset/scss/colors';
+@import 'asset/scss/common';
+
+.form {
+  padding: 20px;
+  background-color: $color-white--500;
+  align-content: center;
+  display: grid;
+  width: 400px;
+  row-gap: 15px;
+  border-radius: $border-radius--large;
+}
+
+.title {
+  width: 100%;
+  text-align: center;
+}
+
+.link {
+  width: 100%;
+  text-align: right;
+}
+
+.error {
+  color: $color-warning--4;
+}

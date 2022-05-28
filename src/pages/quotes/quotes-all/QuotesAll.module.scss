@@ -16,7 +16,7 @@
   }
 }
 
-.allQuotesWrap {
+.wrap {
   display: grid;
   align-items: baseline;
 
@@ -43,7 +43,18 @@
 }
 
 .field {
+  box-shadow: $box-shadow-small;
+  border-radius: $border-radius--small;
+  border: none;
   margin-top: 15px;
+
+  :global(input) {
+    border: none;
+
+    &:focus {
+      border: none;
+    }
+  }
 }
 
 .section {

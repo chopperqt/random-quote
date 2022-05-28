@@ -22,7 +22,7 @@ const SearchInput = ({
   const handleBlur = () => {
     if (value) {
       updateUrlParams({
-        search: value
+        search: JSON.stringify(value)
       })
     }
   }

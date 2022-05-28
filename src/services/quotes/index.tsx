@@ -19,6 +19,7 @@ const initialState = {
   quotesIds: [],
   lastQuotes: [],
   quotesSearch: [],
+  quotesSearchCount: 0,
   quotesCount: 0,
   lastQuotesCount: 0,
   quotesAllCount: 0,
@@ -36,6 +37,7 @@ export interface QuotesCounters {
   quotesAllCount: number
   quotesCount: number
   lastQuotesCount: number
+  quotesSearchCount: number
 }
 
 export interface QuoteData {
@@ -90,6 +92,7 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
 
       const updateLastQuotes = draft.lastQuotes.find((q) => q.id_quote === id)
       const updateQuotes = draft.quotes.find((q) => q.id_quote === id)
+      const updateAllQuotes = draft.quotesAll.find((q) => q.id_quote === id)
 
       if (updateLastQuotes) {
         updateLastQuotes.bookmarked = bookmarked
@@ -97,6 +100,10 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
 
       if (updateQuotes) {
         updateQuotes.bookmarked = bookmarked
+      }
+
+      if (updateAllQuotes) {
+        updateAllQuotes.bookmarked = bookmarked
       }
 
       break;

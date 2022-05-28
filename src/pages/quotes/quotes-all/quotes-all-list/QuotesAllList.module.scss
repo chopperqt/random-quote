@@ -1,0 +1,11 @@
+@import 'asset/scss/common';
+
+.section {
+  display: grid;
+  grid-gap: 15px;
+  margin-bottom: 15px;
+
+  @media screen and (max-width: $media--mobile) {
+    grid-template-columns: 100%;    
+  }
+}

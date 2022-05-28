@@ -1,7 +1,7 @@
 import Store from 'services'
 import { v4 as uuid } from 'uuid'
 
-import { NotificationData, StatusData } from './reducer'
+import { NotificationData, Status } from './reducer'
 import { NotificationType } from "components/notification/Notification"
 
 const DELAY_AFTER_DELETE = 3000
@@ -13,7 +13,7 @@ export const actions = {
 }
 
 export const methods = {
-  loadingRequest: (name: string, status: StatusData) => {
+  loadingRequest: (name: string, status: Status) => {
     return {
       type: actions.CREATE_LOADING,
       payload: {

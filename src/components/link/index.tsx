@@ -5,6 +5,7 @@ export interface ILink {
   activeLink?: string
   className?: string
   children: JSX.Element | string
+  alt?: string
 }
 
 export default Link

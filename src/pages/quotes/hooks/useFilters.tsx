@@ -1,26 +1,31 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react'
 
 import { getAuthors } from 'utils/authors'
 import {
   AUTHORS_TEXT,
+  SHOW_FILTERS,
 } from 'pages/quotes/quotes-all/constants'
 import useResponse from 'helpers/useResponse'
+import Store, {
+  Stores,
+  filterMethods,
+} from 'services'
 import {
-  getUrlParam,
-  updateUrlParams,
-  deleteUrlParam,
-} from 'helpers/urlParams'
+  getFilterQuotesCounter,
+  getQuotes,
+} from 'utils/quotes'
+import { getRange } from 'helpers/pagination'
+import useUser from 'helpers/useUser'
 
-import { Stores } from 'services'
+const DEFAULT_PAGE = 1
 
-interface IUseFilters {
-
-}
-
-const useFilters = ({
-
-}: IUseFilters) => {
+const useFilters = () => {
+  const { user } = useUser()
   const [openedAuthors, setOpenedAuthors] = useState<boolean>(false)
   const {
     NotificationStore: {
@@ -29,13 +34,19 @@ const useFilters = ({
     AuthorStore: {
       authorsCount,
       authors
+    },
+    FilterStore: {
+      filters,
+      count,
     }
   } = Stores()
+  const {
+    from,
+    to,
+  } = getRange(DEFAULT_PAGE)
 
   const handleOpenAuthors = () => setOpenedAuthors(true)
   const handleCloseAuthors = () => setOpenedAuthors(false)
-
-  const authorsTitle = `${AUTHORS_TEXT} (${authorsCount})`
 
   const {
     isLoading,
@@ -45,31 +56,62 @@ const useFilters = ({
     count: authorsCount,
   })
 
-  const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>, path: string) => {
-    let authors: any = getUrlParam('authors')
+  const filtersCount = useResponse({
+    loading: loading.getFilterQuotesCounter
+  })
 
-    if (authors) {
-      authors = JSON.parse(authors)
-    } else {
-      authors = []
-    }
+  const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
+    let authors = filters.authors || []
 
     if (event.currentTarget.checked) {
-      authors.push(path)
+      authors = [...authors, id]
 
-      updateUrlParams({
-        authors: JSON.stringify(authors),
-      })
+      Store.dispatch(filterMethods.updateFilters({ authors: authors }))
 
       return
     }
 
-    authors = authors.filter((author: string) => author !== path)
+    authors = authors.filter((author: number) => author !== id)
 
-    updateUrlParams({
-      authors: JSON.stringify(authors)
+    Store.dispatch(filterMethods.updateFilters({ authors: authors }))
+
+  }
+
+  const handleClickButton = useCallback(() => {
+    getQuotes({
+      from,
+      to,
+      authors: filters.authors
+    })
+  }, [filters])
+
+  const handleReset = () => {
+    getQuotes({
+      from,
+      to,
+      id: user?.id,
     })
   }
+
+  const authorsTitle = useMemo(() => {
+    return `${AUTHORS_TEXT} (${authorsCount})`
+  }, [authorsCount])
+
+  const buttonText = useMemo(() => {
+    if (count > 0) {
+      return `${SHOW_FILTERS} (${count})`
+    }
+
+    return SHOW_FILTERS
+  }, [count])
+
+  useEffect(() => {
+    getFilterQuotesCounter({
+      from,
+      to,
+      authors: filters.authors,
+    })
+  }, [filters.authors])
 
   useEffect(() => {
     getAuthors()
@@ -84,6 +126,10 @@ const useFilters = ({
     isSuccess,
     authors,
     handleChangeCheckbox,
+    buttonText,
+    handleClickButton,
+    handleReset,
+    filtersCount,
   }
 }
 

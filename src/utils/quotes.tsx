@@ -1,8 +1,11 @@
 import moment from 'moment'
-import produce from 'immer';
 
 import supabase from "./client";
-import Store, { quoteMethods, notificationMethods } from 'services'
+import Store, {
+  quoteMethods,
+  notificationMethods,
+  filterMethods,
+} from 'services'
 import { SuccessMessages } from 'helpers/successMessages'
 import loadingStatuses from "helpers/loadingStatuses";
 import {
@@ -10,18 +13,22 @@ import {
   SupabaseFunctions,
 } from './constants'
 import debounce from 'lodash.debounce';
-import { PostgrestError } from '@supabase/supabase-js';
+import {
+  PostgrestError,
+  PostgrestResponse,
+} from '@supabase/supabase-js';
 import { getBookmarks } from './bookmarks'
 import {
   IPostQuote,
-  TUpdateAction,
   IGetQuotes,
+  SearchQuotesProps,
 } from './'
 import { QuoteData } from 'services/quotes';
-import { updateUrlParams } from 'helpers/urlParams';
 import { serializeQuote } from 'helpers/serialize'
+import DefaultProps from 'helpers/defaultProps';
 
 const LIMIT_PER_PAGE = 10
+const QUERY_QUOTES = '*, author: id_author (name, path)'
 
 export const QuotesRequests = {
   getQuotes: 'getQuotes',
@@ -31,10 +38,9 @@ export const QuotesRequests = {
   getQuotesAuthor: 'getQuotesAuthor',
   getQuotesLast: 'getQuotesLast',
   searchQuote: 'searchQuote',
-  changeRating: 'changeRating',
   postQuote: 'postQuotes',
-  getLikedQuote: 'getLikedQuote',
   getActionQuote: 'getActionQuote',
+  getFilterQuotesCounter: 'getFilterQuotesCounter',
 }
 
 export const getQuote = async (id: number, idUser?: string) => {
@@ -90,7 +96,8 @@ export const getQuote = async (id: number, idUser?: string) => {
 export const getQuotes = async ({
   from = 1,
   to = 10,
-  id
+  id,
+  authors = DefaultProps.array,
 }: IGetQuotes) => {
   const {
     handleFailure,
@@ -100,33 +107,29 @@ export const getQuotes = async ({
 
   handlePending()
 
-  const { count } = await supabase.from(Tables.quotes).select('*', { count: 'exact', head: true })
+  let response: PostgrestResponse<any>;
 
-  const quotes = await supabase
-    .from(Tables.quotes)
-    .select(`*,
-      author:id_author (
-        name,
-        path
-      )
-    `, {
-      count: 'exact',
-    })
-    .range(from, to)
+  if (authors.length) {
+    response = await supabase.from(Tables.quotes).select(QUERY_QUOTES, { count: 'exact' }).in('id_author', authors).range(from, to)
+  } else {
+    response = await supabase.from(Tables.quotes).select(QUERY_QUOTES, { count: 'exact' }).range(from, to)
+  }
+
+  const { data, error, count } = response
 
   let list: number[] = []
 
-  if (quotes.error) {
-    handleFailure(quotes.error)
+  if (error) {
+    handleFailure(error)
 
     return
   }
 
-  for (let quote of quotes!.data) {
+  for (let quote of data) {
     list.push(quote.id_quote)
   }
 
-  let quotesData = quotes.data.map((item) => ({
+  let quotesData = data!.map((item) => ({
     ...item,
     ...item.author
   }))
@@ -138,7 +141,7 @@ export const getQuotes = async ({
       return
     }
 
-    quotesData = quotes.data.map((quote: QuoteData) => {
+    quotesData = data!.map((quote: QuoteData) => {
       const isBookmark = bookmarks.data.find((item: any) => +item.id_quote === +quote.id_quote)
 
       return {
@@ -243,7 +246,7 @@ export const getQuotesMore = async ({
   handleSuccess()
 }
 
-export const getQuotesAuthors = async (id_author: string) => {
+export const getQuotesAuthors = async (authors: string[]) => {
   const {
     handleFailure,
     handlePending,
@@ -261,7 +264,7 @@ export const getQuotesAuthors = async (id_author: string) => {
         text
       )
     `)
-    .eq('id_author', +id_author);
+    .in('id_author', authors);
 
   if (error) {
     handleFailure(error)
@@ -305,24 +308,26 @@ export const getLastQuotes = async () => {
   Store.dispatch(quoteMethods.setLastQuotes({ data, count }))
 }
 
-export const searchQuote = debounce(async (search) => {
+export const searchQuote = debounce(async ({
+  id,
+  authors,
+  from,
+  to,
+  search,
+}: SearchQuotesProps) => {
+  console.log('Скольк раз?')
+
   const {
-    handleFailure,
     handlePending,
     handleSuccess,
+    handleFailure,
   } = loadingStatuses(QuotesRequests.searchQuote)
 
-  // handlePending()
+  handlePending()
 
   const { data, error } = await supabase
     .from(Tables.quotes)
-    .select(`
-      *,
-      author:id_author(
-        path,
-        name
-      )
-    `)
+    .select(QUERY_QUOTES)
     .textSearch('text', `'${search}'`)
 
   if (error) {
@@ -333,7 +338,7 @@ export const searchQuote = debounce(async (search) => {
 
   Store.dispatch(quoteMethods.quotesSearch(data))
 
-  // handleSuccess()
+  handleSuccess()
 }, 800)
 
 export const postQuote = async ({
@@ -341,7 +346,13 @@ export const postQuote = async ({
   time,
   author,
 }: IPostQuote) => {
-  Store.dispatch(notificationMethods.loadingRequest('postQuote', 'PENDING'))
+  const {
+    handlePending,
+    handleSuccess,
+    handleFailure,
+  } = loadingStatuses(QuotesRequests.postQuote)
+
+  handlePending()
 
   let createQuote = await supabase
     .from(Tables.quotes)
@@ -351,7 +362,7 @@ export const postQuote = async ({
   if (createQuote.error) {
     const { message } = createQuote.error
 
-    Store.dispatch(notificationMethods.loadingRequest('postQuote', 'FAILURE'))
+    handleFailure(createQuote.error)
 
     notificationMethods.createNotification(message, 'ERROR')
 
@@ -370,14 +381,14 @@ export const postQuote = async ({
     if (createAuthorQuotes.error) {
       const { message } = createAuthorQuotes.error
 
-      Store.dispatch(notificationMethods.loadingRequest('postQuote', 'FAILURE'))
+      handleFailure(createAuthorQuotes.error)
 
       notificationMethods.createNotification(message, 'ERROR')
 
       return
     }
 
-    Store.dispatch(notificationMethods.loadingRequest('postQuote', 'SUCCESS'))
+    handleSuccess()
 
     notificationMethods.createNotification(SuccessMessages.createSuccess, 'SUCCESS')
 
@@ -386,60 +397,6 @@ export const postQuote = async ({
       quote: createQuote.data
     }
   }
-}
-
-export const changeRating = async ({
-  id,
-  id_user,
-}: {
-  id: number
-  id_user: string
-}, action: TUpdateAction) => {
-  const {
-    handleFailure,
-    handlePending,
-    handleSuccess,
-  } = loadingStatuses(QuotesRequests.changeRating)
-
-  handlePending()
-
-  const currentLikes = await getCurrentQuoteRating({ id, id_user })
-  const isNumberCurrentLikes = typeof currentLikes === 'number'
-
-  if (!isNumberCurrentLikes) {
-    handleFailure(currentLikes)
-  }
-
-  let rating = +currentLikes + 1
-
-  if (action === 'dislike') {
-    rating = +currentLikes - 1
-  }
-
-  const {
-    data,
-    error,
-  } = await supabase
-    .from(Tables.rating)
-    .insert([{
-      entity_id: id.toString(),
-      entity_type: 'quote',
-      id_user,
-      count: rating,
-      action,
-    }])
-
-  if (error) {
-    handleFailure(error)
-
-    return error
-  }
-
-  // Store.dispatch(quoteMethods.updateRandomQuote(data, id))
-
-  handleSuccess()
-
-  return data
 }
 
 export const getCurrentQuoteRating = async ({
@@ -465,32 +422,6 @@ export const getCurrentQuoteRating = async ({
   }
 
   return data[0]?.rating || 0
-}
-
-export const getLikedQuote = async (id_quote: number, id_user: string) => {
-  const {
-    handleSuccess,
-    handleFailure,
-    handlePending,
-  } = loadingStatuses(QuotesRequests.getLikedQuote)
-
-  handlePending()
-
-  const { data, error } = await supabase
-    .from(Tables.rating)
-    .select("*")
-    .match({
-      id_quote,
-      id_user,
-    })
-
-  if (error) {
-    handleFailure(error)
-  }
-
-  handleSuccess()
-
-  return data
 }
 
 export const getActionQuote = async (
@@ -522,3 +453,38 @@ export const getActionQuote = async (
   return data || []
 }
 
+export const getFilterQuotesCounter = async ({
+  from = 1,
+  to = 10,
+  authors = DefaultProps.array,
+}: IGetQuotes) => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses(QuotesRequests.getFilterQuotesCounter)
+
+  handlePending()
+
+  let response: PostgrestResponse<any>;
+
+  if (authors.length) {
+    response = await supabase.from(Tables.quotes).select(QUERY_QUOTES, { count: 'exact', head: false }).in('id_author', authors).range(from, to)
+  } else {
+    response = await supabase.from(Tables.quotes).select(QUERY_QUOTES, { count: 'exact', head: false }).range(from, to)
+  }
+
+  const { count, error } = response
+
+  if (error) {
+    handleFailure(error)
+
+    return
+  }
+
+  const formattedCounter = count || 0
+
+  Store.dispatch(filterMethods.updateFiltersCount(formattedCounter))
+
+  handleSuccess()
+}

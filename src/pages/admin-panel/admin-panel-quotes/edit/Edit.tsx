@@ -45,7 +45,7 @@ const Edit = ({
       }
     }
   } = Stores()
-  const hasLoading = loading === 'PENDING'
+  const hasLoading = loading.status === 'PENDING'
 
   const {
     register,

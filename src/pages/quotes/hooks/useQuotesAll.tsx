@@ -4,40 +4,59 @@ import { QUOTES_ALL_TEXT } from '../constants'
 import decOfNum, { quoteWords } from 'helpers/decOfNum'
 import { getRange } from 'helpers/pagination'
 import useResponse from 'helpers/useResponse'
-import {
-  getQuotes,
-} from 'utils/quotes'
+import { getQuotes, QuotesRequests, searchQuote } from 'utils/quotes'
 import useUser from 'helpers/useUser'
-import { getUrlParam } from 'helpers/urlParams'
-import { Stores } from 'services'
-import { QuoteData } from 'services/quotes'
+import Store, { filterMethods, notificationMethods, Stores } from 'services'
+import {
+  deleteUrlParam,
+  getUrlParam,
+} from 'helpers/urlParams'
+
 
 const useQuotesAll = () => {
-  const [search, setSearch] = useState<string>('')
-  const [page, setPage] = useState<number>(Number(getUrlParam('p')) || 1)
+  const searchParam = getUrlParam('search')
+  const formattedSearchParam = searchParam ? JSON.parse(searchParam) : ''
+  const [search, setSearch] = useState<string>(formattedSearchParam)
   const { user } = useUser()
   const {
     QuoteStore: {
       quotesAll,
       quotesSearch,
       quotesCount,
+      quotesAllCount,
     },
     NotificationStore: {
       loading,
+    },
+    FilterStore: {
+      filters
     }
   } = Stores()
   const description = `${QUOTES_ALL_TEXT} ${quotesCount} ${decOfNum(quotesCount, quoteWords)} от 4 авторов`
+  const currentPage = +(filters?.p || 1)
+  const authorsQuery = getUrlParam('authors')
   const hasMoreQuotes = quotesCount > quotesAll.length
   const hasSearchQuotes = quotesSearch.length > 0
-  const pages = Math.ceil(quotesCount / 10)
+  const pages = Math.ceil(quotesAllCount / 10)
+  let authors: number[] = []
   const {
     from,
     to,
-  } = getRange(page)
+  } = getRange(currentPage)
+
+  if (authorsQuery) {
+    authors = JSON.parse(authorsQuery)
+  }
+
+  const handleClearInput = () => {
+    setSearch('')
+
+    deleteUrlParam('search')
+  }
 
   const loadingQuotes = useResponse({
     loading: loading.getQuotes,
-    count: quotesCount,
+    count: quotesAll.length,
   })
 
   const loadingSearch = useResponse({
@@ -45,44 +64,52 @@ const useQuotesAll = () => {
     count: quotesSearch.length,
   })
 
+  const handleSetPage = (p: number) => {
+    Store.dispatch(filterMethods.updateFilters({ p }))
+  }
+
   useEffect(() => {
-    if (user) {
-      getQuotes({
-        id: user.id,
-        from,
-        to,
+    getQuotes({
+      id: user?.id,
+      from,
+      to,
+      authors,
+    })
+  }, [])
+
+  useEffect(() => {
+    getQuotes({
+      id: user?.id,
+      from,
+      to,
+      authors,
+    })
+  }, [filters.p])
+
+  useEffect(() => {
+    if (search) {
+      searchQuote({
+        search,
       })
 
       return
     }
 
-    getQuotes({
-      from,
-      to,
-    })
-  }, [page])
-
-  const handleChangePage = (page?: number) => {
-    setPage(page || 1)
-  }
-
-  useEffect(() => {
-    if (search.length > 2) {
-      // searchQuote(search)
-    }
+    deleteUrlParam('p')
   }, [search])
 
   return {
     description,
     hasMoreQuotes,
     setSearch,
-    handleChangePage,
+    handleSetPage,
+    handleClearInput,
     search,
     quotesSearch,
     hasSearchQuotes,
     loadingSearch,
     loadingQuotes,
-    currentPage: page,
+    currentPage,
     pages,
   }
 }

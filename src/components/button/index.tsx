@@ -4,9 +4,9 @@ export interface IButton extends React.ComponentProps<'button'> {
   className?: string
   loading?: boolean
   children?: JSX.Element | string,
-  color?: TButton
+  color?: ButtonColor
 }
 
-export type TButton = 'primary' | 'warning'
+export type ButtonColor = 'primary' | 'warning'
 
 export default Button

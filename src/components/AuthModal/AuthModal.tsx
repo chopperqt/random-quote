@@ -1,16 +1,32 @@
 import {
+  useState,
+  useEffect,
+} from 'react'
+import cx from 'classnames'
+import {
   useForm,
   SubmitHandler,
-  Controller,
 } from 'react-hook-form'
 
 import Button from "components/button"
 import Icon, { IconList } from "components/icon"
 import Input from 'components/input'
 import Modal from "components/modal"
-import { signInWithGoogle } from 'utils/auth'
+import {
+  signInWithGoogle,
+  login,
+} from 'utils/auth'
+import Link from 'components/link'
+import {
+  REQUITE_FIELD,
+  EMAIL_ERROR,
+  PASSWORD_MIN_LENGTH,
+} from 'helpers/validateMessages'
+import { EMAIL_PATTERN } from 'helpers/patterns'
 
 import styles from './AuthModal.module.scss'
+import { Stores } from 'services'
+import { routes } from 'helpers/routes'
 
 interface AuthModalProps {
   opened: boolean
@@ -21,9 +37,10 @@ const LOGIN_PLEASE_TEXT = 'Войдите что бы добавить в зак
 const LOGIN_TEXT = 'Войти'
 const LOGIN_PLACEHOLDER = 'Логин'
 const PASSWORD_PLACEHOLDER = 'Пароль'
+const QUESTION_TEXT = 'Вы еще не зарегистрированы ?'
 
 interface FormFields {
-  login: string,
+  email: string,
   password: string
 }
 
@@ -32,18 +49,40 @@ const AuthModal = ({
   opened,
 }: AuthModalProps) => {
   const {
+    NotificationStore: {
+      loading,
+    }
+  } = Stores()
+  const [message, setMessage] = useState<string>('')
+  const {
     register,
     handleSubmit,
-    resetField,
-    control,
     formState: {
       errors,
-    }
+    },
+    resetField,
+    watch,
   } = useForm<FormFields>()
+  const passwordValue = watch('password')
 
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    console.log(data)
+  const onSubmit: SubmitHandler<FormFields> = async ({ email, password }) => {
+    const response = await login(email, password)
+
+    if (response) {
+      setMessage(response)
+      resetField('password')
+
+      return
+    }
+
+    onClose()
   }
+
+  useEffect(() => {
+    if (passwordValue && passwordValue.length !== 0) {
+      setMessage('')
+    }
+  }, [passwordValue])
 
   return (
     <Modal
@@ -58,20 +97,39 @@ const AuthModal = ({
           <div className="heading--ls">{LOGIN_PLEASE_TEXT}</div>
           <Input
             placeholder={LOGIN_PLACEHOLDER}
-            error={errors.login && 'This field is Required'}
-            {...(register('login', { required: true }))}
+            error={errors.email?.message}
+            {...(register('email', {
+              required: REQUITE_FIELD,
+              pattern: {
+                value: EMAIL_PATTERN,
+                message: EMAIL_ERROR,
+              }
+            }))}
           />
           <Input
             type="password"
             placeholder={PASSWORD_PLACEHOLDER}
-            error={errors.login && 'This field is Required'}
-            {...(register('password', { required: true }))}
+            error={errors.password?.message}
+            {...(register('password', {
+              required: REQUITE_FIELD,
+              min: PASSWORD_MIN_LENGTH,
+            }))}
           />
+          <Link
+            to={routes.signUp}
+            className={styles.link}
+          >
+            {QUESTION_TEXT}
+          </Link>
           <Button
+            loading={loading?.login?.status === 'PENDING'}
             type="submit"
           >
             {LOGIN_TEXT}
           </Button>
+          {!!message && (
+            <div className={cx('heading--sm', styles.error)}>{message}</div>
+          )}
         </form>
         <div>
           <Button
@@ -82,7 +140,6 @@ const AuthModal = ({
           </Button>
         </div>
       </div>
-
     </Modal>
   )
 }
