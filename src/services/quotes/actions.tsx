@@ -93,7 +93,7 @@ export const increaseQuoteCounter = async (id_user?: string) => {
   }: QuoteCounter = quotesStore
   const { loading } = notificationsStore
 
-  if (loading.getQuote === 'PENDING') {
+  if (loading.getQuote.status === 'PENDING') {
     return
   }
 

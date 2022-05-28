@@ -83,7 +83,7 @@ const AdminPanelQuotes = ({
           {BUTTON_TEXT}
         </>
       </Button>
-      <Spin loading={loading === 'PENDING'}>
+      <Spin loading={loading.status === 'PENDING'}>
         <Table
           data={modifyActionsQuotes}
           columns={columns}

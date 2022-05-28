@@ -60,7 +60,7 @@ const useHome = () => {
   }
 
   const handleChangeQuote = () => {
-    if (isLoading || loading.getRandomQuote === 'PENDING') {
+    if (isLoading || loading.getRandomQuote.status === 'PENDING') {
       return
     }
 

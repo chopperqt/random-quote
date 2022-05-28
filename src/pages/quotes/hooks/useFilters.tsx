@@ -15,7 +15,10 @@ import Store, {
   Stores,
   filterMethods,
 } from 'services'
-import { getFilterQuotes, getQuotes } from 'utils/quotes'
+import {
+  getFilterQuotesCounter,
+  getQuotes,
+} from 'utils/quotes'
 import { getRange } from 'helpers/pagination'
 import useUser from 'helpers/useUser'
 
@@ -51,6 +54,10 @@ const useFilters = () => {
   } = useResponse({
     loading: loading.getAuthors,
     count: authorsCount,
+  })
+
+  const filtersCount = useResponse({
+    loading: loading.getFilterQuotesCounter
   })
 
   const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
@@ -99,7 +106,7 @@ const useFilters = () => {
   }, [count])
 
   useEffect(() => {
-    getFilterQuotes({
+    getFilterQuotesCounter({
       from,
       to,
       authors: filters.authors,
@@ -122,6 +129,7 @@ const useFilters = () => {
     buttonText,
     handleClickButton,
     handleReset,
+    filtersCount,
   }
 }
 

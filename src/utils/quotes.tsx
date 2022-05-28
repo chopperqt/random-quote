@@ -40,7 +40,7 @@ export const QuotesRequests = {
   searchQuote: 'searchQuote',
   postQuote: 'postQuotes',
   getActionQuote: 'getActionQuote',
-  getFilterQuotes: 'getFilterQuotes',
+  getFilterQuotesCounter: 'getFilterQuotesCounter',
 }
 
 export const getQuote = async (id: number, idUser?: string) => {
@@ -315,6 +315,8 @@ export const searchQuote = debounce(async ({
   to,
   search,
 }: SearchQuotesProps) => {
+  console.log('Скольк раз?')
+
   const {
     handlePending,
     handleSuccess,
@@ -344,7 +346,13 @@ export const postQuote = async ({
   time,
   author,
 }: IPostQuote) => {
-  Store.dispatch(notificationMethods.loadingRequest('postQuote', 'PENDING'))
+  const {
+    handlePending,
+    handleSuccess,
+    handleFailure,
+  } = loadingStatuses(QuotesRequests.postQuote)
+
+  handlePending()
 
   let createQuote = await supabase
     .from(Tables.quotes)
@@ -354,7 +362,7 @@ export const postQuote = async ({
   if (createQuote.error) {
     const { message } = createQuote.error
 
-    Store.dispatch(notificationMethods.loadingRequest('postQuote', 'FAILURE'))
+    handleFailure(createQuote.error)
 
     notificationMethods.createNotification(message, 'ERROR')
 
@@ -373,14 +381,14 @@ export const postQuote = async ({
     if (createAuthorQuotes.error) {
       const { message } = createAuthorQuotes.error
 
-      Store.dispatch(notificationMethods.loadingRequest('postQuote', 'FAILURE'))
+      handleFailure(createAuthorQuotes.error)
 
       notificationMethods.createNotification(message, 'ERROR')
 
       return
     }
 
-    Store.dispatch(notificationMethods.loadingRequest('postQuote', 'SUCCESS'))
+    handleSuccess()
 
     notificationMethods.createNotification(SuccessMessages.createSuccess, 'SUCCESS')
 
@@ -445,7 +453,7 @@ export const getActionQuote = async (
   return data || []
 }
 
-export const getFilterQuotes = async ({
+export const getFilterQuotesCounter = async ({
   from = 1,
   to = 10,
   authors = DefaultProps.array,
@@ -454,7 +462,7 @@ export const getFilterQuotes = async ({
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(QuotesRequests.getFilterQuotes)
+  } = loadingStatuses(QuotesRequests.getFilterQuotesCounter)
 
   handlePending()
 

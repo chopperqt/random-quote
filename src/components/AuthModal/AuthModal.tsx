@@ -122,7 +122,7 @@ const AuthModal = ({
             {QUESTION_TEXT}
           </Link>
           <Button
-            loading={loading.login === 'PENDING'}
+            loading={loading?.login?.status === 'PENDING'}
             type="submit"
           >
             {LOGIN_TEXT}

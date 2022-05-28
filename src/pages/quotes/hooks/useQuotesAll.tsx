@@ -7,12 +7,15 @@ import useResponse from 'helpers/useResponse'
 import { getQuotes, QuotesRequests, searchQuote } from 'utils/quotes'
 import useUser from 'helpers/useUser'
 import Store, { filterMethods, notificationMethods, Stores } from 'services'
-import { deleteUrlParam, getUrlParam, updateUrl, updateUrlParams } from 'helpers/urlParams'
+import {
+  deleteUrlParam,
+  getUrlParam,
+} from 'helpers/urlParams'
 
 
 const useQuotesAll = () => {
   const searchParam = getUrlParam('search')
-  const formattedSearchParam = searchParam ? searchParam : ''
+  const formattedSearchParam = searchParam ? JSON.parse(searchParam) : ''
   const [search, setSearch] = useState<string>(formattedSearchParam)
   const { user } = useUser()
   const {
@@ -93,8 +96,6 @@ const useQuotesAll = () => {
     }
 
     deleteUrlParam('p')
-
-    Store.dispatch(notificationMethods.loadingRequest(QuotesRequests.searchQuote, 'PENDING'))
   }, [search])
 
   return {

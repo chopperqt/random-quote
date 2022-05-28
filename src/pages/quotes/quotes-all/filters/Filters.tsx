@@ -25,6 +25,7 @@ const Filters = () => {
     handleClickButton,
     handleReset,
     buttonText,
+    filtersCount,
   } = useFilters()
   const {
     FilterStore
@@ -62,6 +63,7 @@ const Filters = () => {
             </div>
           </Collapse>
           <Button
+            loading={filtersCount.isLoading}
             onClick={handleClickButton}
             className={styles.button}
           >

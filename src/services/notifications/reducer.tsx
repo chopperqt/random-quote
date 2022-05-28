@@ -29,7 +29,24 @@ type LoadingData = {
   [key in RequestsData]: StatusData
 }
 
-export type StatusData = 'PENDING' | 'SUCCESS' | 'FAILURE' | undefined
+export interface Status {
+  status: StatusTypes
+  action: CountAction
+}
+
+export interface StatusData {
+  status: StatusTypes
+  count: number
+}
+
+interface CreateLoading {
+  name: RequestsData
+  status: Status
+}
+
+export type CountAction = 'INCREASE' | 'DECREASE'
+
+export type StatusTypes = 'PENDING' | 'SUCCESS' | 'FAILURE' | undefined
 
 const notificationsStore = (
   state = initialState,
@@ -42,9 +59,21 @@ const notificationsStore = (
   }) => produce(state, (draft: NotificationsStore) => {
     switch (type) {
       case CREATE_LOADING: {
-        // TODO Отрефакторить
-        // @ts-ignore
-        draft.loading[payload.name] = payload.status
+        const { name, status } = payload as CreateLoading
+        let count = draft.loading[name]?.count || 0
+
+        if (status.action === 'INCREASE') {
+          count++
+        }
+
+        if (status.action === 'DECREASE') {
+          count--
+        }
+
+        draft.loading[name] = {
+          status: status.status,
+          count,
+        }
 
         break;
       }

@@ -1,4 +1,6 @@
-import Quote, { QuoteSkeleton } from 'components/quote'
+import React, { Suspense } from 'react'
+
+import { QuoteSkeleton } from 'components/quote'
 import useHome from './hooks/useHome'
 import Footer from 'components/footer'
 import Information, { DefaultMessage } from 'components/Information'
@@ -12,6 +14,8 @@ import ActionButtons from './partials/ActionButtons'
 import useUser from 'helpers/useUser'
 
 import styles from './Home.module.scss'
+
+const LazyQuote = React.lazy(() => import('components/quote'))
 
 const Home = () => {
   const {
@@ -37,9 +41,11 @@ const Home = () => {
           <QuoteSkeleton />
         )}
         {isSuccess && (
-          <Quote
-            quote={quotes[quotesCount]}
-          />
+          <Suspense fallback={<QuoteSkeleton />}>
+            <LazyQuote
+              quote={quotes[quotesCount]}
+            />
+          </Suspense>
         )}
         {isError && (
           <Information text={DefaultMessage.error} />
