@@ -6,10 +6,11 @@ import Quote from 'components/quote'
 import Skeleton from '../partials/Skeleton'
 import Information from 'components/Information'
 import { DefaultMessage } from 'components/Information'
+import Pagination, { PaginationProps } from 'components/pagination'
 
 import styles from './QuotesAllSearch.module.scss'
 
-interface QuotesAllSearchProps {
+interface QuotesAllSearchProps extends PaginationProps {
   isEmpty: boolean
   isSuccess: boolean
   isLoading: boolean
@@ -22,6 +23,9 @@ const QuotesAllSearch = ({
   items,
   isLoading,
   isError,
+  onClick,
+  page,
+  pages,
 }: QuotesAllSearchProps) => (
   <div className={styles.wrap}>
     <div className={styles.section}>
@@ -48,6 +52,11 @@ const QuotesAllSearch = ({
       {isError && (
         <Information text={DefaultMessage.error} />
       )}
+      <Pagination
+        pages={pages}
+        page={page}
+        onClick={onClick}
+      />
     </div>
   </div>
 )

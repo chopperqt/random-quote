@@ -27,10 +27,24 @@ export interface IGetQuotes {
   authors?: number[]
 }
 
+export interface GetQuotesSearch extends IGetQuotes {
+  search?: string
+}
+
 export interface SearchQuotesProps extends IGetQuotes {
   search?: string
 }
 
 export {
   Requests
+}
+
+export interface QuotesBuild {
+  from?: number
+  to?: number
+  id?: string
+  authors?: number[]
+  search?: string
+  head?: boolean
+  lastUpdates?: boolean
 }

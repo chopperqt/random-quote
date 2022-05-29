@@ -80,7 +80,10 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
       break;
     }
     case SEARCH_QUOTES: {
-      draft.quotesSearch = payload
+      const { data, count } = payload
+
+      draft.quotesSearch = data
+      draft.quotesSearchCount = count
 
       break;
     }

@@ -21,11 +21,13 @@ import {
 } from 'utils/quotes'
 import { getRange } from 'helpers/pagination'
 import useUser from 'helpers/useUser'
+import { getUrlParam } from 'helpers/urlParams'
 
 const DEFAULT_PAGE = 1
 
 const useFilters = () => {
   const { user } = useUser()
+  const searchParam = getUrlParam('search')
   const [openedAuthors, setOpenedAuthors] = useState<boolean>(false)
   const {
     NotificationStore: {
@@ -46,6 +48,7 @@ const useFilters = () => {
   } = getRange(DEFAULT_PAGE)
 
   const handleOpenAuthors = () => setOpenedAuthors(true)
+
   const handleCloseAuthors = () => setOpenedAuthors(false)
 
   const {
@@ -107,6 +110,7 @@ const useFilters = () => {
 
   useEffect(() => {
     getFilterQuotesCounter({
+      search: searchParam ?? '',
       from,
       to,
       authors: filters.authors,

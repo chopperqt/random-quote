@@ -67,6 +67,7 @@ const QuotesAll = () => {
               isError={loadingSearch.isError}
               isEmpty={loadingSearch.isEmpty}
               isLoading={loadingSearch.isLoading}
+              {...defaultOptions}
             />
           )}
         </div>
