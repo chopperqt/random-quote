@@ -56,6 +56,8 @@ export interface QuoteData {
   bookmarked?: boolean
 }
 
+export type Quote = Partial<QuoteData>
+
 const quotesStore = (state = initialState, { type, payload }: { type: string, payload: any }) => produce(state, (draft: QuotesStore) => {
   switch (type) {
     case SET_ALL_QUOTES: {

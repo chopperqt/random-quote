@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { produce } from 'immer'
 
 import supabase from "./client";
 import Store, {
@@ -24,7 +25,7 @@ import {
   GetQuotesSearch,
   QuotesBuild,
 } from './'
-import { QuoteData } from 'services/quotes';
+import { Quote, QuoteData } from 'services/quotes';
 import { serializeQuote } from 'helpers/serialize'
 import DefaultProps from 'helpers/defaultProps';
 
@@ -130,7 +131,6 @@ export const getQuotes = async ({
     handlePending,
     handleSuccess,
   } = loadingStatuses(QuotesRequests.getQuotes)
-  let list = []
 
   handlePending()
 
@@ -146,11 +146,20 @@ export const getQuotes = async ({
     return
   }
 
+  const updateData = produce(data, draft => {
+    let list = [...data.id_author]
+
+
+
+
+  })
+
   for (let quote of data) {
     list.push(quote.id_quote)
   }
 
-  let quotesData = (data as any[]).map((item) => ({
+
+  let quotesData = (data as Quote[]).map((item) => ({
     ...item,
     ...item.author
   }))
