@@ -146,44 +146,45 @@ export const getQuotes = async ({
     return
   }
 
-  const updateData = produce(data, draft => {
-    let list = [...data.id_author]
+  const updateData = produce(data as QuoteData[], async (draft) => {
+    const list = []
 
-
-
-
-  })
-
-  for (let quote of data) {
-    list.push(quote.id_quote)
-  }
-
-
-  let quotesData = (data as Quote[]).map((item) => ({
-    ...item,
-    ...item.author
-  }))
-
-  if (id) {
-    const bookmarks = await getBookmarks({ id_user: id, list })
-
-    if (bookmarks.error) {
-      return
+    for (let quote of data) {
+      if (quote.id_author) {
+        list.push(quote.id_author)
+      }
     }
 
-    quotesData = data!.map((quote: QuoteData) => {
-      const isBookmark = bookmarks.data.find((item: any) => +item.id_quote === +quote.id_quote)
+    draft = draft.map((item: QuoteData) => ({
+      ...item,
+      ...item.author
+    }))
 
-      return {
-        ...quote,
-        bookmarked: !!isBookmark,
-        ...quote.author,
+
+    if (id) {
+      const bookmarks = await getBookmarks({ id_user: id, list })
+
+      if (bookmarks.error) {
+        return draft
       }
-    })
-  }
+
+      draft = draft.map((item: QuoteData) => {
+        const isBookmark = bookmarks.data.find(marked => +item.id_quote === +marked.id_quote)
+
+        return {
+          ...item,
+          bookmarked: !!isBookmark,
+          ...item.author,
+        }
+
+      })
+    }
+  })
+
+  console.log(updateData)
 
   Store.dispatch(quoteMethods.setAllQuotes({
-    data: quotesData,
+    data: await updateData,
     count: count,
   }))
 
