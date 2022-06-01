@@ -150,8 +150,8 @@ export const getQuotes = async ({
     const list = []
 
     for (let quote of data) {
-      if (quote.id_author) {
-        list.push(quote.id_author)
+      if (quote.id_quote) {
+        list.push(quote.id_quote.toString())
       }
     }
 
@@ -160,9 +160,12 @@ export const getQuotes = async ({
       ...item.author
     }))
 
-
     if (id) {
+      console.log(list)
+
       const bookmarks = await getBookmarks({ id_user: id, list })
+
+      console.log(bookmarks)
 
       if (bookmarks.error) {
         return draft
@@ -174,14 +177,13 @@ export const getQuotes = async ({
         return {
           ...item,
           bookmarked: !!isBookmark,
-          ...item.author,
         }
 
       })
     }
-  })
 
-  console.log(updateData)
+    return draft
+  })
 
   Store.dispatch(quoteMethods.setAllQuotes({
     data: await updateData,
