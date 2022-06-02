@@ -10,15 +10,16 @@ const initialState = {
 }
 
 export interface AuthorsStore {
-  authors: IAuthor[]
+  authors: Author[]
   authorsCount: number
 }
 
-export interface IAuthor {
+export interface Author {
   created_at: string
   id_author: number
   name: string
   path: string
+  avatar: string
 }
 
 const authorsStore = (

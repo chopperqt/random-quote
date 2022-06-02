@@ -1,12 +1,13 @@
 import React from 'react'
 
-import Title from './partials/Title'
 import useQuotesAll from '../hooks/useQuotesAll'
 import Filters from './filters/Filters'
 import SearchInput from './partials/SearhcInput'
 import { Stores } from 'services'
 import QuotesAllList from './quotes-all-list/QuotesAllList'
 import QuotesAllSearch from './quotes-all-search/QuotesAllSearch'
+import Title from 'components/title'
+import { ALL_QUOTES_TEXT } from '../constants'
 
 import styles from './QuotesAll.module.scss'
 import './Grid.scss'
@@ -37,7 +38,10 @@ const QuotesAll = () => {
 
   return (
     <div className="container">
-      <Title text={description} />
+      <Title
+        title={ALL_QUOTES_TEXT}
+        subText={description}
+      />
       <SearchInput
         classNameWrap={styles.field}
         loading={!!search.length && loadingSearch.isLoading}

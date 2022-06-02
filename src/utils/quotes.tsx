@@ -161,11 +161,7 @@ export const getQuotes = async ({
     }))
 
     if (id) {
-      console.log(list)
-
       const bookmarks = await getBookmarks({ id_user: id, list })
-
-      console.log(bookmarks)
 
       if (bookmarks.error) {
         return draft

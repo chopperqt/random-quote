@@ -2,6 +2,7 @@ import {
   useEffect,
   useState,
   useMemo,
+  useRef,
 } from 'react'
 
 import { QUOTES_ALL_TEXT } from '../constants'
@@ -41,6 +42,7 @@ const useQuotesAll = () => {
   const currentPage = +(filters?.p || 1)
   const authorsQuery = getUrlParam('authors')
   const hasMoreQuotes = quotesCount > quotesAll.length
+  const prevPage = useRef(filters.p)
   //const pages = Math.ceil(quotesAllCount / 10)
   let authors: number[] = []
   const {
@@ -94,12 +96,14 @@ const useQuotesAll = () => {
   }, [])
 
   useEffect(() => {
-    getQuotes({
-      id: user?.id,
-      from,
-      to,
-      authors,
-    })
+    if (prevPage.current !== filters.p) {
+      getQuotes({
+        id: user?.id,
+        from,
+        to,
+        authors,
+      })
+    }
   }, [filters.p])
 
   useEffect(() => {

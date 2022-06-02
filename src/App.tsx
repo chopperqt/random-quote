@@ -16,6 +16,7 @@ import Quotes from 'pages/quotes/Quotes';
 import SignUp from 'pages/signup/SignUp';
 import Login from 'pages/login/Login';
 import useUser from 'helpers/useUser';
+import Authors from 'pages/authors/Authors';
 
 import './asset/scss/typography.scss'
 import './asset/scss/fonts.scss'
@@ -49,6 +50,7 @@ function App() {
           <Route path={routes.profile} element={ComponentProfile} />
           <Route path={routes.logIn} element={ComponentLogin} />
           <Route path={routes.signUp} element={ComponentSignup} />
+          <Route path={routes.authors} element={<Authors />} />
         </Routes>
       </div>
       {hasNotifications && (
