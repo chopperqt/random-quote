@@ -18,6 +18,7 @@ import Login from 'pages/login/Login';
 import useUser from 'helpers/useUser';
 import Authors from 'pages/authors/Authors';
 
+import 'react-lazy-load-image-component/src/effects/blur.css'
 import './asset/scss/typography.scss'
 import './asset/scss/fonts.scss'
 import './App.scss'
