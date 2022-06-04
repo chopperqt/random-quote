@@ -12,20 +12,19 @@ const Author = ({
   img,
   name,
 }: AuthorProps) => (
-  <Link
-    className={styles.author}
-    to={routes.authors}
-
-  >
-    <>
+  <div className={styles.author}>
+    <Link to={routes.authors}
+    >
       <Img
-        height={200}
+        className={styles.image}
+        height={240}
         src={img}
         alt={name}
       />
-      adwawdawd
-    </>
-  </Link>
+    </Link>
+    <div className="heading--ls">{name}</div>
+    <div className="heading--sm">Some text</div>
+  </div>
 )
 
 export default Author

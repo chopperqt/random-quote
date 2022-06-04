@@ -1,0 +1,36 @@
+@import 'asset/scss/colors';
+
+.skeleton {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.wrap {
+  position: relative;
+  height: inherit;
+  width: inherit;
+  background-color: $color-secondary--4;
+  z-index: 44;
+  overflow: hidden;
+}
+.activity {
+  position: absolute;
+  left: -100%;
+  width: 45%;
+  background-image: linear-gradient(to left, rgba(251,251,251, .05), rgba(251,251,251, .3), rgba(251,251,251, .6), rgba(251,251,251, .3), rgba(251,251,251, .05));
+  background-image: -moz-linear-gradient(to left, rgba(251,251,251, .05), rgba(251,251,251, .3), rgba(251,251,251, .6), rgba(251,251,251, .3), rgba(251,251,251, .05));
+  background-image: -webkit-linear-gradient(to left, rgba(251,251,251, .05), rgba(251,251,251, .3), rgba(251,251,251, .6), rgba(251,251,251, .3), rgba(251,251,251, .05));
+  animation: loading 1.4s infinite;
+  z-index: 45;
+  height: inherit;
+  width: inherit;
+}
+
+@keyframes loading {
+  0%{
+      left: -100%;
+  }
+  100%{
+      left: 100%;
+  }
+}

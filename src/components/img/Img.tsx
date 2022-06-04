@@ -10,13 +10,16 @@ interface ImgProps {
   height: number
   src: string
   alt: string
+  className?: string
 }
 const Img = ({
   height,
   src,
   alt,
+  className,
 }: ImgProps) => (
   <LazyLoadImage
+    className={className}
     height={height}
     placeholder={<PlaceholderComponent />}
     effect="blur"

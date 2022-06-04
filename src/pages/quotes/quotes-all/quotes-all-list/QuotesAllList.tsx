@@ -7,6 +7,7 @@ import Skeleton from '../partials/Skeleton'
 import Information from 'components/Information'
 import { DefaultMessage } from 'components/Information'
 import Pagination, { PaginationProps } from 'components/pagination'
+import Grid from 'components/grid'
 
 
 import styles from './QuotesAllList.module.scss'
@@ -33,18 +34,14 @@ const QuotesAllList = ({
       <Empty />
     )}
     {isSuccess && (
-      <Masonry
-        breakpointCols={2}
-        className="my-masonry-grid"
-        columnClassName='my-masonry-grid_column'
-      >
+      <Grid breakpointCols={2}>
         {items.map((quote) => (
           <Quote
             key={quote.id_quote}
             quote={quote}
           />
         ))}
-      </Masonry>
+      </Grid>
     )}
     {isLoading && (
       <Skeleton />

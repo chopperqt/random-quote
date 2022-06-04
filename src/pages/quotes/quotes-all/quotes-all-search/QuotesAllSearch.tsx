@@ -1,5 +1,4 @@
-import Masonry from 'react-masonry-css'
-
+import Grid from 'components/grid'
 import { QuoteData } from 'services/quotes'
 import Empty from '../empty/Empty'
 import Quote from 'components/quote'
@@ -33,18 +32,14 @@ const QuotesAllSearch = ({
         <Empty />
       )}
       {isSuccess && (
-        <Masonry
-          breakpointCols={2}
-          className="my-masonry-grid"
-          columnClassName='my-masonry-grid_column'
-        >
+        <Grid breakpointCols={2} >
           {items.map((quote) => (
             <Quote
               key={quote.id_quote}
               quote={quote}
             />
           ))}
-        </Masonry>
+        </Grid>
       )}
       {isLoading && (
         <Skeleton />

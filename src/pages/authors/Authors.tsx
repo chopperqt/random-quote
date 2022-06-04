@@ -1,12 +1,14 @@
 import { useEffect } from 'react'
-import Masonry from 'react-masonry-css'
 
 import { Stores } from 'services'
 import { getAuthors } from 'utils/authors'
 import Author from './partials/Author'
 import Title from 'components/title'
-import { AUTHORS_TITLE } from './constatns'
+import { AUTHORS_TITLE } from './constants'
+import Grid from 'components/grid'
+
 import styles from './Authors.module.scss'
+import AuthorsSkeleton from './partials/AuthorsSkeleton'
 
 const Authors = () => {
   const {
@@ -26,10 +28,10 @@ const Authors = () => {
           title={AUTHORS_TITLE}
           subText="Всего 2 автора"
         />
-        <Masonry
-          breakpointCols={2}
-          className="my-masonry-grid"
-          columnClassName='my-masonry-grid_column'
+        <AuthorsSkeleton />
+        {/* <Grid
+          breakpointCols={5}
+          className={styles.wrap}
         >
           {authors.map(({
             avatar,
@@ -40,7 +42,7 @@ const Authors = () => {
               img={avatar}
             />
           ))}
-        </Masonry>
+        </Grid> */}
       </div>
     </div>
   )
