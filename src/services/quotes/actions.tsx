@@ -1,6 +1,7 @@
 import Store, { quoteMethods } from "services"
 import { getRandomQuote } from "utils/quotes"
 import {
+  QuoteData,
   QuotesCounters,
   QuotesStore,
 } from "."
@@ -20,35 +21,45 @@ export const actions = {
 
 export type TActions = 'quotes' | 'randomQuote' | 'lastQuotes'
 
+interface DefaultReturnData {
+  data: QuoteData[]
+  count: number
+}
+
+interface DefaultUpdateProps {
+  bookmarked: boolean,
+  id: number
+}
+
 export const methods = {
-  setAllQuotes<T>(data: T) {
+  setAllQuotes(payload: DefaultReturnData) {
     return {
       type: actions.SET_ALL_QUOTES,
-      payload: data,
+      payload,
     }
   },
-  setLastQuotes<T>(data: T) {
+  setLastQuotes(payload: DefaultReturnData) {
     return {
       type: actions.SET_LAST_QUOTES,
-      payload: data,
+      payload,
     }
   },
-  setQuote<T>(data: T) {
+  setQuote(payload: QuoteData[]) {
     return {
       type: actions.SET_QUOTE,
-      payload: data,
+      payload,
     }
   },
-  quotesSearch<T>(data: T) {
+  quotesSearch(payload: DefaultReturnData) {
     return {
       type: actions.SEARCH_QUOTES,
-      payload: data,
+      payload,
     }
   },
-  updateQuotes(bookmarked: boolean, id: number) {
+  updateQuotes(payload: DefaultUpdateProps) {
     return {
       type: actions.UPDATE_QUOTES,
-      payload: { bookmarked, id },
+      payload,
     }
   },
   increaseQuoteCounter() {

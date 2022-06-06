@@ -25,7 +25,7 @@ import {
   GetQuotesSearch,
   QuotesBuild,
 } from './'
-import { Quote, QuoteData } from 'services/quotes';
+import { QuoteData } from 'services/quotes';
 import { serializeQuote } from 'helpers/serialize'
 import DefaultProps from 'helpers/defaultProps';
 
@@ -81,13 +81,7 @@ export const getQuote = async (id: number, idUser?: string) => {
 
   const { data, error } = await supabase
     .from(Tables.quotes)
-    .select(`
-    *,
-    author:id_author (
-      name,
-      path
-    ) 
-  `)
+    .select(QUERY_QUOTES)
     .match({ id_quote: id })
 
   if (error) {
@@ -183,7 +177,7 @@ export const getQuotes = async ({
 
   Store.dispatch(quoteMethods.setAllQuotes({
     data: await updateData,
-    count: count,
+    count: count || 0,
   }))
 
   handleSuccess()
@@ -283,7 +277,10 @@ export const getLastQuotes = async () => {
     return
   }
 
-  Store.dispatch(quoteMethods.setLastQuotes({ data, count }))
+  Store.dispatch(quoteMethods.setLastQuotes({
+    data,
+    count: count || 0,
+  }))
 
   handleSuccess()
 }
@@ -310,7 +307,11 @@ export const searchQuote = debounce(async ({
     to,
   })
 
-  const { data, error, count } = response
+  const {
+    data,
+    error,
+    count,
+  } = response
 
   if (error) {
     handleFailure(error)
@@ -318,7 +319,10 @@ export const searchQuote = debounce(async ({
     return
   }
 
-  Store.dispatch(quoteMethods.quotesSearch({ data, count }))
+  Store.dispatch(quoteMethods.quotesSearch({
+    data,
+    count: count || 0
+  }))
 
   handleSuccess()
 }, 800)
