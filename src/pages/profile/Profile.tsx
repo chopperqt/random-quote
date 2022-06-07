@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-
 import useUser from 'helpers/useUser'
 import { routes } from 'helpers/routes'
 import {
@@ -37,7 +36,6 @@ const Profile = () => {
           {user.email}
         </>
       )}
-
     </div>
   )
 
