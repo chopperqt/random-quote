@@ -1,5 +1,7 @@
 import cx from 'classnames'
 
+import Skeleton from 'components/skeleton'
+
 import styles from './QuoteSkeleton.module.scss'
 
 export const QuoteSkeletonText = () => (
@@ -25,7 +27,7 @@ export const QuoteSkeletonLikes = () => (
     <div className={styles.likesItem}></div>
     <div className={styles.likesItem}></div>
     <div className={styles.likesItem}></div>
-  </div>
+  </div >
 )
 
 const QuoteSkeleton = () => (
