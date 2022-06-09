@@ -12,6 +12,12 @@ const BookmarkRequests = {
   getBookmarks: 'getBookmarks',
 }
 
+export type BookmarkRequests =
+  'addBookmark' |
+  'removeBookmark' |
+  'getBookmarks'
+
+
 type BookmarksQuote = Pick<QuoteData, 'id_quote'>
 
 interface BookmarksActions extends BookmarksQuote {
@@ -42,7 +48,7 @@ export const getBookmarks = async ({
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(BookmarkRequests.getBookmarks)
+  } = loadingStatuses('getBookmarks')
   let status: any = handleSuccess
 
   handlePending()
@@ -83,7 +89,7 @@ export const addBookmark = async ({
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(BookmarkRequests.addBookmark)
+  } = loadingStatuses('addBookmark')
 
   handlePending()
 
@@ -123,7 +129,7 @@ export const deleteBookmark = async ({
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(BookmarkRequests.removeBookmark)
+  } = loadingStatuses('removeBookmark')
 
   handlePending()
 

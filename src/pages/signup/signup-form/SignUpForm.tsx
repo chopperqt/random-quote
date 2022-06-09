@@ -27,6 +27,7 @@ import {
   QUESTION_TEXT,
 } from '../constants'
 import {
+  LoginData,
   signUp,
   validateEmail,
 } from 'utils/auth'
@@ -37,19 +38,15 @@ import { routes } from 'helpers/routes'
 
 import styles from './SignUpForm.module.scss'
 
-interface SignUpFields {
-  email: string
+interface SignUpFields extends LoginData {
   nickname: string
-  password: string
   passwordRepeat: string
 }
 
 const SignUpForm = () => {
   const navigate = useNavigate()
   const {
-    NotificationStore: {
-      loading,
-    }
+    NotificationStore: { loading }
   } = Stores()
   const {
     register,
@@ -64,9 +61,17 @@ const SignUpForm = () => {
     isLoading,
   } = useResponse({ loading: loading.signUp })
 
-  const onSubmit: SubmitHandler<SignUpFields> = async (data) => {
-    const response = await signUp(data.email, data.password, {
-      nickname: data.nickname,
+  const onSubmit: SubmitHandler<SignUpFields> = async ({
+    email,
+    nickname,
+    password,
+  }) => {
+    const response = await signUp({
+      email,
+      password,
+      data: {
+        nickname,
+      },
     })
 
     if (response) {

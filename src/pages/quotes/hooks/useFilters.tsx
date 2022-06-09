@@ -30,9 +30,7 @@ const useFilters = () => {
   const searchParam = getUrlParam('search')
   const [openedAuthors, setOpenedAuthors] = useState<boolean>(false)
   const {
-    NotificationStore: {
-      loading
-    },
+    NotificationStore: { loading },
     AuthorStore: {
       authorsCount,
       authors
@@ -60,7 +58,7 @@ const useFilters = () => {
   })
 
   const filtersCount = useResponse({
-    loading: loading.getFilterQuotesCounter
+    loading: loading.getFilterQuotesCount
   })
 
   const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {

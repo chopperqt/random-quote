@@ -11,6 +11,7 @@ import {
 import { Stores } from 'services'
 
 import styles from './Filters.module.scss'
+import MultiSelect from 'components/multi-select'
 
 const Filters = () => {
   const {
@@ -61,6 +62,7 @@ const Filters = () => {
                 )
               })}
             </div>
+            <MultiSelect />
           </Collapse>
           <Button
             loading={filtersCount.isLoading}

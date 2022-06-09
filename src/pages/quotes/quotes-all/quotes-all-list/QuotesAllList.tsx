@@ -34,7 +34,10 @@ const QuotesAllList = ({
       <Empty />
     )}
     {isSuccess && (
-      <Grid breakpointCols={2}>
+      <Grid
+        breakpointCols={2}
+        columnClassName={styles.grid}
+      >
         {items.map((quote) => (
           <Quote
             key={quote.id_quote}

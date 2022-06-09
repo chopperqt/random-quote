@@ -15,7 +15,7 @@ import {
 } from './constants'
 import debounce from 'lodash.debounce';
 import {
-  PostgrestError,
+  PostgrestError, User,
 } from '@supabase/supabase-js';
 import { getBookmarks } from './bookmarks'
 import {
@@ -28,20 +28,21 @@ import {
 import { QuoteData } from 'services/quotes';
 import { serializeQuote } from 'helpers/serialize'
 import DefaultProps from 'helpers/defaultProps';
+import { UserID } from './auth';
 
 const LIMIT_PER_PAGE = 10
 const QUERY_QUOTES = '*, author: id_author (name, path)'
+const DELAY = 800
 
-export const QuotesRequests = {
-  getQuotes: 'getQuotes',
-  getQuote: 'getQuote',
-  getRandomQuote: 'getRandomQuote',
-  getQuotesAuthor: 'getQuotesAuthor',
-  getQuotesLast: 'getQuotesLast',
-  searchQuote: 'searchQuote',
-  postQuote: 'postQuotes',
-  getFilterQuotesCounter: 'getFilterQuotesCounter',
-}
+export type QuotesRequests =
+  'getQuotes' |
+  'getQuote' |
+  'getRandomQuote' |
+  'getQuotesAuthor' |
+  'getQuotesLast' |
+  'searchQuote' |
+  'postQuote' |
+  'getFilterQuotesCount'
 
 const createQuotesBuilder = ({
   search,
@@ -70,7 +71,7 @@ const createQuotesBuilder = ({
   return request
 }
 
-export const getQuote = async (id: number, idUser?: string) => {
+export const getQuote = async (id: number, idUser?: UserID) => {
   const {
     handleFailure,
     handlePending,
@@ -124,7 +125,7 @@ export const getQuotes = async ({
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(QuotesRequests.getQuotes)
+  } = loadingStatuses('getQuotes')
 
   handlePending()
 
@@ -183,12 +184,12 @@ export const getQuotes = async ({
   handleSuccess()
 }
 
-export const getRandomQuote = async (idUser?: string): Promise<boolean | PostgrestError> => {
+export const getRandomQuote = async (idUser?: UserID): Promise<boolean | PostgrestError> => {
   const {
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(QuotesRequests.getQuote)
+  } = loadingStatuses('getQuote')
 
   handlePending()
 
@@ -234,7 +235,7 @@ export const getQuotesAuthors = async (authors: string[]) => {
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(QuotesRequests.getQuotesAuthor)
+  } = loadingStatuses('getQuotesAuthor')
 
   handlePending()
 
@@ -265,7 +266,7 @@ export const getLastQuotes = async () => {
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(QuotesRequests.getQuotesLast)
+  } = loadingStatuses('getQuotesLast')
 
   handlePending()
 
@@ -296,7 +297,7 @@ export const searchQuote = debounce(async ({
     handlePending,
     handleSuccess,
     handleFailure,
-  } = loadingStatuses(QuotesRequests.searchQuote)
+  } = loadingStatuses('searchQuote')
 
   handlePending()
 
@@ -325,7 +326,7 @@ export const searchQuote = debounce(async ({
   }))
 
   handleSuccess()
-}, 800)
+}, DELAY)
 
 export const postQuote = async ({
   text,
@@ -336,7 +337,7 @@ export const postQuote = async ({
     handlePending,
     handleSuccess,
     handleFailure,
-  } = loadingStatuses(QuotesRequests.postQuote)
+  } = loadingStatuses('postQuote')
 
   handlePending()
 
@@ -390,7 +391,7 @@ export const getFilterQuotesCounter = async (data: GetQuotesSearch) => {
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(QuotesRequests.getFilterQuotesCounter)
+  } = loadingStatuses('getFilterQuotesCount')
 
   handlePending()
 
