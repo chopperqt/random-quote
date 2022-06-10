@@ -22,6 +22,7 @@ const Home = () => {
     QuoteStore: {
       quotes,
       quotesCount,
+      quotesControl
     }
   } = Stores()
   const { user } = useUser()
@@ -42,7 +43,7 @@ const Home = () => {
         {isSuccess && (
           <Suspense fallback={<QuoteSkeleton />}>
             <LazyQuote
-              quote={quotes[quotesCount]}
+              quote={quotes[quotesControl - 1]}
             />
           </Suspense>
         )}

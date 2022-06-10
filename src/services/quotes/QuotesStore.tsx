@@ -1,17 +1,7 @@
-import { actions } from './actions'
 import produce from 'immer'
 
-const {
-  SET_QUOTE,
-  SET_ALL_QUOTES,
-  SET_LAST_QUOTES,
-  SEARCH_QUOTES,
-  UPDATE_QUOTES,
-  CLEAR_QUOTES,
-  INCREASE_QUOTE_COUNTER,
-  DECREASE_QUOTE_COUNTER,
-  SET_COUNTER,
-} = actions
+import { QuotesApi } from 'utils/quotes'
+import { QuotesActions } from './actions'
 
 const initialState = {
   quotes: [],
@@ -23,6 +13,7 @@ const initialState = {
   quotesCount: 0,
   lastQuotesCount: 0,
   quotesAllCount: 0,
+  quotesControl: 0,
 }
 
 export interface QuotesStore extends QuotesCounters {
@@ -38,29 +29,30 @@ export interface QuotesCounters {
   quotesCount: number
   lastQuotesCount: number
   quotesSearchCount: number
+  quotesControl: number
 }
 
-export interface QuoteData {
-  author: {
-    path: string,
-    name: string
-  },
-  created_at: string,
-  data: string,
-  id_quote: number,
-  id_author: number,
-  text: string,
+export type FilterQuoteApi = Pick<QuotesApi, 'created_at' | 'data' | 'id_quote' | 'id_author' | 'text'>
+
+export interface QuoteData extends FilterQuoteApi {
   name: string,
   path: string
-  rating: number
   bookmarked?: boolean
+}
+
+export interface PayloadData {
+  type: QuotesActions
+  payload: any
 }
 
 export type Quote = Partial<QuoteData>
 
-const quotesStore = (state = initialState, { type, payload }: { type: string, payload: any }) => produce(state, (draft: QuotesStore) => {
+const quotesStore = (
+  state = initialState,
+  { type, payload }: PayloadData
+) => produce(state, (draft: QuotesStore) => {
   switch (type) {
-    case SET_ALL_QUOTES: {
+    case 'SET_ALL_QUOTES': {
       const { data, count } = payload
 
       draft.quotesAll = data
@@ -68,7 +60,7 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
 
       break;
     }
-    case SET_LAST_QUOTES: {
+    case 'SET_LAST_QUOTES': {
       const { data, count } = payload
 
       draft.lastQuotes = data
@@ -76,12 +68,12 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
 
       break;
     }
-    case SET_QUOTE: {
+    case 'SET_QUOTE': {
       draft.quotes.push(payload[0])
 
       break;
     }
-    case SEARCH_QUOTES: {
+    case 'SEARCH_QUOTES': {
       const { data, count } = payload
 
       draft.quotesSearch = data
@@ -89,7 +81,7 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
 
       break;
     }
-    case UPDATE_QUOTES: {
+    case 'UPDATE_QUOTES': {
       const {
         bookmarked,
         id,
@@ -113,24 +105,24 @@ const quotesStore = (state = initialState, { type, payload }: { type: string, pa
 
       break;
     }
-    case INCREASE_QUOTE_COUNTER: {
-      draft.quotesCount++
+    case 'INCREASE_QUOTE_COUNTER': {
+      draft.quotesControl++
 
       break;
     }
-    case DECREASE_QUOTE_COUNTER: {
-      draft.quotesCount--
+    case 'DECREASE_QUOTE_COUNTER': {
+      draft.quotesControl--
 
       break;
     }
-    case SET_COUNTER: {
+    case 'SET_COUNTER': {
       // TODO: Отрефакторить
       // @ts-ignore
       draft[payload.type] = payload.data
 
       break;
     }
-    case CLEAR_QUOTES: {
+    case 'CLEAR_QUOTES': {
       draft.quotes = []
       draft.lastQuotes = []
 

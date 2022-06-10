@@ -4,7 +4,7 @@ import loadingStatuses from "helpers/loadingStatuses";
 import Store, { quoteMethods } from "services";
 import supabase from "./client";
 import { Tables } from "./constants";
-import { QuoteData } from "services/quotes";
+import { QuoteData } from "services/quotes/QuotesStore";
 
 const BookmarkRequests = {
   addBookmark: 'addBookmark',

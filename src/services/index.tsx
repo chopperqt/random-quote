@@ -7,14 +7,13 @@ import thunk from 'redux-thunk'
 import { useSelector } from 'react-redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
-import quotesStore, { QuotesStore } from './quotes'
+import quotesStore, { QuotesStore } from './quotes/QuotesStore'
 import userStore, { UserStore } from './user/reducer'
 import notificationsStore, { NotificationsStore } from './notifications/reducer'
 import authorsStore, { AuthorsStore } from './authors'
 import filtersStore, { FiltersStore } from './filters'
 
 import {
-  actions as quoteActions,
   methods as quoteMethods
 } from './quotes/actions'
 import {
@@ -59,7 +58,6 @@ export const Stores = () => {
 }
 
 export {
-  quoteActions,
   quoteMethods,
   notificationActions,
   notificationMethods,

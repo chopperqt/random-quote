@@ -1,5 +1,5 @@
 import Grid from 'components/grid'
-import { QuoteData } from 'services/quotes'
+import { QuoteData } from 'services/quotes/QuotesStore'
 import Empty from '../empty/Empty'
 import Quote from 'components/quote'
 import Skeleton from '../partials/Skeleton'

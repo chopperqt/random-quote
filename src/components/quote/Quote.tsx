@@ -7,29 +7,32 @@ import Link from 'components/link'
 import useQuote from './hooks/useQuote'
 import Bookmark from './bookmark/Bookmark'
 import Actions from './action/Actions'
+import { QuoteSkeleton } from './'
 
 import styles from './Quote.module.scss'
 
-import { IQuoteProps } from './'
+import { QuoteProps } from './'
 
 const Quote = ({
-  quote,
-}: IQuoteProps) => {
-  const {
-    created_at,
-    text,
-    id_quote,
-    path,
-    name,
-    bookmarked,
-  } = quote
+  loading = true,
+  created_at,
+  text,
+  id_quote,
+  path,
+  name,
+  bookmarked,
+}: QuoteProps) => {
   const {
     handleCopyText,
   } = useQuote({
-    text: quote.text,
+    text: text,
     id: id_quote,
   })
   const formattedDate = moment(created_at).fromNow()
+
+  if (loading) {
+    return <QuoteSkeleton />
+  }
 
   return (
     <div className={cx(styles.layout, 'item-content')}>

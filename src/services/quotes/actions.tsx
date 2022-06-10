@@ -1,23 +1,26 @@
 import Store, { quoteMethods } from "services"
+import { UserID } from "utils/auth"
 import { getRandomQuote } from "utils/quotes"
 import {
   QuoteData,
   QuotesCounters,
   QuotesStore,
-} from "."
+} from "./QuotesStore"
 
-export const actions = {
+const actions = {
   SET_QUOTE: 'SET_QUOTE',
   SET_LAST_QUOTES: 'SET_LAST_QUOTES',
   SET_ALL_QUOTES: 'SET_ALL_QUOTES',
   SEARCH_QUOTES: 'SEARCH_QUOTES',
   UPDATE_QUOTES: 'UPDATE_QUOTES',
   UPDATE_LAST_QUOTE: 'UPDATE_LAST_QUOTE',
-  CLEAR_QUOTES: 'CLEAR_QUOTE',
+  CLEAR_QUOTES: 'CLEAR_QUOTES',
   INCREASE_QUOTE_COUNTER: 'INCREASE_QUOTE_COUNTER',
   DECREASE_QUOTE_COUNTER: 'DECREASE_QUOTE_COUNTER',
   SET_COUNTER: 'SET_COUNTER',
 }
+
+export type QuotesActions = keyof typeof actions
 
 export type TActions = 'quotes' | 'randomQuote' | 'lastQuotes'
 
@@ -93,7 +96,7 @@ export const methods = {
 
 type QuoteCounter = Pick<QuotesStore, 'quotesCount' | 'quotes'>
 
-export const increaseQuoteCounter = async (id_user?: string) => {
+export const increaseQuoteCounter = async (userID?: UserID) => {
   const {
     quotesStore,
     notificationsStore,
@@ -102,16 +105,16 @@ export const increaseQuoteCounter = async (id_user?: string) => {
     quotes,
     quotesCount,
   }: QuoteCounter = quotesStore
-  const { loading } = notificationsStore
+  const { loading: { getQuote: { status } } } = notificationsStore
 
-  if (loading.getQuote.status === 'PENDING') {
+  if (status === 'PENDING') {
     return
   }
 
   const quotesLength = quotes.length - 1
 
   if (quotesCount >= quotesLength) {
-    const isSuccess = await getRandomQuote(id_user)
+    const isSuccess = await getRandomQuote(userID)
 
     if (isSuccess) {
       Store.dispatch(quoteMethods.increaseQuoteCounter())

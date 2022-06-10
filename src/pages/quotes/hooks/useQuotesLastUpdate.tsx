@@ -8,7 +8,7 @@ import {
 } from '../constants'
 import useResponse from 'helpers/useResponse'
 import { Stores } from 'services'
-import { QuoteData } from 'services/quotes'
+import { QuoteData } from 'services/quotes/QuotesStore'
 
 const useQuotesLastUpdate = () => {
   const {

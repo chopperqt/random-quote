@@ -25,7 +25,7 @@ import {
   GetQuotesSearch,
   QuotesBuild,
 } from './'
-import { QuoteData } from 'services/quotes';
+import { QuoteData } from 'services/quotes/QuotesStore';
 import { serializeQuote } from 'helpers/serialize'
 import DefaultProps from 'helpers/defaultProps';
 import { UserID } from './auth';
@@ -43,6 +43,18 @@ export type QuotesRequests =
   'searchQuote' |
   'postQuote' |
   'getFilterQuotesCount'
+
+export interface QuotesApi {
+  author: {
+    path: string,
+    name: string
+  },
+  created_at: Date,
+  data: Date,
+  id_quote: number,
+  id_author: number,
+  text: string,
+}
 
 const createQuotesBuilder = ({
   search,
