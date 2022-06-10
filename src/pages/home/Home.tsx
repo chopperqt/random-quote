@@ -24,7 +24,6 @@ const Home = () => {
       quotesCount,
     }
   } = Stores()
-  const isFirstQuote = quotesCount === 0
   const { user } = useUser()
 
   const {
@@ -57,7 +56,7 @@ const Home = () => {
           disabled={isLoading}
           onClickLeft={decreaseQuoteCounter}
           onClickRight={() => increaseQuoteCounter(user?.id)}
-          disabledLeft={isFirstQuote}
+          disabledLeft={quotesCount === 0}
         />
       </div>
     </div>
