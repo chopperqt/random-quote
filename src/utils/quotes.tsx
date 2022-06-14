@@ -14,9 +14,7 @@ import {
   SupabaseFunctions,
 } from './constants'
 import debounce from 'lodash.debounce';
-import {
-  PostgrestError, User,
-} from '@supabase/supabase-js';
+import { PostgrestError } from '@supabase/supabase-js';
 import { getBookmarks } from './bookmarks'
 import {
   IPostQuote,
@@ -26,7 +24,7 @@ import {
   QuotesBuild,
 } from './'
 import { QuoteData } from 'services/quotes/QuotesStore';
-import { serializeQuote } from 'helpers/serialize'
+import { serializeQuote, serializeQuoteReturn } from 'helpers/serialize'
 import DefaultProps from 'helpers/defaultProps';
 import { UserID } from './auth';
 
@@ -112,8 +110,8 @@ export const getQuote = async (id: number, idUser?: UserID) => {
       return
     }
 
-    updateData = updateData.map((quote: QuoteData) => {
-      const isBookmark = bookmarks.data.find((item: QuoteData) => +item.id_quote === +quote.id_quote)
+    updateData = updateData.map((quote: serializeQuoteReturn) => {
+      const isBookmark = bookmarks.data.find((item: serializeQuoteReturn) => +item.id_quote === +quote.id_quote)
 
       return {
         ...quote,

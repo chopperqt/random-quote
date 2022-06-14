@@ -7,21 +7,21 @@ export interface serializeQuoteReturn {
   name: string,
   text: string,
   path: string,
-  createAt: Date,
+  create_at: Date,
   data: Date,
-  idQuote: number
-  idAuthor: number
+  id_quote: number
+  id_author: number
 }
 
 export const serializeQuote = (quote: QuotesApi): serializeQuoteReturn => {
   return {
-    name: quote.name,
+    name: quote.author.name,
     text: quote.text,
-    path: quote.path,
-    createAt: quote.created_at,
+    path: quote.author.path,
+    create_at: quote.created_at,
     data: quote.data,
-    idQuote: quote.id_quote,
-    idAuthor: quote.id_author,
+    id_quote: quote.id_quote,
+    id_author: quote.id_author,
   }
 }
 

@@ -38,10 +38,24 @@ const QuotesAllList = ({
         breakpointCols={2}
         columnClassName={styles.grid}
       >
-        {items.map((quote) => (
+        {items.map(({
+          name,
+          text,
+          path,
+          created_at,
+          id_author,
+          id_quote,
+          data,
+        }) => (
           <Quote
-            key={quote.id_quote}
-            quote={quote}
+            key={id_quote}
+            id_author={id_author}
+            id_quote={id_quote}
+            name={name}
+            path={path}
+            text={text}
+            created_at={created_at}
+            data={data}
           />
         ))}
       </Grid>

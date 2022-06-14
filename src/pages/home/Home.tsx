@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useMemo } from 'react'
 
 import { QuoteSkeleton } from 'components/quote'
 import useHome from './hooks/useHome'
@@ -33,6 +33,20 @@ const Home = () => {
     isSuccess,
   } = useHome()
 
+  const {
+    text,
+    path,
+    name,
+    data,
+    bookmarked,
+    id_author,
+    id_quote,
+    created_at,
+  } = useMemo(() => {
+    return quotes[quotesControl - 1]
+  }, [quotes, quotesControl])
+
+
   return (
     <div className={styles.home}>
       <div className={styles.quote}>
@@ -43,8 +57,15 @@ const Home = () => {
         {isSuccess && (
           <Suspense fallback={<QuoteSkeleton />}>
             <LazyQuote
-              quote={quotes[quotesControl - 1]}
+              text={text}
+              path={path}
+              name={name}
+              data={data}
+              id_author={id_author}
+              id_quote={id_quote}
+              created_at={created_at}
             />
+            bookmarked={bookmarked}
           </Suspense>
         )}
         {isError && (
