@@ -18,10 +18,10 @@ const Quote = ({
   created_at,
   text,
   id_quote,
-  path,
-  name,
+  author,
   bookmarked,
 }: QuoteProps) => {
+
   const {
     handleCopyText,
   } = useQuote({
@@ -51,10 +51,12 @@ const Quote = ({
         </div>
         <div className={styles.info}>
           <div className="heading--sm">{formattedDate}</div>
-          <Link
-            to={`${routes.authors}/${path}`}
-            className="heading--sm text--right text--bold"
-          >{name}</Link>
+          {!!author && (
+            <Link
+              to={`${routes.authors}/${author.path}`}
+              className="heading--sm text--right text--bold"
+            >{author.name}</Link>
+          )}
         </div>
       </div>
     </div >

@@ -24,7 +24,6 @@ import {
   QuotesBuild,
 } from './'
 import { QuoteData } from 'services/quotes/QuotesStore';
-import { serializeQuote, serializeQuoteReturn } from 'helpers/serialize'
 import DefaultProps from 'helpers/defaultProps';
 import { UserID } from './auth';
 
@@ -48,7 +47,6 @@ export interface QuotesApi {
     name: string
   },
   created_at: Date,
-  data: Date,
   id_quote: number,
   id_author: number,
   text: string,
@@ -101,7 +99,7 @@ export const getQuote = async (id: number, idUser?: UserID) => {
     return
   }
 
-  let updateData = [serializeQuote(data[0])]
+  let updateData: QuoteData[] = [data[0]]
 
   if (idUser) {
     const bookmarks = await getBookmarks({ id_user: idUser, list: [data[0].id_quote] })
@@ -110,8 +108,8 @@ export const getQuote = async (id: number, idUser?: UserID) => {
       return
     }
 
-    updateData = updateData.map((quote: serializeQuoteReturn) => {
-      const isBookmark = bookmarks.data.find((item: serializeQuoteReturn) => +item.id_quote === +quote.id_quote)
+    updateData = updateData.map((quote) => {
+      const isBookmark = bookmarks.data.find((item) => +item.id_quote === +quote.id_quote)
 
       return {
         ...quote,
@@ -151,7 +149,7 @@ export const getQuotes = async ({
     return
   }
 
-  const updateData = produce(data as QuoteData[], async (draft) => {
+  const updateData = produce(data as QuotesApi[], async (draft) => {
     const list = []
 
     for (let quote of data) {
@@ -160,11 +158,6 @@ export const getQuotes = async ({
       }
     }
 
-    draft = draft.map((item: QuoteData) => ({
-      ...item,
-      ...item.author
-    }))
-
     if (id) {
       const bookmarks = await getBookmarks({ id_user: id, list })
 
@@ -172,7 +165,7 @@ export const getQuotes = async ({
         return draft
       }
 
-      draft = draft.map((item: QuoteData) => {
+      draft = draft.map((item) => {
         const isBookmark = bookmarks.data.find(marked => +item.id_quote === +marked.id_quote)
 
         return {
@@ -211,7 +204,7 @@ export const getRandomQuote = async (idUser?: UserID): Promise<boolean | Postgre
     return error
   }
 
-  let updateData = [serializeQuote(data[0])]
+  let updateData = [data[0]]
 
   if (idUser) {
     const bookmarks = await getBookmarks({ id_user: idUser, list: [data[0].id_quote] })

@@ -35,22 +35,18 @@ const QuotesAllSearch = ({
         <Grid breakpointCols={2} >
           {items.map(({
             text,
-            name,
-            data,
             created_at,
             id_author,
             id_quote,
-            path,
+            author,
           }) => (
             <Quote
               key={id_quote}
               text={text}
-              name={name}
-              data={data}
+              author={author}
               created_at={created_at}
               id_author={id_author}
               id_quote={id_quote}
-              path={path}
             />
           ))}
         </Grid>

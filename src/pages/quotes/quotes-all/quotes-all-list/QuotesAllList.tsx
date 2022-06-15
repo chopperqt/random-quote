@@ -39,23 +39,22 @@ const QuotesAllList = ({
         columnClassName={styles.grid}
       >
         {items.map(({
-          name,
+          author,
           text,
-          path,
           created_at,
           id_author,
           id_quote,
-          data,
+          bookmarked,
         }) => (
           <Quote
+            loading={false}
             key={id_quote}
             id_author={id_author}
             id_quote={id_quote}
-            name={name}
-            path={path}
+            author={author}
             text={text}
             created_at={created_at}
-            data={data}
+            bookmarked={bookmarked}
           />
         ))}
       </Grid>

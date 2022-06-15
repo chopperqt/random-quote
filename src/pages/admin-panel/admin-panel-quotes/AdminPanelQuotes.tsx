@@ -32,7 +32,7 @@ const AdminPanelQuotes = ({
 
   const modifyActionsQuotes = quotes.map((quote) => ({
     ...quote,
-    author: quote.name || '',
+    author: quote.author.name || '',
     actions: (
       <TableAction
         onDelete={() => { }}

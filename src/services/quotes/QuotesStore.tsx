@@ -32,11 +32,7 @@ export interface QuotesCounters {
   quotesControl: number
 }
 
-export type FilterQuoteApi = Pick<QuotesApi, 'created_at' | 'data' | 'id_quote' | 'id_author' | 'text'>
-
-export interface QuoteData extends FilterQuoteApi {
-  name: string,
-  path: string
+export interface QuoteData extends QuotesApi {
   bookmarked?: boolean
 }
 

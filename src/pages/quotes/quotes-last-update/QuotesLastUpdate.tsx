@@ -42,44 +42,36 @@ const QuotesLastUpdate = () => {
               <div className={styles.gridColumn}>
                 {quotesFirstColumn.map(({
                   text,
-                  name,
-                  path,
+                  author,
                   created_at,
                   id_author,
                   id_quote,
-                  data,
                 }) => (
                   <Quote
                     key={id_quote}
                     text={text}
-                    name={name}
-                    path={path}
+                    author={author}
                     created_at={created_at}
                     id_quote={id_quote}
                     id_author={id_author}
-                    data={data}
                   />
                 ))}
               </div>
               <div className={styles.gridColumn}>
                 {quotesSecondColumn.map(({
                   text,
-                  name,
-                  path,
                   created_at,
                   id_author,
                   id_quote,
-                  data,
+                  author
                 }) => (
                   <Quote
                     key={id_quote}
                     text={text}
-                    name={name}
-                    path={path}
                     created_at={created_at}
                     id_quote={id_quote}
                     id_author={id_author}
-                    data={data}
+                    author={author}
                   />
                 ))}
               </div>
