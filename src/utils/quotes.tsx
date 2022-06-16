@@ -204,7 +204,18 @@ export const getRandomQuote = async (idUser?: UserID): Promise<boolean | Postgre
     return error
   }
 
-  let updateData = [data[0]]
+  let updateData = [
+    {
+      created_at: data[0].created_at,
+      id_quote: data[0].id_quote,
+      id_author: data[0].id_author,
+      text: data[0].text,
+      author: {
+        name: data[0].author,
+        path: data[0].path,
+      }
+    },
+  ] as QuotesApi[]
 
   if (idUser) {
     const bookmarks = await getBookmarks({ id_user: idUser, list: [data[0].id_quote] })

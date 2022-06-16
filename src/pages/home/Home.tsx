@@ -33,17 +33,18 @@ const Home = () => {
     isSuccess,
   } = useHome()
 
-  // const {
-  //   text,
-  //   author,
-  //   bookmarked,
-  //   id_author,
-  //   id_quote,
-  //   created_at,
-  // } = useMemo(() => {
-  //   return quotes[quotesControl - 1]
-  // }, [quotes, quotesControl])
+  const {
+    text,
+    author,
+    bookmarked,
+    id_author,
+    id_quote,
+    created_at,
+  } = useMemo(() => {
+    return quotes[quotesControl - 1]
+  }, [quotes, quotesControl])
 
+  console.log('text: ', text)
 
   return (
     <div className={styles.home}>
@@ -54,14 +55,14 @@ const Home = () => {
         )}
         {isSuccess && (
           <Suspense fallback={<QuoteSkeleton />}>
-            {/* <LazyQuote
+            <LazyQuote
               text={text}
               author={author}
               id_author={id_author}
               id_quote={id_quote}
               created_at={created_at}
               bookmarked={bookmarked}
-            /> */}
+            />
           </Suspense>
         )}
         {isError && (

@@ -9,7 +9,6 @@ import { DefaultMessage } from 'components/Information'
 import Pagination, { PaginationProps } from 'components/pagination'
 import Grid from 'components/grid'
 
-
 import styles from './QuotesAllList.module.scss'
 
 interface QuotesAllSearchProps extends PaginationProps {
