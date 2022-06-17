@@ -12,6 +12,7 @@ import {
 import { HELPER_HOTKEY_TEXT } from './constants'
 import ActionButtons from './partials/ActionButtons'
 import useUser from 'helpers/useUser'
+import { getControlCount } from './helpers/getControlCount'
 
 import styles from './Home.module.scss'
 
@@ -22,29 +23,20 @@ const Home = () => {
     QuoteStore: {
       quotes,
       quotesCount,
-      quotesControl
+      currentQuote,
     }
   } = Stores()
   const { user } = useUser()
-
   const {
     isError,
     isLoading,
     isSuccess,
   } = useHome()
 
-  const {
-    text,
-    author,
-    bookmarked,
-    id_author,
-    id_quote,
-    created_at,
-  } = useMemo(() => {
-    return quotes[quotesControl - 1]
-  }, [quotes, quotesControl])
-
-  console.log('text: ', text)
+  const quote = useMemo(() => quotes[currentQuote], [
+    quotes,
+    currentQuote
+  ])
 
   return (
     <div className={styles.home}>
@@ -53,15 +45,16 @@ const Home = () => {
         {isLoading && (
           <QuoteSkeleton />
         )}
-        {isSuccess && (
+        {isSuccess && !!quote && (
           <Suspense fallback={<QuoteSkeleton />}>
             <LazyQuote
-              text={text}
-              author={author}
-              id_author={id_author}
-              id_quote={id_quote}
-              created_at={created_at}
-              bookmarked={bookmarked}
+              loading={isLoading}
+              text={quote.text}
+              author={quote.author}
+              id_author={quote.id_author}
+              id_quote={quote.id_quote}
+              created_at={quote.created_at}
+              bookmarked={quote.bookmarked}
             />
           </Suspense>
         )}

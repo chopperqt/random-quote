@@ -13,7 +13,7 @@ const initialState = {
   quotesCount: 0,
   lastQuotesCount: 0,
   quotesAllCount: 0,
-  quotesControl: 0,
+  currentQuote: 0,
 }
 
 export interface QuotesStore extends QuotesCounters {
@@ -29,7 +29,7 @@ export interface QuotesCounters {
   quotesCount: number
   lastQuotesCount: number
   quotesSearchCount: number
-  quotesControl: number
+  currentQuote: number
 }
 
 export interface QuoteData extends QuotesApi {
@@ -102,12 +102,12 @@ const quotesStore = (
       break;
     }
     case 'INCREASE_QUOTE_COUNTER': {
-      draft.quotesControl++
+      draft.currentQuote++
 
       break;
     }
     case 'DECREASE_QUOTE_COUNTER': {
-      draft.quotesControl--
+      draft.currentQuote--
 
       break;
     }

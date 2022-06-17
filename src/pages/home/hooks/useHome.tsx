@@ -34,7 +34,7 @@ const useHome = () => {
       loading,
     },
     QuoteStore: {
-      quotesControl,
+      currentQuote,
       quotes,
     }
   } = Stores()
@@ -73,7 +73,7 @@ const useHome = () => {
     window.addEventListener('keydown', handleClickArrow)
 
     if (quotes.length) {
-      Store.dispatch(quoteMethods.setCounter(quotes.length - 1, 'quotesControl'))
+      Store.dispatch(quoteMethods.setCounter(currentQuote, 'currentQuote'))
 
       return
     }
@@ -92,12 +92,12 @@ const useHome = () => {
   }, [])
 
   useEffect(() => {
-    if (quotes[quotesControl]?.id_quote) {
-      updateUrlParams({ qq: quotes[quotesControl].id_quote })
+    if (quotes[currentQuote]?.id_quote) {
+      updateUrlParams({ qq: quotes[currentQuote].id_quote })
     }
   }, [
     quotes,
-    quotesControl,
+    currentQuote,
   ])
 
   return {
