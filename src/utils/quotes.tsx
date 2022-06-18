@@ -26,6 +26,7 @@ import {
 import { QuoteData } from 'services/quotes/QuotesStore';
 import DefaultProps from 'helpers/defaultProps';
 import { UserID } from './auth';
+import { updateUrlParams } from 'helpers/urlParams';
 
 const LIMIT_PER_PAGE = 10
 const QUERY_QUOTES = '*, author: id_author (name, path)'
@@ -117,6 +118,10 @@ export const getQuote = async (id: number, idUser?: UserID) => {
       }
     })
   }
+
+  updateUrlParams({
+    qq: id,
+  })
 
   Store.dispatch(quoteMethods.setQuote(updateData))
 
@@ -236,6 +241,10 @@ export const getRandomQuote = async (idUser?: UserID): Promise<boolean | Postgre
       }
     })
   }
+
+  updateUrlParams({
+    qq: updateData[0].id_quote,
+  })
 
   Store.dispatch(quoteMethods.setQuote(updateData))
 

@@ -72,11 +72,11 @@ const useHome = () => {
 
     window.addEventListener('keydown', handleClickArrow)
 
-    if (quotes.length) {
-      Store.dispatch(quoteMethods.setCounter(currentQuote, 'currentQuote'))
+    // if (quotes.length) {
+    //   Store.dispatch(quoteMethods.setCounter(currentQuote, 'currentQuote'))
 
-      return
-    }
+    //   return
+    // }
 
     if (idFromUrl) {
       getQuote(idFromUrl, user?.id)
@@ -91,14 +91,14 @@ const useHome = () => {
     }
   }, [])
 
-  useEffect(() => {
-    if (quotes[currentQuote]?.id_quote) {
-      updateUrlParams({ qq: quotes[currentQuote].id_quote })
-    }
-  }, [
-    quotes,
-    currentQuote,
-  ])
+  // useEffect(() => {
+  //   if (quotes[currentQuote]?.id_quote) {
+  //     updateUrlParams({ qq: quotes[currentQuote].id_quote })
+  //   }
+  // }, [
+  //   quotes,
+  //   currentQuote,
+  // ])
 
   return {
     isLoading,
