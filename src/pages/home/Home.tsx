@@ -31,12 +31,8 @@ const Home = () => {
     isError,
     isLoading,
     isSuccess,
+    quote,
   } = useHome()
-
-  const quote = useMemo(() => quotes[currentQuote], [
-    quotes,
-    currentQuote
-  ])
 
   return (
     <div className={styles.home}>

@@ -105,26 +105,16 @@ export const increaseQuoteCounter = async (userID?: UserID) => {
   const {
     quotes,
     quotesCount,
-  }: QuoteCounter = quotesStore
+    currentQuote,
+  } = quotesStore
   const { loading: { getQuote: { status } } } = notificationsStore
 
   if (status === 'PENDING') {
     return
   }
 
-  const quotesLength = quotes.length - 1
-
-  if (quotesCount >= quotesLength) {
-    const isSuccess = await getRandomQuote(userID)
-
-    if (isSuccess) {
-      Store.dispatch(quoteMethods.increaseQuoteCounter())
-    }
-
-    return
-  }
-
   Store.dispatch(quoteMethods.increaseQuoteCounter())
+
 }
 
 export const decreaseQuoteCounter = () => {

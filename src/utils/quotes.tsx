@@ -30,6 +30,7 @@ import { updateUrlParams } from 'helpers/urlParams';
 
 const LIMIT_PER_PAGE = 10
 const QUERY_QUOTES = '*, author: id_author (name, path)'
+const QUERY_AUTHOR = 'id, data:quotes(id_quote,text)'
 const DELAY = 800
 
 export type QuotesRequests =
@@ -264,13 +265,7 @@ export const getQuotesAuthors = async (authors: string[]) => {
 
   let { data, error } = await supabase
     .from(Tables.authorsQuotes)
-    .select(`
-      id,
-      data:quotes(
-        id_quote,
-        text
-      )
-    `)
+    .select(QUERY_AUTHOR)
     .in('id_author', authors);
 
   if (error) {
