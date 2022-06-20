@@ -13,10 +13,7 @@ import {
   changeDocumentTitle,
   DocumentTitles
 } from 'helpers/documentTitle'
-import {
-  getUrlParam,
-  updateUrlParams,
-} from 'helpers/urlParams'
+import { getUrlParam } from 'helpers/urlParams'
 import Store, {
   quoteMethods,
   Stores,
@@ -44,7 +41,6 @@ const useHome = () => {
   } = Stores()
   const idFromUrl = Number(getUrlParam('qq'))
   const { user } = useUser()
-  const prevCurrentQuote = useRef(currentQuote)
 
   const {
     isError,
@@ -56,10 +52,18 @@ const useHome = () => {
 
   const quote = useMemo(() => quotes[currentQuote], [
     quotes,
+    currentQuote,
   ])
 
   const handleClickArrow = (event: KeyboardEvent) => {
     if (event.code === ArrowKeys.right) {
+      if (currentQuote <= quotes.length - 1) {
+        console.log('fsefse')
+        getRandomQuote()
+
+        return
+      }
+
       increaseQuoteCounter(user?.id)
     }
 
@@ -77,17 +81,8 @@ const useHome = () => {
   }
 
   useEffect(() => {
-    console.log(currentQuote, prevCurrentQuote)
-
-    if (quotes.length > currentQuote && prevCurrentQuote.current !== currentQuote) {
-      getRandomQuote(user?.id)
-    }
-
-    prevCurrentQuote.current = currentQuote
-  }, [
-    quotes,
-    currentQuote,
-  ])
+    Store.dispatch(quoteMethods.setCounter(quotes.length - 1, 'currentQuote'))
+  }, [quotes])
 
 
   useEffect(() => {
