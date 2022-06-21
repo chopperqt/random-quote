@@ -21,8 +21,6 @@ const LazyQuote = React.lazy(() => import('components/quote'))
 const Home = () => {
   const {
     QuoteStore: {
-      quotes,
-      quotesCount,
       currentQuote,
     }
   } = Stores()
@@ -64,7 +62,7 @@ const Home = () => {
           disabled={isLoading}
           onClickLeft={decreaseQuoteCounter}
           onClickRight={() => increaseQuoteCounter(user?.id)}
-          disabledLeft={quotesCount === 0}
+          disabledLeft={currentQuote === 0}
         />
       </div>
     </div>
