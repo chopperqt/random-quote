@@ -100,7 +100,7 @@ const SignUpForm = () => {
         })}
         placeholder={EMAIL_TEXT}
         error={errors.email?.message}
-        loading={loading.validateEmail.status === 'PENDING'}
+        loading={loading?.validateEmail?.status === 'PENDING'}
       />
       <Input
         {...register('nickname', {

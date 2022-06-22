@@ -2,10 +2,8 @@ import { useEffect } from 'react'
 
 import { Stores } from 'services'
 import { getAuthors } from 'utils/authors'
-import Author from './partials/Author'
 import Title from 'components/title'
 import { AUTHORS_TITLE } from './constants'
-import Grid from 'components/grid'
 
 import styles from './Authors.module.scss'
 import AuthorsSkeleton from './partials/AuthorsSkeleton'

@@ -114,7 +114,7 @@ const LoginForm = () => {
       </Link>
       <Button
         type="submit"
-        loading={loading.login.status === 'PENDING'}
+        loading={loading?.login?.status === 'PENDING'}
       >
         {BUTTON_TEXT}
       </Button>
