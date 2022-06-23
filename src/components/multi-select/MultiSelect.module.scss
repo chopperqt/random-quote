@@ -1,4 +1,51 @@
+@import 'asset/scss/colors';
+@import 'asset/scss/common';
+
 .multiSelect {
   display: flex;
   flex-direction: column;
+}
+
+.select {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  border: 1px solid $color-secondary--4;
+  border-radius: $border-radius--small;
+  min-height: 30px;
+  width: 100%;
+  padding: 5px;
+  gap: 5px;
+  cursor: text;
+}
+
+.item {
+  color: $color-white--500;
+  padding: 2px 5px;
+  border-radius: $border-radius--small;
+  background-color: $color-primary--6;
+}
+
+.modalWrap {
+  padding-top: 5px;
+}
+
+.modal {
+  position: absolute;
+  overflow-x: none;
+  overflow-y: auto;
+  padding: 0 5px;
+  border-radius: $border-radius--small;
+  border: 1px solid $color-secondary--4;
+  max-height: 200px;
+  background-color: $color-white--500;
+}
+
+.modalItem {
+  padding: 5px 0;
+  border-bottom: 1px solid $color-secondary--5;
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
