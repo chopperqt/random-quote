@@ -24,6 +24,7 @@
   padding: 2px 5px;
   border-radius: $border-radius--small;
   background-color: $color-primary--6;
+  cursor: pointer;
 }
 
 .modalWrap {
@@ -44,6 +45,7 @@
 .modalItem {
   padding: 5px 0;
   border-bottom: 1px solid $color-secondary--5;
+  cursor: pointer;
 
   &:last-child {
     border-bottom: none;

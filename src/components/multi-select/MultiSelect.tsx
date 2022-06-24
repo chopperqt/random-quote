@@ -2,17 +2,41 @@ import { useRef } from 'react'
 import cx from 'classnames'
 
 import { useMultiSelect } from "./hooks/useMultiSelect"
+import DefaultProps from 'helpers/defaultProps'
 
 import styles from './MultiSelect.module.scss'
 
-const MultiSelect = () => {
+export type SelectKey = string | number
+export type SelectValue = string | number
+export type SelectChange = (value: ChangeReturn) => void
+
+export interface ChangeReturn {
+  currentList: SelectList,
+  lists: SelectList[]
+}
+export interface SelectList {
+  key: SelectKey,
+  value: SelectValue,
+}
+
+interface MultiSelectProps {
+  list: SelectList[]
+  onChange: (list: ChangeReturn) => void
+}
+
+const MultiSelect = ({
+  list = DefaultProps.array,
+  onChange,
+}: MultiSelectProps) => {
   const selectRef = useRef<HTMLDivElement | null>(null)
   const {
     isOpened,
-    handleClose,
     handleOpen,
-    handleClickSelect,
+    selectedList,
+    handleClickItem,
+    handleClickSelectedItem,
   } = useMultiSelect({
+    onChange,
     selectElement: selectRef,
   })
 
@@ -21,27 +45,38 @@ const MultiSelect = () => {
       className={styles.multiSelect}
       ref={selectRef}
     >
-      <div className={styles.select} onClick={handleClickSelect}>
-        <div className={cx(styles.item, "heading--xs")}>Марк Твен</div>
-        <div className={cx(styles.item, "heading--xs")}>Марк Твен</div>
-        <div className={cx(styles.item, "heading--xs")}>Марк Твен</div>
-        <div className={cx(styles.item, "heading--xs")}>Никколо Макиавелли</div>
+      <div className={styles.select} onClick={handleOpen}>
+        {selectedList.map(({
+          value,
+          key,
+        }) => (
+          <div
+            key={key}
+            className={cx(styles.item, "heading--xs")}
+            onClick={() => handleClickSelectedItem({ key, value })}
+          >
+            {value}
+          </div>
+        ))}
       </div>
       {isOpened && (
         <div className={styles.modalWrap}>
           <div className={styles.modal}>
-            <div className={styles.modalItem}>Марк твен</div>
-            <div className={styles.modalItem}>никколо Макиавелли</div>
-            <div className={styles.modalItem}>Марк твен</div>
-            <div className={styles.modalItem}>никколо Макиавелли</div>
-            <div className={styles.modalItem}>Марк твен</div>
-            <div className={styles.modalItem}>никколо Макиавелли</div>
-            <div className={styles.modalItem}>Марк твен</div>
-            <div className={styles.modalItem}>никколо Макиавелли</div>
-            <div className={styles.modalItem}>Марк твен</div>
-            <div className={styles.modalItem}>никколо Макиавелли</div>
-            <div className={styles.modalItem}>Марк твен</div>
-            <div className={styles.modalItem}>никколо Макиавелли</div>
+            {list.map(({
+              value,
+              key,
+            }) => (
+              <div
+                key={key}
+                onClick={() => handleClickItem({
+                  value,
+                  key,
+                })}
+                className={styles.modalItem}
+              >
+                {value}
+              </div>
+            ))}
           </div>
         </div>
       )}

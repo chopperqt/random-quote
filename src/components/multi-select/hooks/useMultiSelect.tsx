@@ -3,13 +3,21 @@ import {
   useEffect,
   useState,
 } from "react"
+import {
+  SelectList,
+  SelectChange
+} from "../MultiSelect"
 
 interface useMultiSelectProps {
   selectElement: MutableRefObject<HTMLDivElement | null>
+  onChange: SelectChange
 }
+
 export const useMultiSelect = ({
   selectElement,
+  onChange,
 }: useMultiSelectProps) => {
+  const [selectedList, setSelectedList] = useState<SelectList[]>([])
   const [isOpened, setIsOpened] = useState<boolean>(false)
 
   const handleOpen = () => {
@@ -30,13 +38,32 @@ export const useMultiSelect = ({
     setIsOpened(true)
   }
 
-  const handleClickOutSelect = (event: any) => {
-    if (!selectElement) {
+  const handleClickOutSelect = (event: Event) => {
+    if (!selectElement || (event.target instanceof Element && selectElement.current?.contains(event.target))) {
       return
     }
 
-    console.log(selectElement.current?.closest(event.target))
+    setIsOpened(false)
+  }
 
+  const handleClickItem = (list: SelectList) => {
+    setSelectedList([...selectedList, list])
+
+    onChange({
+      currentList: list,
+      lists: [...selectedList, list],
+    })
+  }
+
+  const handleClickSelectedItem = (list: SelectList) => {
+    const updateLists = selectedList.filter(({ key }) => key !== list.key)
+
+    setSelectedList(updateLists)
+
+    onChange({
+      currentList: list,
+      lists: updateLists,
+    })
   }
 
   useEffect(() => {
@@ -45,9 +72,12 @@ export const useMultiSelect = ({
 
   return {
     isOpened,
+    selectedList,
     handleClose,
     handleOpen,
     handleClickSelect,
+    handleClickItem,
+    handleClickSelectedItem,
   }
 }
 

@@ -9,9 +9,24 @@ import {
   RESET_FILTERS,
 } from '../constants'
 import { Stores } from 'services'
+import MultiSelect from 'components/multi-select'
 
 import styles from './Filters.module.scss'
-import MultiSelect from 'components/multi-select'
+
+const MOCK_LIST = [
+  {
+    key: 'mark-tven',
+    value: 'Марк Твен',
+  },
+  {
+    key: 'nokollo-makiaveli',
+    value: 'Никколо Макиавелли'
+  },
+  {
+    value: 'Вася пупкин',
+    key: 'vasya-pupkn',
+  },
+]
 
 const Filters = () => {
   const {
@@ -62,7 +77,10 @@ const Filters = () => {
                 )
               })}
             </div>
-            <MultiSelect />
+            <MultiSelect
+              onChange={(value) => console.log(value)}
+              list={MOCK_LIST}
+            />
           </Collapse>
           <Button
             loading={filtersCount.isLoading}
