@@ -28,6 +28,13 @@ const MOCK_LIST = [
   },
 ]
 
+const MOCK_LIST_SELECTED = [
+  {
+    key: 'mark-tven',
+    value: 'Марк Твен',
+  },
+]
+
 const Filters = () => {
   const {
     handleCloseAuthors,
@@ -80,6 +87,7 @@ const Filters = () => {
             <MultiSelect
               onChange={(value) => console.log(value)}
               list={MOCK_LIST}
+              listSelected={MOCK_LIST_SELECTED}
             />
           </Collapse>
           <Button

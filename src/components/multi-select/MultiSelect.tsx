@@ -22,22 +22,27 @@ export interface SelectList {
 interface MultiSelectProps {
   list: SelectList[]
   onChange: (list: ChangeReturn) => void
+  listSelected?: SelectList[]
 }
 
 const MultiSelect = ({
   list = DefaultProps.array,
   onChange,
+  listSelected = DefaultProps.array
 }: MultiSelectProps) => {
   const selectRef = useRef<HTMLDivElement | null>(null)
   const {
     isOpened,
     handleOpen,
+    formattedList,
     selectedList,
     handleClickItem,
     handleClickSelectedItem,
   } = useMultiSelect({
     onChange,
     selectElement: selectRef,
+    selectList: listSelected,
+    list,
   })
 
   return (
@@ -62,9 +67,10 @@ const MultiSelect = ({
       {isOpened && (
         <div className={styles.modalWrap}>
           <div className={styles.modal}>
-            {list.map(({
+            {formattedList.map(({
               value,
               key,
+              disabled,
             }) => (
               <div
                 key={key}
@@ -72,7 +78,9 @@ const MultiSelect = ({
                   value,
                   key,
                 })}
-                className={styles.modalItem}
+                className={cx(styles.modalItem, {
+                  [styles.modalItemDisabled]: disabled,
+                })}
               >
                 {value}
               </div>

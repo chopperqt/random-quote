@@ -51,3 +51,8 @@
     border-bottom: none;
   }
 }
+
+.modalItemDisabled {
+  color: $color-secondary--4;
+  pointer-events: none;
+}

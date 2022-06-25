@@ -1,3 +1,4 @@
+import DefaultProps from "helpers/defaultProps"
 import {
   MutableRefObject,
   useEffect,
@@ -8,16 +9,23 @@ import {
   SelectChange
 } from "../MultiSelect"
 
+interface FormattedList extends SelectList {
+  disabled: boolean
+}
 interface useMultiSelectProps {
   selectElement: MutableRefObject<HTMLDivElement | null>
   onChange: SelectChange
+  selectList?: SelectList[]
+  list: SelectList[]
 }
-
 export const useMultiSelect = ({
   selectElement,
   onChange,
+  selectList = DefaultProps.array,
+  list = DefaultProps.array
 }: useMultiSelectProps) => {
-  const [selectedList, setSelectedList] = useState<SelectList[]>([])
+  const [selectedList, setSelectedList] = useState<SelectList[]>([...selectList])
+  const [formattedList, setFormattedList] = useState<FormattedList[]>([])
   const [isOpened, setIsOpened] = useState<boolean>(false)
 
   const handleOpen = () => {
@@ -47,6 +55,12 @@ export const useMultiSelect = ({
   }
 
   const handleClickItem = (list: SelectList) => {
+    const hasSelectedList = selectedList.find(_ => _.key === list.key)
+
+    if (hasSelectedList) {
+      return
+    }
+
     setSelectedList([...selectedList, list])
 
     onChange({
@@ -67,12 +81,25 @@ export const useMultiSelect = ({
   }
 
   useEffect(() => {
+    const updateList = list.map(_ => ({
+      ..._,
+      disabled: !!selectedList.find(__ => __.key === _.key)
+    }))
+
+    setFormattedList(updateList)
+  }, [
+    list,
+    selectedList,
+  ])
+
+  useEffect(() => {
     window.addEventListener('click', handleClickOutSelect)
   }, [])
 
   return {
     isOpened,
     selectedList,
+    formattedList,
     handleClose,
     handleOpen,
     handleClickSelect,
