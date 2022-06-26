@@ -43,7 +43,7 @@ const Add = ({
       loading: postQuoteStatus,
     }
   } = Stores()
-  const hasLoading = postQuoteStatus.postQuote.status === 'PENDING'
+  const hasLoading = postQuoteStatus.postQuote?.status === 'PENDING'
   const {
     register,
     handleSubmit,

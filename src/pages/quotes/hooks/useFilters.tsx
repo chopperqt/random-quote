@@ -22,12 +22,14 @@ import {
 import { getRange } from 'helpers/pagination'
 import useUser from 'helpers/useUser'
 import { getUrlParam } from 'helpers/urlParams'
+import { ChangeReturn } from 'components/multi-select/MultiSelect'
 
 const DEFAULT_PAGE = 1
 
 const useFilters = () => {
   const { user } = useUser()
   const searchParam = getUrlParam('search')
+  const authorsParam = getUrlParam('authors')
   const [openedAuthors, setOpenedAuthors] = useState<boolean>(false)
   const {
     NotificationStore: { loading },
@@ -86,6 +88,12 @@ const useFilters = () => {
     })
   }, [filters])
 
+  const handleChangeSelector = (value: ChangeReturn) => {
+    Store.dispatch(filterMethods.updateFilters({
+      authors: value.lists.map(_ => _.key)
+    }))
+  }
+
   const handleReset = () => {
     getQuotes({
       from,
@@ -113,11 +121,36 @@ const useFilters = () => {
       to,
       authors: filters.authors,
     })
-  }, [filters.authors])
+  }, [
+    filters.authors,
+    from,
+    to,
+    searchParam,
+  ])
 
   useEffect(() => {
     getAuthors()
   }, [])
+
+  const defaultAuthors = useMemo(() => {
+    if (!!!filters.authors) {
+      return []
+    }
+
+    const authorsFromParam = filters.authors.map(_ => {
+      const findAuthor = authors.find(__ => __.id_author === _)
+
+      return findAuthor
+    })
+
+
+    return authorsFromParam.filter(_ => _ !== undefined).map(_ => ({
+      key: _!.id_author,
+      value: _!.name,
+    }))
+
+
+  }, [openedAuthors])
 
   return {
     handleOpenAuthors,
@@ -132,6 +165,8 @@ const useFilters = () => {
     handleClickButton,
     handleReset,
     filtersCount,
+    handleChangeSelector,
+    defaultAuthors,
   }
 }
 

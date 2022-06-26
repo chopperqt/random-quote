@@ -21,7 +21,7 @@ const AdminPanelQuotes = ({
 }: IAdminPanelQuotes) => {
   const {
     QuoteStore: {
-      quotes,
+      quotesAll,
     },
     NotificationStore: {
       loading: {
@@ -30,7 +30,7 @@ const AdminPanelQuotes = ({
     }
   } = Stores()
 
-  const modifyActionsQuotes = quotes.map((quote) => ({
+  const modifyActionsQuotes = quotesAll.map((quote) => ({
     ...quote,
     author: quote.author.name || '',
     actions: (
@@ -72,6 +72,8 @@ const AdminPanelQuotes = ({
     getQuotes({})
   }, [])
 
+  console.log(modifyActionsQuotes)
+
   return (
     <div className={styles.layout}>
       <Button
@@ -83,13 +85,12 @@ const AdminPanelQuotes = ({
           {BUTTON_TEXT}
         </>
       </Button>
-      <Spin loading={loading.status === 'PENDING'}>
+      <Spin loading={loading?.status === 'PENDING'}>
         <Table
           data={modifyActionsQuotes}
           columns={columns}
         />
       </Spin>
-
     </div>
   )
 }

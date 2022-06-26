@@ -23,12 +23,18 @@ interface MultiSelectProps {
   list: SelectList[]
   onChange: (list: ChangeReturn) => void
   listSelected?: SelectList[]
+  className?: string
+  label?: string
+  classNameSelect?: string
 }
 
 const MultiSelect = ({
   list = DefaultProps.array,
   onChange,
-  listSelected = DefaultProps.array
+  listSelected = DefaultProps.array,
+  classNameSelect,
+  className,
+  label,
 }: MultiSelectProps) => {
   const selectRef = useRef<HTMLDivElement | null>(null)
   const {
@@ -46,48 +52,53 @@ const MultiSelect = ({
   })
 
   return (
-    <div
-      className={styles.multiSelect}
-      ref={selectRef}
-    >
-      <div className={styles.select} onClick={handleOpen}>
-        {selectedList.map(({
-          value,
-          key,
-        }) => (
-          <div
-            key={key}
-            className={cx(styles.item, "heading--xs")}
-            onClick={() => handleClickSelectedItem({ key, value })}
-          >
-            {value}
-          </div>
-        ))}
-      </div>
-      {isOpened && (
-        <div className={styles.modalWrap}>
-          <div className={styles.modal}>
-            {formattedList.map(({
-              value,
-              key,
-              disabled,
-            }) => (
-              <div
-                key={key}
-                onClick={() => handleClickItem({
-                  value,
-                  key,
-                })}
-                className={cx(styles.modalItem, {
-                  [styles.modalItemDisabled]: disabled,
-                })}
-              >
-                {value}
-              </div>
-            ))}
-          </div>
-        </div>
+    <div className={className}>
+      {label && (
+        <div>{label}</div>
       )}
+      <div
+        className={cx(styles.multiSelect, classNameSelect)}
+        ref={selectRef}
+      >
+        <div className={styles.select} onClick={handleOpen}>
+          {selectedList.map(({
+            value,
+            key,
+          }) => (
+            <div
+              key={key}
+              className={cx(styles.item, "heading--xs")}
+              onClick={() => handleClickSelectedItem({ key, value })}
+            >
+              {value}
+            </div>
+          ))}
+        </div>
+        {isOpened && (
+          <div className={styles.modalWrap}>
+            <div className={styles.modal}>
+              {formattedList.map(({
+                value,
+                key,
+                disabled,
+              }) => (
+                <div
+                  key={key}
+                  onClick={() => handleClickItem({
+                    value,
+                    key,
+                  })}
+                  className={cx(styles.modalItem, {
+                    [styles.modalItemDisabled]: disabled,
+                  })}
+                >
+                  {value}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

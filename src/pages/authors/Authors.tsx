@@ -4,9 +4,11 @@ import { Stores } from 'services'
 import { getAuthors } from 'utils/authors'
 import Title from 'components/title'
 import { AUTHORS_TITLE } from './constants'
+import AuthorsSkeleton from './partials/AuthorsSkeleton'
+import Grid from 'components/grid'
+import Author from './partials/Author'
 
 import styles from './Authors.module.scss'
-import AuthorsSkeleton from './partials/AuthorsSkeleton'
 
 const Authors = () => {
   const {
@@ -27,7 +29,7 @@ const Authors = () => {
           subText="Всего 2 автора"
         />
         <AuthorsSkeleton />
-        {/* <Grid
+        <Grid
           breakpointCols={5}
           className={styles.wrap}
         >
@@ -40,7 +42,7 @@ const Authors = () => {
               img={avatar}
             />
           ))}
-        </Grid> */}
+        </Grid>
       </div>
     </div>
   )
