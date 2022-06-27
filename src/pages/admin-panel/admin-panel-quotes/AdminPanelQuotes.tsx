@@ -72,8 +72,6 @@ const AdminPanelQuotes = ({
     getQuotes({})
   }, [])
 
-  console.log(modifyActionsQuotes)
-
   return (
     <div className={styles.layout}>
       <Button

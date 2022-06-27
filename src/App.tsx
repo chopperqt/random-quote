@@ -46,7 +46,7 @@ function App() {
         <Routes>
           <Route path={routes.adminPanel} element={<AdminPanel />} />
           <Route path={routes.default} element={<Home />} />
-          <Route path={`${routes.default}/:id`} element={<Home />} />
+          <Route path={routes.defaultWithId} element={<Home />} />
           <Route path={routes.quotes} element={<Quotes />} />
           <Route path={routes.profile} element={ComponentProfile} />
           <Route path={routes.logIn} element={ComponentLogin} />
