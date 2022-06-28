@@ -1,7 +1,6 @@
 import {
   useEffect,
   useMemo,
-  useRef,
 } from 'react'
 
 import {
@@ -13,7 +12,10 @@ import {
   changeDocumentTitle,
   DocumentTitles
 } from 'helpers/documentTitle'
-import { getUrlParam, updateUrlParams } from 'helpers/urlParams'
+import {
+  getUrlParam,
+  updateUrlParams,
+} from 'helpers/urlParams'
 import Store, {
   quoteMethods,
   Stores,
@@ -78,7 +80,6 @@ const useHome = () => {
 
     getRandomQuote(user?.id)
   }
-
 
   useEffect(() => {
     changeDocumentTitle(DocumentTitles.home)
