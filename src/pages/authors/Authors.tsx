@@ -12,6 +12,9 @@ import styles from './Authors.module.scss'
 
 const Authors = () => {
   const {
+    NotificationStore: {
+      loading,
+    },
     AuthorStore: {
       authors,
     }
@@ -28,7 +31,9 @@ const Authors = () => {
           title={AUTHORS_TITLE}
           subText="Всего 2 автора"
         />
-        <AuthorsSkeleton />
+        {(loading.getAuthors?.status === 'PENDING' || !authors) && (
+          <AuthorsSkeleton />
+        )}
         <Grid
           breakpointCols={5}
           className={styles.wrap}
