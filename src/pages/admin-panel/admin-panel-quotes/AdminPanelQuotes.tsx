@@ -41,32 +41,29 @@ const AdminPanelQuotes = ({
     )
   }))
 
-  const columns = useMemo(
-    () => [
-      {
-        Header: 'ID',
-        accessor: 'id_quote',
-      },
-      {
-        Header: 'Quote',
-        accessor: 'text',
-        width: 600,
-      },
-      {
-        Header: 'Author',
-        accessor: 'author',
-      },
-      {
-        Header: 'Create At',
-        accessor: 'created_at',
-      },
-      {
-        Header: 'Actions',
-        accessor: 'actions',
-      }
-    ],
-    []
-  )
+  const columns = useMemo(() => [
+    {
+      Header: 'ID',
+      accessor: 'id_quote',
+    },
+    {
+      Header: 'Quote',
+      accessor: 'text',
+      width: 600,
+    },
+    {
+      Header: 'Author',
+      accessor: 'author',
+    },
+    {
+      Header: 'Create At',
+      accessor: 'created_at',
+    },
+    {
+      Header: 'Actions',
+      accessor: 'actions',
+    }
+  ], [])
 
   useEffect(() => {
     getQuotes({})

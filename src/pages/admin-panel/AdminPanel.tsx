@@ -5,6 +5,7 @@ import Tabs, { TabItem } from 'components/tabs'
 import useModalAdd from './hooks/useModalAdd'
 import AdminPanelAdd from './admin-panel-quotes/add/Add'
 import AdminPanelQuotes from './admin-panel-quotes/AdminPanelQuotes'
+import AdminPanelAuthors from './admin-panel-author/AdminPanelAuthors'
 
 import styles from './AdminPanel.module.scss'
 
@@ -39,9 +40,7 @@ const AdminPanel = () => {
             />
           </TabItem>
           <TabItem key={MOCK_TABS[1].key}>
-            <div>
-              Table 2
-            </div>
+            <AdminPanelAuthors />
           </TabItem>
         </Tabs>
         <Modal
