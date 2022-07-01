@@ -6,6 +6,7 @@ import {
 import { Stores } from 'services'
 import { getAuthors } from 'utils/authors'
 import { TableAction } from 'components/table'
+import Img from 'components/img/Img'
 
 const useAdminPanelAuthors = () => {
   const {
@@ -39,6 +40,10 @@ const useAdminPanelAuthors = () => {
       accessor: 'path',
     },
     {
+      Header: 'Avatar',
+      accessor: 'avatar'
+    },
+    {
       Header: 'Actions',
       accessor: 'actions',
     },
@@ -47,6 +52,13 @@ const useAdminPanelAuthors = () => {
   const data = useMemo(() => {
     return authors.map((author) => ({
       ...author,
+      avatar: (
+        <Img
+          alt={author.name}
+          src={author.avatar}
+          height={30}
+        />
+      ),
       actions: (
         <TableAction
           onDelete={() => { }}
