@@ -1,0 +1,18 @@
+@import 'asset/scss/colors';
+@import 'asset/scss/common';
+@import 'asset/scss/mixin';
+
+.layout {
+  border: 2px dashed;
+  border-radius: $border-radius--large;
+  width: 400px;
+  padding: 20px;
+}
+
+.button {
+  @include reset-button();
+}
+
+.input {
+  display: none;
+}

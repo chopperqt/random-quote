@@ -11,6 +11,7 @@ import useModalAdd from "pages/admin-panel/hooks/useModalAdd"
 import { ADD_AUTHOR_TEXT } from '../../constants'
 
 import styles from '../Content.module.scss'
+import Uploader from 'components/uploader'
 
 interface FormFields {
   name: string
@@ -50,14 +51,21 @@ const Add = () => {
           onSubmit={handleSubmit(onSubmit)}
           className={styles.form}
         >
-          <Input
-            {...(register('name', { required: true }))}
-            className={styles.input}
-          />
-          <Input
-            {...(register('avatar', { required: true }))}
-            className={styles.input}
-          />
+          <div>
+            <div >
+              <Uploader />
+            </div>
+            <div>
+              <Input
+                {...(register('name', { required: true }))}
+                className={styles.input}
+              />
+              <Input
+                {...(register('avatar', { required: true }))}
+                className={styles.input}
+              />
+            </div>
+          </div>
           <Button type='submit'>
             {ADD_AUTHOR_TEXT}
           </Button>
