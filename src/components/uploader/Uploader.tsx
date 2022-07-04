@@ -1,3 +1,5 @@
+import cx from 'classnames'
+
 import Img from 'components/img'
 import {
   useRef,
@@ -7,17 +9,21 @@ import {
 
 import styles from './Uploader.module.scss'
 
+const UPLOAD_TEXT = 'Загрузите изображение'
+
 const Uploader = () => {
   const [images, setImages] = useState<(ArrayBuffer | string)[]>([])
+  const hasImages = images.length > 0
 
   const layoutRef = useRef<HTMLDivElement | null>(null)
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
-  const preventDefaults = (e: any) => {
+  const preventDefaults = (e: Event) => {
     e.preventDefault()
     e.stopPropagation()
   }
 
-  const hightLight = (e: any) => {
+  const hightLight = () => {
     if (!layoutRef.current) {
       return
     }
@@ -25,7 +31,7 @@ const Uploader = () => {
     layoutRef.current.classList.add('hightLight')
   }
 
-  const unhighLight = (e: any) => {
+  const unhightLight = () => {
     if (!layoutRef.current) {
       return
     }
@@ -33,36 +39,14 @@ const Uploader = () => {
     layoutRef.current.classList.remove('unhighlight')
   }
 
-  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-    if (!layoutRef.current) {
-      return
-    }
-
-    layoutRef?.current.addEventListener(eventName, preventDefaults, false)
-  });
-
-  ['dragenter', 'dragover'].forEach(eventName => {
-    if (!layoutRef.current) {
-      return
-    }
-
-    layoutRef.current.addEventListener(eventName, hightLight, false)
-  });
-
-  ['dragleave', 'drop'].forEach(eventName => {
-    if (!layoutRef.current) {
-      return
-    }
-
-    layoutRef.current.addEventListener(eventName, unhighLight, false)
-  });
-
   const uploadFiles = (file: any) => {
     console.log('uploading File: ', file)
   }
 
   const handleFiles = (files: any) => {
-    ([...files]).forEach(uploadFiles)
+    console.log('45', files)
+
+    return [files].forEach(uploadFiles)
   }
 
   const handleDrop = (e: DragEvent) => {
@@ -70,7 +54,8 @@ const Uploader = () => {
 
     if (dt) {
       const files = dt.files
-      const formattedFiles = Array.from(files).forEach((file) => {
+
+      const test = Array.from(files).forEach((file) => {
         const readImage = new FileReader()
         readImage.readAsDataURL(file)
         readImage.onloadend = () => {
@@ -78,24 +63,34 @@ const Uploader = () => {
             return
           }
 
+
+          console.log('files', readImage.result)
           setImages([...images, readImage.result])
         }
       })
 
-      console.log('formattedFiles: ', formattedFiles)
-
-      handleFiles(files)
-
+      handleFiles(test)
     }
   }
 
-
   useEffect(() => {
-    if (!layoutRef.current) {
-      return
-    }
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((eventName) => {
+      layoutRef.current?.addEventListener(eventName, preventDefaults, false)
+    });
 
-    layoutRef.current.addEventListener('drop', handleDrop, false)
+    ['dragenter', 'dragover'].forEach(eventName => {
+      layoutRef.current?.addEventListener(eventName, hightLight, false)
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      layoutRef.current?.addEventListener(eventName, unhightLight, false)
+    });
+
+    layoutRef.current?.addEventListener('drop', handleDrop, false)
+
+    inputRef.current?.addEventListener('change', (e: any) => {
+      console.log(e)
+    })
   }, [])
 
 
@@ -106,31 +101,33 @@ const Uploader = () => {
   return (
     <div
       ref={layoutRef}
-      className={styles.layout}
+      className={cx(styles.layout, {
+        [styles.layoutImage]: hasImages,
+      })}
     >
-      <form action="">
-        <p>Перетащите сюда файл</p>
-        <input
-          type="file"
-          multiple
-          accept="image/*"
-          id="uploader"
-          className={styles.input}
-        />
-        <label
-          htmlFor="uploader"
-          className={styles.button}
-        >
-          Выберите файл
-        </label>
-      </form>
+      {!hasImages && (
+        <>
+          <input
+            ref={inputRef}
+            type="file"
+            multiple
+            accept="image/*"
+            id="uploader"
+            className={styles.input}
+          />
+          <label
+            htmlFor="uploader"
+            className={styles.button}
+          >
+            {UPLOAD_TEXT}
+          </label>
+        </>
+      )}
       {images && images.map((image) => {
-
-
-
         return (
           <Img
-            height={200}
+            className={styles.image}
+            height={250}
             src={image}
             alt="SomeImage"
           />
