@@ -1,7 +1,7 @@
 import cx from 'classnames'
 
 import Img from 'components/img'
-import {
+import React, {
   useRef,
   useEffect,
   useState,
@@ -11,12 +11,35 @@ import styles from './Uploader.module.scss'
 
 const UPLOAD_TEXT = 'Загрузите изображение'
 
+type ImageType = (ArrayBuffer | string)
+
 const Uploader = () => {
-  const [images, setImages] = useState<(ArrayBuffer | string)[]>([])
+  const [images, setImages] = useState<ImageType[]>([])
+  const [preImages, setPreImage] = useState<ImageType[]>([])
   const hasImages = images.length > 0
 
   const layoutRef = useRef<HTMLDivElement | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
+
+  const filesReader = (files: FileList): ImageType[] => {
+    let buffer: ImageType[] = []
+
+    Array.from(files).forEach((file) => {
+      const readImage = new FileReader()
+      readImage.readAsDataURL(file)
+      readImage.onloadend = () => {
+        if (!readImage?.result) {
+          return
+        }
+
+        setImages([...images, readImage.result])
+
+        buffer = [...buffer, ((readImage?.result as ImageType) || '')]
+      }
+    })
+
+    return buffer
+  }
 
   const preventDefaults = (e: Event) => {
     e.preventDefault()
@@ -44,33 +67,32 @@ const Uploader = () => {
   }
 
   const handleFiles = (files: any) => {
-    console.log('45', files)
 
     return [files].forEach(uploadFiles)
   }
 
-  const handleDrop = (e: DragEvent) => {
-    const dt = e.dataTransfer
+  const handleDrop = async (e: DragEvent | FileList) => {
+    if (e instanceof DragEvent) {
+      const dt = e.dataTransfer
 
-    if (dt) {
-      const files = dt.files
+      if (dt) {
+        const files = dt.files
 
-      const test = Array.from(files).forEach((file) => {
-        const readImage = new FileReader()
-        readImage.readAsDataURL(file)
-        readImage.onloadend = () => {
-          if (!readImage.result) {
-            return
-          }
+        const normalizedImages = filesReader(files)
 
+        console.log('normalizedImage', normalizedImages)
 
-          console.log('files', readImage.result)
-          setImages([...images, readImage.result])
-        }
-      })
+        //setImages([...images, ...normalizedImages])
 
-      handleFiles(test)
+        handleFiles(normalizedImages)
+      }
     }
+  }
+
+  const handleSelectFile = (e: Event) => {
+    const target = e.target as HTMLInputElement
+    const file: File = (target.files as FileList)[0]
+
   }
 
   useEffect(() => {
@@ -88,9 +110,7 @@ const Uploader = () => {
 
     layoutRef.current?.addEventListener('drop', handleDrop, false)
 
-    inputRef.current?.addEventListener('change', (e: any) => {
-      console.log(e)
-    })
+    inputRef.current?.addEventListener('change', handleSelectFile)
   }, [])
 
 
