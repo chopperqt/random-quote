@@ -5,7 +5,10 @@ import {
 
 import { Stores } from 'services'
 import { getAuthors } from 'utils/authors'
-import { TableAction } from 'components/table'
+import {
+  TableAction,
+  TableAuthor,
+} from 'components/table'
 import Img from 'components/img/Img'
 
 const useAdminPanelAuthors = () => {
@@ -53,9 +56,9 @@ const useAdminPanelAuthors = () => {
     return authors.map((author) => ({
       ...author,
       avatar: (
-        <Img
-          alt={author.name}
-          src={author.avatar}
+        <TableAuthor
+          name={author.name}
+          avatar={author.avatar}
           height={30}
         />
       ),

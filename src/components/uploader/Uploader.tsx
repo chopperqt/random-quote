@@ -91,7 +91,9 @@ const Uploader = () => {
 
   const handleSelectFile = (e: Event) => {
     const target = e.target as HTMLInputElement
-    const file: File = (target.files as FileList)[0]
+    const normalizedImages = filesReader(target.files as FileList)
+
+    handleFiles(normalizedImages)
 
   }
 
