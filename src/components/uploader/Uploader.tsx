@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useState,
 } from 'react'
+import { uploadFile } from 'utils/authors'
 
 import styles from './Uploader.module.scss'
 
@@ -22,7 +23,11 @@ const Uploader = () => {
   const inputRef = useRef<HTMLInputElement | null>(null)
 
   const filesReader = (files: FileList): ImageType[] => {
+    console.log(files)
+
     let buffer: ImageType[] = []
+
+    uploadFile(files[0])
 
     Array.from(files).forEach((file) => {
       const readImage = new FileReader()
@@ -31,6 +36,8 @@ const Uploader = () => {
         if (!readImage?.result) {
           return
         }
+
+
 
         setImages([...images, readImage.result])
 
@@ -63,12 +70,14 @@ const Uploader = () => {
   }
 
   const uploadFiles = (file: any) => {
-    console.log('uploading File: ', file)
+    //console.log('file: ', file)
+
+    uploadFile(file[0])
   }
 
   const handleFiles = (files: any) => {
 
-    return [files].forEach(uploadFiles)
+    // return [files].forEach((file) => uploadFiles(file))
   }
 
   const handleDrop = async (e: DragEvent | FileList) => {
@@ -80,11 +89,12 @@ const Uploader = () => {
 
         const normalizedImages = filesReader(files)
 
-        console.log('normalizedImage', normalizedImages)
+
+        //console.log(normalizedImages)
 
         //setImages([...images, ...normalizedImages])
 
-        handleFiles(normalizedImages)
+        //handleFiles(normalizedImages)
       }
     }
   }
@@ -94,7 +104,6 @@ const Uploader = () => {
     const normalizedImages = filesReader(target.files as FileList)
 
     handleFiles(normalizedImages)
-
   }
 
   useEffect(() => {
@@ -114,11 +123,6 @@ const Uploader = () => {
 
     inputRef.current?.addEventListener('change', handleSelectFile)
   }, [])
-
-
-  useEffect(() => {
-    console.log(images)
-  }, [images])
 
   return (
     <div

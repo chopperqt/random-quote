@@ -3,7 +3,7 @@ import { Author } from 'services/authors'
 
 import styles from './TableAuthor.module.scss'
 
-const DEFAULT_STRING = 'https://gkywdfbpxquelncihepl.supabase.co/storage/v1/object/public/(.*)'
+const DEFAULT_STRING = 'https://gkywdfbpxquelncihepl.supabase.co/storage/v1/object/public/images/(.*)'
 
 type TableAuthor = Pick<Author, 'name' | 'avatar'>
 
