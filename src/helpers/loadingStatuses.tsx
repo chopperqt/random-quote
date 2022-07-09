@@ -2,10 +2,12 @@ import { ApiError, PostgrestError } from '@supabase/supabase-js'
 
 import { SuccessMessages } from './successMessages'
 import Store, { notificationMethods } from 'services'
-import { RequestsData } from 'utils'
+import { ApiRequests } from 'utils'
 import { CountAction, StatusTypes } from 'services/notifications/reducer'
 
 export type TLoadingStatus = (() => void) | ((message?: PostgrestError) => void)
+
+type ErrorType = PostgrestError | ApiError | Error
 
 interface Action {
   pending: ActionData
@@ -33,17 +35,17 @@ export const ActionsStatus: Action = {
   }
 }
 
-const loadingStatuses = (name: RequestsData | string) => {
-  const handlePending = () => Store.dispatch(notificationMethods.loadingRequest(name, ActionsStatus.pending))
+const loadingStatuses = (requestName: ApiRequests) => {
+  const handlePending = () => Store.dispatch(notificationMethods.loadingRequest(requestName, ActionsStatus.pending))
 
-  const handleFailure = ({ message }: PostgrestError | ApiError) => {
-    Store.dispatch(notificationMethods.loadingRequest(name, ActionsStatus.failure))
+  const handleFailure = ({ message }: ErrorType) => {
+    Store.dispatch(notificationMethods.loadingRequest(requestName, ActionsStatus.failure))
 
     notificationMethods.createNotification(message, 'ERROR')
   }
 
   const handleSuccess = (message?: string) => {
-    Store.dispatch(notificationMethods.loadingRequest(name, ActionsStatus.success))
+    Store.dispatch(notificationMethods.loadingRequest(requestName, ActionsStatus.success))
 
     if (message) {
       notificationMethods.createNotification(message || SuccessMessages.createSuccess, 'SUCCESS')

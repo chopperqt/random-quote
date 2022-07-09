@@ -4,7 +4,7 @@ export interface ILink {
   to: string,
   activeLink?: string
   className?: string
-  children: JSX.Element | string
+  children: JSX.Element | JSX.Element[] | string
   alt?: string
 }
 

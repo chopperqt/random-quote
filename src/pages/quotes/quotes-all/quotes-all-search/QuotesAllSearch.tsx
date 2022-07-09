@@ -1,15 +1,15 @@
-import Masonry from 'react-masonry-css'
-
-import { QuoteData } from 'services/quotes'
+import Grid from 'components/grid'
+import { QuoteData } from 'services/quotes/QuotesStore'
 import Empty from '../empty/Empty'
 import Quote from 'components/quote'
 import Skeleton from '../partials/Skeleton'
 import Information from 'components/Information'
 import { DefaultMessage } from 'components/Information'
+import Pagination, { PaginationProps } from 'components/pagination'
 
 import styles from './QuotesAllSearch.module.scss'
 
-interface QuotesAllSearchProps {
+interface QuotesAllSearchProps extends PaginationProps {
   isEmpty: boolean
   isSuccess: boolean
   isLoading: boolean
@@ -22,6 +22,9 @@ const QuotesAllSearch = ({
   items,
   isLoading,
   isError,
+  onClick,
+  page,
+  pages,
 }: QuotesAllSearchProps) => (
   <div className={styles.wrap}>
     <div className={styles.section}>
@@ -29,18 +32,24 @@ const QuotesAllSearch = ({
         <Empty />
       )}
       {isSuccess && (
-        <Masonry
-          breakpointCols={2}
-          className="my-masonry-grid"
-          columnClassName='my-masonry-grid_column'
-        >
-          {items.map((quote) => (
+        <Grid breakpointCols={2} >
+          {items.map(({
+            text,
+            created_at,
+            id_author,
+            id_quote,
+            author,
+          }) => (
             <Quote
-              key={quote.id_quote}
-              quote={quote}
+              key={id_quote}
+              text={text}
+              author={author}
+              created_at={created_at}
+              id_author={id_author}
+              id_quote={id_quote}
             />
           ))}
-        </Masonry>
+        </Grid>
       )}
       {isLoading && (
         <Skeleton />
@@ -48,6 +57,11 @@ const QuotesAllSearch = ({
       {isError && (
         <Information text={DefaultMessage.error} />
       )}
+      <Pagination
+        pages={pages}
+        page={page}
+        onClick={onClick}
+      />
     </div>
   </div>
 )

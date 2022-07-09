@@ -1,13 +1,13 @@
 import Masonry from 'react-masonry-css'
 
-import { QuoteData } from 'services/quotes'
+import { QuoteData } from 'services/quotes/QuotesStore'
 import Empty from '../empty/Empty'
 import Quote from 'components/quote'
 import Skeleton from '../partials/Skeleton'
 import Information from 'components/Information'
 import { DefaultMessage } from 'components/Information'
 import Pagination, { PaginationProps } from 'components/pagination'
-
+import Grid from 'components/grid'
 
 import styles from './QuotesAllList.module.scss'
 
@@ -33,18 +33,30 @@ const QuotesAllList = ({
       <Empty />
     )}
     {isSuccess && (
-      <Masonry
+      <Grid
         breakpointCols={2}
-        className="my-masonry-grid"
-        columnClassName='my-masonry-grid_column'
+        columnClassName={styles.grid}
       >
-        {items.map((quote) => (
+        {items.map(({
+          author,
+          text,
+          created_at,
+          id_author,
+          id_quote,
+          bookmarked,
+        }) => (
           <Quote
-            key={quote.id_quote}
-            quote={quote}
+            loading={false}
+            key={id_quote}
+            id_author={id_author}
+            id_quote={id_quote}
+            author={author}
+            text={text}
+            created_at={created_at}
+            bookmarked={bookmarked}
           />
         ))}
-      </Masonry>
+      </Grid>
     )}
     {isLoading && (
       <Skeleton />

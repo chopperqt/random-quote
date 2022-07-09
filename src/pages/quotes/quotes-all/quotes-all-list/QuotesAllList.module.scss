@@ -9,3 +9,9 @@
     grid-template-columns: 100%;    
   }
 }
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+}

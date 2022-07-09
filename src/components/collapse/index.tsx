@@ -1,8 +1,8 @@
 import Collapse from "./Collapse";
 
-export interface ICollapseProps {
+export interface CollapseProps {
   text: string
-  children?: JSX.Element
+  children?: JSX.Element | JSX.Element[]
   open: boolean
   onOpen?: () => void
   onClose?: () => void

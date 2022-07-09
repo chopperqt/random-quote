@@ -15,7 +15,10 @@ const initialState = {
 
 export type UserStore = typeof initialState
 
-const userStore = (state = initialState, { type, payload }: { type: string, payload: any }) => produce(state, draft => {
+const userStore = (
+  state = initialState,
+  { type, payload }: { type: string, payload: any }
+) => produce(state, draft => {
   switch (type) {
     case SET_USER: {
       draft.email = payload.email

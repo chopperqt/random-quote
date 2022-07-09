@@ -28,16 +28,15 @@ import {
   PASSWORD_PLACEHOLDER,
   QUESTION_TEXT,
 } from '../constants'
-import { login } from 'utils/auth'
+import {
+  login,
+  LoginData,
+} from 'utils/auth'
 import { Stores } from 'services'
 import { routes } from 'helpers/routes'
 
 import styles from './LoginForm.module.scss'
 
-interface LoginFields {
-  email: string
-  password: string
-}
 const LoginForm = () => {
   const navigate = useNavigate()
   const {
@@ -55,15 +54,12 @@ const LoginForm = () => {
     },
     resetField,
     watch,
-  } = useForm<LoginFields>()
+  } = useForm<LoginData>()
 
   const passwordValue = watch('password')
 
-  const onSubmit: SubmitHandler<LoginFields> = async ({
-    email,
-    password
-  }) => {
-    const response = await login(email, password)
+  const onSubmit: SubmitHandler<LoginData> = async (data) => {
+    const response = await login(data)
 
     if (response) {
       setShowError(true)
@@ -118,7 +114,7 @@ const LoginForm = () => {
       </Link>
       <Button
         type="submit"
-        loading={loading.login.status === 'PENDING'}
+        loading={loading?.login?.status === 'PENDING'}
       >
         {BUTTON_TEXT}
       </Button>

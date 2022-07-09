@@ -1,4 +1,7 @@
-import { useEffect } from 'react'
+import {
+  useEffect,
+  useMemo,
+} from 'react'
 
 import {
   getQuote,
@@ -34,9 +37,9 @@ const useHome = () => {
       loading,
     },
     QuoteStore: {
-      quotesCount,
+      currentQuote,
       quotes,
-    }
+    },
   } = Stores()
   const idFromUrl = Number(getUrlParam('qq'))
   const { user } = useUser()
@@ -48,6 +51,17 @@ const useHome = () => {
   } = useResponse({
     loading: loading.getQuote,
   })
+
+  const quote = useMemo(() => {
+    if (quotes[currentQuote]) {
+      updateUrlParams({ qq: quotes[currentQuote].id_quote })
+    }
+
+    return quotes[currentQuote]
+  }, [
+    quotes,
+    currentQuote,
+  ])
 
   const handleClickArrow = (event: KeyboardEvent) => {
     if (event.code === ArrowKeys.right) {
@@ -72,8 +86,8 @@ const useHome = () => {
 
     window.addEventListener('keydown', handleClickArrow)
 
-    if (quotes.length) {
-      Store.dispatch(quoteMethods.setCounter(quotes.length - 1, 'quotesCount'))
+    if (currentQuote <= quotes.length && quotes.length !== 0) {
+      Store.dispatch(quoteMethods.setCounter(currentQuote, 'currentQuote'))
 
       return
     }
@@ -91,16 +105,8 @@ const useHome = () => {
     }
   }, [])
 
-  useEffect(() => {
-    if (quotes[quotesCount]?.id_quote) {
-      updateUrlParams({ qq: quotes[quotesCount].id_quote })
-    }
-  }, [
-    quotes,
-    quotesCount,
-  ])
-
   return {
+    quote,
     isLoading,
     isSuccess,
     isError,

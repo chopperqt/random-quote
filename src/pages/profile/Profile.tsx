@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-
 import useUser from 'helpers/useUser'
 import { routes } from 'helpers/routes'
 import {
@@ -9,6 +8,7 @@ import {
   logOut,
   deleteUser,
 } from 'utils/auth'
+import Link from 'components/link'
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -31,13 +31,15 @@ const Profile = () => {
       <button onClick={() => deleteUser(user!.id)}>
         Удалить аккаунт
       </button>
+      <Link to={routes.adminPanel}>
+        Панель админа
+      </Link>
       {user && (
         <>
           <img src={user.avatar_url} alt="user-avatar" />
           {user.email}
         </>
       )}
-
     </div>
   )
 

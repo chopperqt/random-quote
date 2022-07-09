@@ -1,0 +1,46 @@
+@import 'asset/scss/colors';
+@import 'asset/scss/common';
+@import 'asset/scss/mixin';
+
+.layout {
+  border: 2px dashed $color-secondary--5;
+  border-radius: $border-radius--large;
+  color: $color-secondary--5;
+  width: 200px;
+  height: 250px;
+  padding: 20px;
+  position: relative;
+}
+
+.layoutImage {
+  padding: 0;
+  border: none
+}
+
+.button {
+  @include reset-button();
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+.input {
+  display: none;
+}
+
+.image {
+  width: 200px;
+  border-radius: $border-radius--large;
+}
+
+.upload {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  
+  :global(.icon-svg) {
+    fill: $color-white--500;
+  }
+}

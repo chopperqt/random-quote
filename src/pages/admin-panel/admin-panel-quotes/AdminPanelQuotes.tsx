@@ -21,7 +21,7 @@ const AdminPanelQuotes = ({
 }: IAdminPanelQuotes) => {
   const {
     QuoteStore: {
-      quotes,
+      quotesAll,
     },
     NotificationStore: {
       loading: {
@@ -30,9 +30,9 @@ const AdminPanelQuotes = ({
     }
   } = Stores()
 
-  const modifyActionsQuotes = quotes.map((quote) => ({
+  const modifyActionsQuotes = quotesAll.map((quote) => ({
     ...quote,
-    author: quote.name || '',
+    author: quote.author.name || '',
     actions: (
       <TableAction
         onDelete={() => { }}
@@ -41,32 +41,29 @@ const AdminPanelQuotes = ({
     )
   }))
 
-  const columns = useMemo(
-    () => [
-      {
-        Header: 'ID',
-        accessor: 'id_quote',
-      },
-      {
-        Header: 'Quote',
-        accessor: 'text',
-        width: 600,
-      },
-      {
-        Header: 'Author',
-        accessor: 'author',
-      },
-      {
-        Header: 'Create At',
-        accessor: 'created_at',
-      },
-      {
-        Header: 'Actions',
-        accessor: 'actions',
-      }
-    ],
-    []
-  )
+  const columns = useMemo(() => [
+    {
+      Header: 'ID',
+      accessor: 'id_quote',
+    },
+    {
+      Header: 'Quote',
+      accessor: 'text',
+      width: 600,
+    },
+    {
+      Header: 'Author',
+      accessor: 'author',
+    },
+    {
+      Header: 'Create At',
+      accessor: 'created_at',
+    },
+    {
+      Header: 'Actions',
+      accessor: 'actions',
+    }
+  ], [])
 
   useEffect(() => {
     getQuotes({})
@@ -83,13 +80,12 @@ const AdminPanelQuotes = ({
           {BUTTON_TEXT}
         </>
       </Button>
-      <Spin loading={loading.status === 'PENDING'}>
+      <Spin loading={loading?.status === 'PENDING'}>
         <Table
           data={modifyActionsQuotes}
           columns={columns}
         />
       </Spin>
-
     </div>
   )
 }

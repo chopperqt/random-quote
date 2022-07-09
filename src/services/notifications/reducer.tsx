@@ -1,6 +1,6 @@
 import { NotificationType } from "components/notification/Notification"
 import { actions } from "./actions"
-import { RequestsData } from 'utils'
+import { ApiRequests } from 'utils'
 import produce from "immer"
 
 const initialState: NotificationsStore = {
@@ -26,7 +26,7 @@ export interface NotificationData {
 }
 
 type LoadingData = {
-  [key in RequestsData]: StatusData
+  [key in ApiRequests]: StatusData
 }
 
 export interface Status {
@@ -40,7 +40,7 @@ export interface StatusData {
 }
 
 interface CreateLoading {
-  name: RequestsData
+  name: ApiRequests
   status: Status
 }
 

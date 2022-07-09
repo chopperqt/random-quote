@@ -40,16 +40,38 @@ const QuotesLastUpdate = () => {
           {isSuccess && (
             <div className={styles.grid}>
               <div className={styles.gridColumn}>
-                {quotesFirstColumn.map((quote) => (
+                {quotesFirstColumn.map(({
+                  text,
+                  author,
+                  created_at,
+                  id_author,
+                  id_quote,
+                }) => (
                   <Quote
-                    quote={quote}
+                    key={id_quote}
+                    text={text}
+                    author={author}
+                    created_at={created_at}
+                    id_quote={id_quote}
+                    id_author={id_author}
                   />
                 ))}
               </div>
               <div className={styles.gridColumn}>
-                {quotesSecondColumn.map((quote) => (
+                {quotesSecondColumn.map(({
+                  text,
+                  created_at,
+                  id_author,
+                  id_quote,
+                  author
+                }) => (
                   <Quote
-                    quote={quote}
+                    key={id_quote}
+                    text={text}
+                    created_at={created_at}
+                    id_quote={id_quote}
+                    id_author={id_author}
+                    author={author}
                   />
                 ))}
               </div>

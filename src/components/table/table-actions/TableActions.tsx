@@ -7,9 +7,6 @@ import { ITableActions } from '../'
 
 import styles from './TableActions.module.scss'
 
-const EDIT_TEXT = 'Изменить'
-const DELETE_TEXT = 'Удалить'
-
 const TableAction = ({
   onDelete,
   onEdit
@@ -19,20 +16,14 @@ const TableAction = ({
       className={styles.button}
       onClick={onEdit}
     >
-      <>
-        <Icon icon={IconList.edit} />
-        {EDIT_TEXT}
-      </>
+      <Icon icon={IconList.edit} />
     </Button>
     <Button
       className={styles.button}
       onClick={onDelete}
       color="warning"
     >
-      <>
-        <Icon icon={IconList.trash} />
-        {DELETE_TEXT}
-      </>
+      <Icon icon={IconList.trash} />
     </Button>
   </div>
 )

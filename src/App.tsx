@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import {
   Routes,
   Route,
@@ -16,7 +15,9 @@ import Quotes from 'pages/quotes/Quotes';
 import SignUp from 'pages/signup/SignUp';
 import Login from 'pages/login/Login';
 import useUser from 'helpers/useUser';
+import Authors from 'pages/authors/Authors';
 
+import 'react-lazy-load-image-component/src/effects/blur.css'
 import './asset/scss/typography.scss'
 import './asset/scss/fonts.scss'
 import './App.scss'
@@ -44,11 +45,12 @@ function App() {
         <Routes>
           <Route path={routes.adminPanel} element={<AdminPanel />} />
           <Route path={routes.default} element={<Home />} />
-          <Route path={`${routes.default}/:id`} element={<Home />} />
+          <Route path={routes.defaultWithId} element={<Home />} />
           <Route path={routes.quotes} element={<Quotes />} />
           <Route path={routes.profile} element={ComponentProfile} />
           <Route path={routes.logIn} element={ComponentLogin} />
           <Route path={routes.signUp} element={ComponentSignup} />
+          <Route path={routes.authors} element={<Authors />} />
         </Routes>
       </div>
       {hasNotifications && (

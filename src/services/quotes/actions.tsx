@@ -1,54 +1,69 @@
 import Store, { quoteMethods } from "services"
+import { UserID } from "utils/auth"
+import { QuotesApi } from 'utils/quotes'
 import { getRandomQuote } from "utils/quotes"
 import {
+  QuoteData,
   QuotesCounters,
   QuotesStore,
-} from "."
+} from "./QuotesStore"
 
-export const actions = {
+const actions = {
   SET_QUOTE: 'SET_QUOTE',
   SET_LAST_QUOTES: 'SET_LAST_QUOTES',
   SET_ALL_QUOTES: 'SET_ALL_QUOTES',
   SEARCH_QUOTES: 'SEARCH_QUOTES',
   UPDATE_QUOTES: 'UPDATE_QUOTES',
   UPDATE_LAST_QUOTE: 'UPDATE_LAST_QUOTE',
-  CLEAR_QUOTES: 'CLEAR_QUOTE',
+  CLEAR_QUOTES: 'CLEAR_QUOTES',
   INCREASE_QUOTE_COUNTER: 'INCREASE_QUOTE_COUNTER',
   DECREASE_QUOTE_COUNTER: 'DECREASE_QUOTE_COUNTER',
   SET_COUNTER: 'SET_COUNTER',
 }
 
+export type QuotesActions = keyof typeof actions
+
 export type TActions = 'quotes' | 'randomQuote' | 'lastQuotes'
 
+interface DefaultReturnData {
+  data: QuoteData[]
+  count: number
+}
+
+interface DefaultUpdateProps {
+  bookmarked: boolean,
+  id: number
+}
+
 export const methods = {
-  setAllQuotes<T>(data: T) {
+  setAllQuotes(payload: DefaultReturnData) {
     return {
       type: actions.SET_ALL_QUOTES,
-      payload: data,
+      payload,
     }
   },
-  setLastQuotes<T>(data: T) {
+  setLastQuotes(payload: DefaultReturnData) {
     return {
       type: actions.SET_LAST_QUOTES,
-      payload: data,
+      payload,
     }
   },
-  setQuote<T>(data: T) {
+  setQuote(payload: QuoteData[]) {
     return {
       type: actions.SET_QUOTE,
-      payload: data,
+      payload,
     }
   },
-  quotesSearch<T>(data: T) {
+  quotesSearch(payload: DefaultReturnData) {
     return {
       type: actions.SEARCH_QUOTES,
-      payload: data,
+      payload,
     }
   },
-  updateQuotes(bookmarked: boolean, id: number) {
+  updateQuotes(payload: DefaultUpdateProps) {
     return {
       type: actions.UPDATE_QUOTES,
-      payload: { bookmarked, id },
+      payload,
     }
   },
   increaseQuoteCounter() {
@@ -82,7 +97,7 @@ export const methods = {
 
 type QuoteCounter = Pick<QuotesStore, 'quotesCount' | 'quotes'>
 
-export const increaseQuoteCounter = async (id_user?: string) => {
+export const increaseQuoteCounter = async (userID?: UserID) => {
   const {
     quotesStore,
     notificationsStore,
@@ -90,20 +105,20 @@ export const increaseQuoteCounter = async (id_user?: string) => {
   const {
     quotes,
     quotesCount,
-  }: QuoteCounter = quotesStore
-  const { loading } = notificationsStore
+    currentQuote,
+  } = quotesStore
+  const { loading: { getQuote: { status } } } = notificationsStore
 
-  if (loading.getQuote.status === 'PENDING') {
+
+  if (status === 'PENDING') {
     return
   }
 
-  const quotesLength = quotes.length - 1
+  if (currentQuote === quotes.length - 1) {
+    const response = await getRandomQuote()
 
-  if (quotesCount >= quotesLength) {
-    const isSuccess = await getRandomQuote(id_user)
-
-    if (isSuccess) {
-      Store.dispatch(quoteMethods.increaseQuoteCounter())
+    if (typeof response === 'boolean') {
+      Store.dispatch(quoteMethods.setCounter(quotes.length, 'currentQuote'))
     }
 
     return
@@ -113,12 +128,14 @@ export const increaseQuoteCounter = async (id_user?: string) => {
 }
 
 export const decreaseQuoteCounter = () => {
-  const { quotesStore } = Store.getState()
   const {
-    quotesCount
-  }: QuoteCounter = quotesStore
+    quotesStore: {
+      currentQuote,
+    }
+  } = Store.getState()
 
-  if (quotesCount !== 0) {
+
+  if (currentQuote !== 0) {
     Store.dispatch(quoteMethods.decreaseQuoteCounter())
   }
 }

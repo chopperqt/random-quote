@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { QuoteData } from 'services/quotes'
+import { QuoteData } from 'services/quotes/QuotesStore'
 import { getLastQuotes } from 'utils/quotes'
 import decOfNum, { quoteWords } from 'helpers/decOfNum'
 import { LAST_UPDATE_QUOTES_DESCRIPTION } from '../constants'

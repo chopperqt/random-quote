@@ -1,0 +1,1 @@
+export const AUTHORS_TITLE = 'Авторы'

@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { produce } from 'immer'
 
 import supabase from "./client";
 import Store, {
@@ -13,37 +14,74 @@ import {
   SupabaseFunctions,
 } from './constants'
 import debounce from 'lodash.debounce';
-import {
-  PostgrestError,
-  PostgrestResponse,
-} from '@supabase/supabase-js';
+import { PostgrestError } from '@supabase/supabase-js';
 import { getBookmarks } from './bookmarks'
 import {
   IPostQuote,
   IGetQuotes,
   SearchQuotesProps,
+  GetQuotesSearch,
+  QuotesBuild,
 } from './'
-import { QuoteData } from 'services/quotes';
-import { serializeQuote } from 'helpers/serialize'
+import { QuoteData } from 'services/quotes/QuotesStore';
 import DefaultProps from 'helpers/defaultProps';
+import { UserID } from './auth';
+import { updateUrlParams } from 'helpers/urlParams';
 
 const LIMIT_PER_PAGE = 10
 const QUERY_QUOTES = '*, author: id_author (name, path)'
+const QUERY_AUTHOR = 'id, data:quotes(id_quote,text)'
+const DELAY = 800
 
-export const QuotesRequests = {
-  getQuotes: 'getQuotes',
-  getQuote: 'getQuote',
-  getRandomQuote: 'getRandomQuote',
-  getQuotesMore: 'getQuotesMore',
-  getQuotesAuthor: 'getQuotesAuthor',
-  getQuotesLast: 'getQuotesLast',
-  searchQuote: 'searchQuote',
-  postQuote: 'postQuotes',
-  getActionQuote: 'getActionQuote',
-  getFilterQuotesCounter: 'getFilterQuotesCounter',
+export type QuotesRequests =
+  'getQuotes' |
+  'getQuote' |
+  'getRandomQuote' |
+  'getQuotesAuthor' |
+  'getQuotesLast' |
+  'searchQuote' |
+  'postQuote' |
+  'getFilterQuotesCount'
+
+export interface QuotesApi {
+  author: {
+    path: string,
+    name: string
+  },
+  created_at: Date,
+  id_quote: number,
+  id_author: number,
+  text: string,
 }
 
-export const getQuote = async (id: number, idUser?: string) => {
+const createQuotesBuilder = ({
+  search,
+  from = 0,
+  to = 10,
+  authors = DefaultProps.array,
+  head = false,
+  lastUpdates = false,
+}: QuotesBuild) => {
+  let request = supabase.from(Tables.quotes).select(QUERY_QUOTES, { count: 'exact', head })
+
+  if (lastUpdates) {
+    return request.gt("created_at", moment().startOf('day').toISOString())
+  }
+
+  if (authors.length) {
+    request = request.in('id_author', authors)
+  }
+
+  if (search) {
+    request = request.textSearch('text', search)
+  }
+
+  request = request.range(from, to)
+
+  return request
+}
+
+export const getQuote = async (id: number, idUser?: UserID) => {
   const {
     handleFailure,
     handlePending,
@@ -54,13 +92,7 @@ export const getQuote = async (id: number, idUser?: string) => {
 
   const { data, error } = await supabase
     .from(Tables.quotes)
-    .select(`
-    *,
-    author:id_author (
-      name,
-      path
-    ) 
-  `)
+    .select(QUERY_QUOTES)
     .match({ id_quote: id })
 
   if (error) {
@@ -69,7 +101,7 @@ export const getQuote = async (id: number, idUser?: string) => {
     return
   }
 
-  let updateData = [serializeQuote(data[0])]
+  let updateData: QuoteData[] = [data[0]]
 
   if (idUser) {
     const bookmarks = await getBookmarks({ id_user: idUser, list: [data[0].id_quote] })
@@ -78,8 +110,8 @@ export const getQuote = async (id: number, idUser?: string) => {
       return
     }
 
-    updateData = updateData.map((quote: QuoteData) => {
-      const isBookmark = bookmarks.data.find((item: QuoteData) => +item.id_quote === +quote.id_quote)
+    updateData = updateData.map((quote) => {
+      const isBookmark = bookmarks.data.find((item) => +item.id_quote === +quote.id_quote)
 
       return {
         ...quote,
@@ -87,6 +119,10 @@ export const getQuote = async (id: number, idUser?: string) => {
       }
     })
   }
+
+  updateUrlParams({
+    qq: id,
+  })
 
   Store.dispatch(quoteMethods.setQuote(updateData))
 
@@ -103,21 +139,15 @@ export const getQuotes = async ({
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(QuotesRequests.getQuotes)
+  } = loadingStatuses('getQuotes')
 
   handlePending()
 
-  let response: PostgrestResponse<any>;
-
-  if (authors.length) {
-    response = await supabase.from(Tables.quotes).select(QUERY_QUOTES, { count: 'exact' }).in('id_author', authors).range(from, to)
-  } else {
-    response = await supabase.from(Tables.quotes).select(QUERY_QUOTES, { count: 'exact' }).range(from, to)
-  }
-
-  const { data, error, count } = response
-
-  let list: number[] = []
+  const {
+    data,
+    error,
+    count,
+  } = await createQuotesBuilder({ from, to, authors })
 
   if (error) {
     handleFailure(error)
@@ -125,47 +155,50 @@ export const getQuotes = async ({
     return
   }
 
-  for (let quote of data) {
-    list.push(quote.id_quote)
-  }
+  const updateData = produce(data as QuotesApi[], async (draft) => {
+    const list = []
 
-  let quotesData = data!.map((item) => ({
-    ...item,
-    ...item.author
-  }))
-
-  if (id) {
-    const bookmarks = await getBookmarks({ id_user: id, list })
-
-    if (bookmarks.error) {
-      return
+    for (let quote of data) {
+      if (quote.id_quote) {
+        list.push(quote.id_quote.toString())
+      }
     }
 
-    quotesData = data!.map((quote: QuoteData) => {
-      const isBookmark = bookmarks.data.find((item: any) => +item.id_quote === +quote.id_quote)
+    if (id) {
+      const bookmarks = await getBookmarks({ id_user: id, list })
 
-      return {
-        ...quote,
-        bookmarked: !!isBookmark,
-        ...quote.author,
+      if (bookmarks.error) {
+        return draft
       }
-    })
-  }
+
+      draft = draft.map((item) => {
+        const isBookmark = bookmarks.data.find(marked => +item.id_quote === +marked.id_quote)
+
+        return {
+          ...item,
+          bookmarked: !!isBookmark,
+        }
+
+      })
+    }
+
+    return draft
+  })
 
   Store.dispatch(quoteMethods.setAllQuotes({
-    data: quotesData,
-    count: count,
+    data: await updateData,
+    count: count || 0,
   }))
 
   handleSuccess()
 }
 
-export const getRandomQuote = async (idUser?: string): Promise<boolean | PostgrestError> => {
+export const getRandomQuote = async (idUser?: UserID): Promise<boolean | PostgrestError> => {
   const {
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(QuotesRequests.getQuote)
+  } = loadingStatuses('getQuote')
 
   handlePending()
 
@@ -177,7 +210,18 @@ export const getRandomQuote = async (idUser?: string): Promise<boolean | Postgre
     return error
   }
 
-  let updateData = [serializeQuote(data[0])]
+  let updateData = [
+    {
+      created_at: data[0].created_at,
+      id_quote: data[0].id_quote,
+      id_author: data[0].id_author,
+      text: data[0].text,
+      author: {
+        name: data[0].author,
+        path: data[0].path,
+      }
+    },
+  ] as QuotesApi[]
 
   if (idUser) {
     const bookmarks = await getBookmarks({ id_user: idUser, list: [data[0].id_quote] })
@@ -199,6 +243,10 @@ export const getRandomQuote = async (idUser?: string): Promise<boolean | Postgre
     })
   }
 
+  updateUrlParams({
+    qq: updateData[0].id_quote,
+  })
+
   Store.dispatch(quoteMethods.setQuote(updateData))
 
   handleSuccess()
@@ -206,64 +254,18 @@ export const getRandomQuote = async (idUser?: string): Promise<boolean | Postgre
   return true
 }
 
-export const getQuotesMore = async ({
-  from = 0,
-  to = LIMIT_PER_PAGE
-}: IGetQuotes) => {
-  const {
-    handleFailure,
-    handlePending,
-    handleSuccess,
-  } = loadingStatuses(QuotesRequests.getQuotesMore)
-
-  handlePending()
-
-  const {
-    data,
-    error,
-    count
-  } = await supabase
-    .from(Tables.quotes)
-    .select(`
-      *,
-      author:id_author (
-        name,
-        path
-      )
-    `, { count: 'exact' })
-    .order("id_quote", { ascending: true })
-    .range(from, to)
-    .limit(LIMIT_PER_PAGE)
-
-  if (error) {
-    handleFailure(error)
-
-    return
-  }
-
-  Store.dispatch(quoteMethods.setAllQuotes({ data, count }))
-
-  handleSuccess()
-}
-
 export const getQuotesAuthors = async (authors: string[]) => {
   const {
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(QuotesRequests.getQuotesAuthor)
+  } = loadingStatuses('getQuotesAuthor')
 
   handlePending()
 
   let { data, error } = await supabase
     .from(Tables.authorsQuotes)
-    .select(`
-      id,
-      data:quotes(
-        id_quote,
-        text
-      )
-    `)
+    .select(QUERY_AUTHOR)
     .in('id_author', authors);
 
   if (error) {
@@ -282,20 +284,11 @@ export const getLastQuotes = async () => {
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(QuotesRequests.getQuotesLast)
+  } = loadingStatuses('getQuotesLast')
 
   handlePending()
 
-  const { data, error, count } = await supabase
-    .from(Tables.quotes)
-    .select(`
-    *,
-    author:id_author(
-      path,
-      name
-    )
-  `, { count: 'exact' })
-    .gt("created_at", moment().startOf('day').toISOString());
+  const { data, error, count } = await createQuotesBuilder({ lastUpdates: true })
 
   if (error) {
     handleFailure(error)
@@ -303,9 +296,12 @@ export const getLastQuotes = async () => {
     return
   }
 
-  handleSuccess()
+  Store.dispatch(quoteMethods.setLastQuotes({
+    data,
+    count: count || 0,
+  }))
 
-  Store.dispatch(quoteMethods.setLastQuotes({ data, count }))
+  handleSuccess()
 }
 
 export const searchQuote = debounce(async ({
@@ -313,22 +309,28 @@ export const searchQuote = debounce(async ({
   authors,
   from,
   to,
-  search,
+  search = '',
 }: SearchQuotesProps) => {
-  console.log('Скольк раз?')
-
   const {
     handlePending,
     handleSuccess,
     handleFailure,
-  } = loadingStatuses(QuotesRequests.searchQuote)
+  } = loadingStatuses('searchQuote')
 
   handlePending()
 
-  const { data, error } = await supabase
-    .from(Tables.quotes)
-    .select(QUERY_QUOTES)
-    .textSearch('text', `'${search}'`)
+  const response = await createQuotesBuilder({
+    search,
+    authors,
+    from,
+    to,
+  })
+
+  const {
+    data,
+    error,
+    count,
+  } = response
 
   if (error) {
     handleFailure(error)
@@ -336,10 +338,13 @@ export const searchQuote = debounce(async ({
     return
   }
 
-  Store.dispatch(quoteMethods.quotesSearch(data))
+  Store.dispatch(quoteMethods.quotesSearch({
+    data,
+    count: count || 0
+  }))
 
   handleSuccess()
-}, 800)
+}, DELAY)
 
 export const postQuote = async ({
   text,
@@ -350,7 +355,7 @@ export const postQuote = async ({
     handlePending,
     handleSuccess,
     handleFailure,
-  } = loadingStatuses(QuotesRequests.postQuote)
+  } = loadingStatuses('postQuote')
 
   handlePending()
 
@@ -399,80 +404,16 @@ export const postQuote = async ({
   }
 }
 
-export const getCurrentQuoteRating = async ({
-  id,
-  id_user,
-}: {
-  id: number
-  id_user: string
-}): Promise<PostgrestError | number> => {
-  const {
-    data,
-    error
-  } = await supabase
-    .from(Tables.rating)
-    .select('*')
-    .match({
-      entity_id: id.toString(),
-      entity_type: 'quote',
-    })
-
-  if (error) {
-    return error
-  }
-
-  return data[0]?.rating || 0
-}
-
-export const getActionQuote = async (
-  id: string,
-  list: number[],
-  limit: number = LIMIT_PER_PAGE
-): Promise<any[]> => {
+export const getFilterQuotesCounter = async (data: GetQuotesSearch) => {
   const {
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(QuotesRequests.getActionQuote)
+  } = loadingStatuses('getFilterQuotesCount')
 
   handlePending()
 
-  const { data, error } = await supabase.rpc('getquotes5', {
-    id,
-    list: "{25}",
-  })
-
-  if (error) {
-    handleFailure(error)
-
-    return []
-  }
-
-  handleSuccess()
-
-  return data || []
-}
-
-export const getFilterQuotesCounter = async ({
-  from = 1,
-  to = 10,
-  authors = DefaultProps.array,
-}: IGetQuotes) => {
-  const {
-    handleFailure,
-    handlePending,
-    handleSuccess,
-  } = loadingStatuses(QuotesRequests.getFilterQuotesCounter)
-
-  handlePending()
-
-  let response: PostgrestResponse<any>;
-
-  if (authors.length) {
-    response = await supabase.from(Tables.quotes).select(QUERY_QUOTES, { count: 'exact', head: false }).in('id_author', authors).range(from, to)
-  } else {
-    response = await supabase.from(Tables.quotes).select(QUERY_QUOTES, { count: 'exact', head: false }).range(from, to)
-  }
+  let response = await createQuotesBuilder(data)
 
   const { count, error } = response
 
@@ -482,9 +423,7 @@ export const getFilterQuotesCounter = async ({
     return
   }
 
-  const formattedCounter = count || 0
-
-  Store.dispatch(filterMethods.updateFiltersCount(formattedCounter))
+  Store.dispatch(filterMethods.updateFiltersCount(count || 0))
 
   handleSuccess()
 }

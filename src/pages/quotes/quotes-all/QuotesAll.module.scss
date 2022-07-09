@@ -79,4 +79,8 @@
 .skeletonSection {
   @extend .section;
   grid-template-columns: 485px 485px;
+
+  @media screen and (max-width: $media--mobile) {
+    grid-template-columns: 1fr;
+  }
 }

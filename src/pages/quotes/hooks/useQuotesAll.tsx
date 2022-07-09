@@ -1,4 +1,9 @@
-import { useEffect, useState } from 'react'
+import {
+  useEffect,
+  useState,
+  useMemo,
+  useRef,
+} from 'react'
 
 import { QUOTES_ALL_TEXT } from '../constants'
 import decOfNum, { quoteWords } from 'helpers/decOfNum'
@@ -24,6 +29,7 @@ const useQuotesAll = () => {
       quotesSearch,
       quotesCount,
       quotesAllCount,
+      quotesSearchCount,
     },
     NotificationStore: {
       loading,
@@ -36,8 +42,8 @@ const useQuotesAll = () => {
   const currentPage = +(filters?.p || 1)
   const authorsQuery = getUrlParam('authors')
   const hasMoreQuotes = quotesCount > quotesAll.length
-  const hasSearchQuotes = quotesSearch.length > 0
-  const pages = Math.ceil(quotesAllCount / 10)
+  const prevPage = useRef(filters.p)
+  //const pages = Math.ceil(quotesAllCount / 10)
   let authors: number[] = []
   const {
     from,
@@ -47,6 +53,18 @@ const useQuotesAll = () => {
   if (authorsQuery) {
     authors = JSON.parse(authorsQuery)
   }
+
+  const pages = useMemo(() => {
+    if (search.length !== 0) {
+      return Math.ceil(quotesSearchCount / 10)
+    }
+
+    return Math.ceil(quotesAllCount / 10)
+  }, [
+    search,
+    quotesSearchCount,
+    quotesAllCount,
+  ])
 
   const handleClearInput = () => {
     setSearch('')
@@ -78,12 +96,14 @@ const useQuotesAll = () => {
   }, [])
 
   useEffect(() => {
-    getQuotes({
-      id: user?.id,
-      from,
-      to,
-      authors,
-    })
+    if (prevPage.current !== filters.p) {
+      getQuotes({
+        id: user?.id,
+        from,
+        to,
+        authors,
+      })
+    }
   }, [filters.p])
 
   useEffect(() => {
@@ -95,6 +115,7 @@ const useQuotesAll = () => {
       return
     }
 
+    deleteUrlParam('search')
     deleteUrlParam('p')
   }, [search])
 
@@ -106,7 +127,6 @@ const useQuotesAll = () => {
     handleClearInput,
     search,
     quotesSearch,
-    hasSearchQuotes,
     loadingSearch,
     loadingQuotes,
     currentPage,

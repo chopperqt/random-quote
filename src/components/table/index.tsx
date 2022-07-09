@@ -1,5 +1,6 @@
 import Table from './Table'
 import TableAction from './table-actions/TableActions'
+import TableAuthor from './table-author/TableAuthor'
 
 export interface ITable {
   columns: IColumn[]
@@ -17,7 +18,8 @@ export interface ITableActions {
 }
 
 export {
-  TableAction
+  TableAction,
+  TableAuthor,
 }
 
 export default Table 

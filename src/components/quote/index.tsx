@@ -1,9 +1,8 @@
 import Quote from "./Quote";
 import QuoteSkeleton from "./quote-skeleton/QuoteSkeleton";
-import { QuoteData } from 'services/quotes'
-export interface IQuoteProps {
+import { QuoteData } from 'services/quotes/QuotesStore'
+export interface QuoteProps extends QuoteData {
   loading?: boolean
-  quote: QuoteData
 }
 
 export interface ILikesProps extends ILikesButtonProps {

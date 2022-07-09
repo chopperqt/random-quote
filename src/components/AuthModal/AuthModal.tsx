@@ -57,16 +57,20 @@ const AuthModal = ({
   const {
     register,
     handleSubmit,
-    formState: {
-      errors,
-    },
+    formState: { errors },
     resetField,
     watch,
   } = useForm<FormFields>()
   const passwordValue = watch('password')
 
-  const onSubmit: SubmitHandler<FormFields> = async ({ email, password }) => {
-    const response = await login(email, password)
+  const onSubmit: SubmitHandler<FormFields> = async ({
+    email,
+    password,
+  }) => {
+    const response = await login({
+      email,
+      password,
+    })
 
     if (response) {
       setMessage(response)

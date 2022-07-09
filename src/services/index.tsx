@@ -6,15 +6,15 @@ import {
 import thunk from 'redux-thunk'
 import { useSelector } from 'react-redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import { createSelector } from 'reselect'
 
-import quotesStore, { QuotesStore } from './quotes'
+import quotesStore, { QuotesStore } from './quotes/QuotesStore'
 import userStore, { UserStore } from './user/reducer'
 import notificationsStore, { NotificationsStore } from './notifications/reducer'
 import authorsStore, { AuthorsStore } from './authors'
 import filtersStore, { FiltersStore } from './filters'
 
 import {
-  actions as quoteActions,
   methods as quoteMethods
 } from './quotes/actions'
 import {
@@ -45,21 +45,22 @@ const rootStore = combineReducers({
 const Store = createStore(rootStore, composeWithDevTools(applyMiddleware(thunk)))
 
 export const Stores = () => {
-  const NotificationStore = useSelector((store: StoreData) => store.notificationsStore)
-  const AuthorStore = useSelector((store: StoreData) => store.authorsStore)
-  const QuoteStore = useSelector((store: StoreData) => store.quotesStore)
-  const FilterStore = useSelector((store: StoreData) => store.filtersStore)
+  const selectStore = createSelector(
+    (state: StoreData) => state,
+    (state) => state,
+  )
+
+  const stores = useSelector(selectStore)
 
   return {
-    NotificationStore,
-    AuthorStore,
-    QuoteStore,
-    FilterStore,
+    NotificationStore: stores.notificationsStore,
+    AuthorStore: stores.authorsStore,
+    QuoteStore: stores.quotesStore,
+    FilterStore: stores.filtersStore,
   }
 }
 
 export {
-  quoteActions,
   quoteMethods,
   notificationActions,
   notificationMethods,

@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useMemo } from 'react'
 
 import { QuoteSkeleton } from 'components/quote'
 import useHome from './hooks/useHome'
@@ -12,6 +12,7 @@ import {
 import { HELPER_HOTKEY_TEXT } from './constants'
 import ActionButtons from './partials/ActionButtons'
 import useUser from 'helpers/useUser'
+import { getControlCount } from './helpers/getControlCount'
 
 import styles from './Home.module.scss'
 
@@ -20,17 +21,15 @@ const LazyQuote = React.lazy(() => import('components/quote'))
 const Home = () => {
   const {
     QuoteStore: {
-      quotes,
-      quotesCount,
+      currentQuote,
     }
   } = Stores()
-  const isFirstQuote = quotesCount === 0
   const { user } = useUser()
-
   const {
     isError,
     isLoading,
     isSuccess,
+    quote,
   } = useHome()
 
   return (
@@ -40,10 +39,16 @@ const Home = () => {
         {isLoading && (
           <QuoteSkeleton />
         )}
-        {isSuccess && (
+        {isSuccess && !!quote && (
           <Suspense fallback={<QuoteSkeleton />}>
             <LazyQuote
-              quote={quotes[quotesCount]}
+              loading={isLoading}
+              text={quote.text}
+              author={quote.author}
+              id_author={quote.id_author}
+              id_quote={quote.id_quote}
+              created_at={quote.created_at}
+              bookmarked={quote.bookmarked}
             />
           </Suspense>
         )}
@@ -57,7 +62,7 @@ const Home = () => {
           disabled={isLoading}
           onClickLeft={decreaseQuoteCounter}
           onClickRight={() => increaseQuoteCounter(user?.id)}
-          disabledLeft={isFirstQuote}
+          disabledLeft={currentQuote === 0}
         />
       </div>
     </div>

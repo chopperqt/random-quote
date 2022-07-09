@@ -3,7 +3,7 @@ import Button from './Button'
 export interface IButton extends React.ComponentProps<'button'> {
   className?: string
   loading?: boolean
-  children?: JSX.Element | string,
+  children?: JSX.Element | string | JSX.Element[],
   color?: ButtonColor
 }
 

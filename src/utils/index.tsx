@@ -1,16 +1,15 @@
 import { QuotesRequests } from './quotes'
 import { AuthorsRequests } from './authors'
 import { AuthRequests } from './auth'
+import { BookmarkRequests } from './bookmarks'
+import { UploadRequest } from './upload'
 
-const Requests = {
-  ...QuotesRequests,
-  ...AuthorsRequests,
-  ...AuthRequests,
-}
-
-export type TQuotesRequest = keyof typeof QuotesRequests
-export type TAuthorsRequests = keyof typeof AuthorsRequests
-export type RequestsData = keyof typeof Requests
+export type ApiRequests =
+  QuotesRequests |
+  AuthorsRequests |
+  AuthRequests |
+  BookmarkRequests |
+  UploadRequest
 
 export interface IPostQuote {
   text: string
@@ -27,10 +26,20 @@ export interface IGetQuotes {
   authors?: number[]
 }
 
+export interface GetQuotesSearch extends IGetQuotes {
+  search?: string
+}
+
 export interface SearchQuotesProps extends IGetQuotes {
   search?: string
 }
 
-export {
-  Requests
+export interface QuotesBuild {
+  from?: number
+  to?: number
+  id?: string
+  authors?: number[]
+  search?: string
+  head?: boolean
+  lastUpdates?: boolean
 }

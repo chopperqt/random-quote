@@ -14,13 +14,26 @@ const {
   signUpSuccess,
 } = SuccessMessages
 
-export const AuthRequests = {
-  loginWithGoogle: 'loginWithGoogle',
-  signUp: 'signUp',
-  validateEmail: 'validateEmail',
-  deleteUser: 'deleteUser',
-  login: 'login',
-  getUser: 'getUser',
+export type AuthRequests =
+  'loginWithGoogle' |
+  'signUp' |
+  'validateEmail' |
+  'deleteUser' |
+  'login' |
+  'getUser'
+
+export type UserEmail = string
+export type UserID = string
+export type UserPassword = string
+
+export interface LoginData {
+  email: UserEmail
+  password: UserPassword
+}
+
+// FIXED добавить какие данные будут в дате при регистрации
+export interface SignUpData extends LoginData {
+  data: any
 }
 
 export const signInWithGoogle = async () => {
@@ -28,7 +41,7 @@ export const signInWithGoogle = async () => {
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(AuthRequests.loginWithGoogle)
+  } = loadingStatuses('loginWithGoogle')
 
   handlePending()
 
@@ -43,12 +56,15 @@ export const signInWithGoogle = async () => {
   handleSuccess()
 }
 
-export const login = async (email: string, password: string): Promise<string | undefined> => {
+export const login = async ({
+  email,
+  password,
+}: LoginData): Promise<string | undefined> => {
   const {
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(AuthRequests.login)
+  } = loadingStatuses('login')
 
   handlePending()
 
@@ -84,12 +100,16 @@ export const logOut = async () => {
   await supabase.auth.signOut()
 }
 
-export const signUp = async (email: string, password: string, data: any): Promise<boolean> => {
+export const signUp = async ({
+  email,
+  password,
+  data,
+}: SignUpData): Promise<boolean> => {
   const {
     handleFailure,
     handlePending,
     handleSuccess
-  } = loadingStatuses(AuthRequests.signUp)
+  } = loadingStatuses('signUp')
 
   handlePending()
 
@@ -111,12 +131,12 @@ export const signUp = async (email: string, password: string, data: any): Promis
   return true
 }
 
-export const deleteUser = async (id: string) => {
+export const deleteUser = async (id: UserID) => {
   const {
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(AuthRequests.deleteUser)
+  } = loadingStatuses('deleteUser')
 
   handlePending()
 
@@ -134,12 +154,12 @@ export const deleteUser = async (id: string) => {
   handleSuccess()
 }
 
-export const validateEmail = debounce(async (email: string): Promise<any[]> => {
+export const validateEmail = debounce(async (email: UserEmail): Promise<any[]> => {
   const {
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(AuthRequests.validateEmail)
+  } = loadingStatuses('validateEmail')
 
   handlePending()
 
@@ -164,7 +184,7 @@ export const getUser = async (token: string) => {
     handleFailure,
     handlePending,
     handleSuccess,
-  } = loadingStatuses(AuthRequests.getUser)
+  } = loadingStatuses('getUser')
 
   handlePending()
 

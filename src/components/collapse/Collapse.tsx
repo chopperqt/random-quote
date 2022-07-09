@@ -1,4 +1,4 @@
-import { ICollapseProps } from './'
+import { CollapseProps } from './'
 import Icon, { IconList } from 'components/icon'
 import DefaultProps from 'helpers/defaultProps'
 import useCollapse from './hooks/useCollapse'
@@ -11,7 +11,7 @@ const Collapse = ({
   open = false,
   onClose = DefaultProps.function,
   onOpen = DefaultProps.function,
-}: ICollapseProps) => {
+}: CollapseProps) => {
   const {
     handleClick
   } = useCollapse({
