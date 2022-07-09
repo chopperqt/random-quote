@@ -1,7 +1,6 @@
-import Add from "./partials/Add"
+import Add from "../add/Add"
 
 import styles from './Content.module.scss'
-import Modal from "components/modal"
 
 const Content = () => (
   <div className={styles.layout}>

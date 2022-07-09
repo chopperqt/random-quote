@@ -6,10 +6,6 @@ import { ActionsStatus } from "helpers/loadingStatuses";
 
 export type AuthorsRequests = 'getAuthors'
 
-const Storages = {
-  images: 'images',
-}
-
 export const getAuthors = async () => {
   Store.dispatch(notificationMethods.loadingRequest('getAuthors', ActionsStatus.pending))
 

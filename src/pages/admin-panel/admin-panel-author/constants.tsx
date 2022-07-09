@@ -1,1 +1,0 @@
-export const ADD_AUTHOR_TEXT = 'Добавить автора'

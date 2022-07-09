@@ -9,6 +9,7 @@
   width: 200px;
   height: 250px;
   padding: 20px;
+  position: relative;
 }
 
 .layoutImage {
@@ -32,4 +33,14 @@
 .image {
   width: 200px;
   border-radius: $border-radius--large;
+}
+
+.upload {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  
+  :global(.icon-svg) {
+    fill: $color-white--500;
+  }
 }

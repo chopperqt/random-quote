@@ -2,12 +2,14 @@ import { QuotesRequests } from './quotes'
 import { AuthorsRequests } from './authors'
 import { AuthRequests } from './auth'
 import { BookmarkRequests } from './bookmarks'
+import { UploadRequest } from './upload'
 
 export type ApiRequests =
   QuotesRequests |
   AuthorsRequests |
   AuthRequests |
-  BookmarkRequests
+  BookmarkRequests |
+  UploadRequest
 
 export interface IPostQuote {
   text: string

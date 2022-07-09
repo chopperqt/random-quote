@@ -7,6 +7,8 @@ import { CountAction, StatusTypes } from 'services/notifications/reducer'
 
 export type TLoadingStatus = (() => void) | ((message?: PostgrestError) => void)
 
+type ErrorType = PostgrestError | ApiError | Error
+
 interface Action {
   pending: ActionData
   failure: ActionData
@@ -36,7 +38,7 @@ export const ActionsStatus: Action = {
 const loadingStatuses = (requestName: ApiRequests) => {
   const handlePending = () => Store.dispatch(notificationMethods.loadingRequest(requestName, ActionsStatus.pending))
 
-  const handleFailure = ({ message }: PostgrestError | ApiError) => {
+  const handleFailure = ({ message }: ErrorType) => {
     Store.dispatch(notificationMethods.loadingRequest(requestName, ActionsStatus.failure))
 
     notificationMethods.createNotification(message, 'ERROR')

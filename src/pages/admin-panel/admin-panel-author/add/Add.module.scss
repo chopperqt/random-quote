@@ -1,0 +1,27 @@
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.section {
+  display: flex;
+  column-gap: 15px;
+}
+
+.button {
+  margin-top: 15px;
+}
+
+.fields  {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+}
+
+.input {
+  width: 250px;
+}
+
+.create {
+  
+}

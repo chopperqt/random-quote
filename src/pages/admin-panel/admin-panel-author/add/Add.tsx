@@ -8,14 +8,24 @@ import Button from "components/button"
 import Input from "components/input"
 import Modal from "components/modal"
 import useModalAdd from "pages/admin-panel/hooks/useModalAdd"
-import { ADD_AUTHOR_TEXT } from '../../constants'
-
-import styles from '../Content.module.scss'
 import Uploader from 'components/uploader'
+import Icon, { IconList } from 'components/icon'
+
+import styles from './Add.module.scss'
+
+const Placeholders = {
+  name: 'Имя',
+  surName: 'Фамилия',
+  secondName: 'Отчество',
+}
+
+const CREATE_TEXT = 'Создать автора'
 
 interface FormFields {
   name: string
   avatar: string
+  surName: string
+  secondName: string
 }
 
 const Add = () => {
@@ -40,8 +50,13 @@ const Add = () => {
 
   return (
     <>
-      <Button onClick={handleOpen}>
-        {ADD_AUTHOR_TEXT}
+      <Button
+        onClick={handleOpen}
+      >
+        <>
+          <Icon icon={IconList.save} />
+          {CREATE_TEXT}
+        </>
       </Button>
       <Modal
         onClose={handleClose}
@@ -51,23 +66,31 @@ const Add = () => {
           onSubmit={handleSubmit(onSubmit)}
           className={styles.form}
         >
-          <div>
-            <div >
-              <Uploader />
-            </div>
-            <div>
+          <div className={styles.section}>
+            <Uploader />
+            <div className={styles.fields}>
               <Input
                 {...(register('name', { required: true }))}
                 className={styles.input}
+                placeholder={Placeholders.name}
               />
               <Input
-                {...(register('avatar', { required: true }))}
+                {...(register('surName', { required: true }))}
                 className={styles.input}
+                placeholder={Placeholders.surName}
+              />
+              <Input
+                {...(register('secondName', { required: false }))}
+                className={styles.input}
+                placeholder={Placeholders.secondName}
               />
             </div>
           </div>
-          <Button type='submit'>
-            {ADD_AUTHOR_TEXT}
+          <Button
+            type='submit'
+            className={styles.button}
+          >
+            {CREATE_TEXT}
           </Button>
         </form>
       </Modal>
