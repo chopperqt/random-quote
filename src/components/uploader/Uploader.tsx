@@ -9,13 +9,21 @@ import { useUploader } from './hooks/useUploader'
 
 const UPLOAD_TEXT = 'Загрузите изображение'
 
-const Uploader = () => {
+
+interface UploaderProps {
+  onChange: (file: FileList) => void
+}
+const Uploader = ({
+  onChange,
+}: UploaderProps) => {
   const {
     layoutRef,
     inputRef,
     hasImages,
     images,
-  } = useUploader()
+  } = useUploader({
+    onChange,
+  })
 
   return (
     <div

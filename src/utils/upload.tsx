@@ -7,7 +7,7 @@ const Storages = {
   images: 'images',
 }
 
-export const uploadFile = async (file: File) => {
+export const uploadFile = async (file: FileList) => {
   const {
     handleFailure,
     handlePending,
@@ -19,11 +19,9 @@ export const uploadFile = async (file: File) => {
   const { data, error } = await supabase
     .storage
     .from(Storages.images)
-    .upload(file.name, file, {
-      upsert: true,
-      contentType: 'image/jpeg',
+    .upload(file[0].name, file[0], {
+      upsert: false,
       cacheControl: '3600',
-
     })
 
   if (error) {
@@ -34,5 +32,6 @@ export const uploadFile = async (file: File) => {
 
   handleSuccess()
 
-  return data
+
+  return data?.Key
 }
