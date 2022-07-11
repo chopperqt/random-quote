@@ -35,3 +35,12 @@ export const uploadFile = async (file: FileList) => {
 
   return data?.Key
 }
+
+export const deleteFile = async () => {
+
+}
+
+export const updateFile = async () => {
+
+}
+
