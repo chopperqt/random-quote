@@ -14,6 +14,7 @@ export interface ISelector {
   label?: string
   initialValue?: IOption
   onChange?: (option: IOption) => void
+  disabled?: boolean
 }
 
 export default Selector

@@ -11,7 +11,7 @@ import Button from 'components/button'
 
 import { Stores } from 'services'
 import {
-  IAdminPanelAdd,
+  AdminPanelModal,
   IAdminPanelAddField
 } from '../../constants'
 
@@ -37,7 +37,7 @@ const MOCK_DATA = [
 
 const Edit = ({
   onClose = () => { },
-}: IAdminPanelAdd) => {
+}: AdminPanelModal) => {
   const {
     NotificationStore: {
       loading: {

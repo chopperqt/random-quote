@@ -17,6 +17,7 @@ const Selector = ({
   label,
   onChange = () => { },
   initialValue,
+  disabled,
 }: ISelector) => {
   const inputRef = useRef<HTMLInputElement | null>(null)
   const {
@@ -33,12 +34,15 @@ const Selector = ({
   })
 
   return (
-    <div className={cx(styles.layout, className)}>
+    <div className={cx(styles.layout, className, {
+      [styles.disabled]: disabled,
+    })}>
       {label && (
         <label className={styles.label}>{label}</label>
       )}
       <div className={styles.wrap}>
         <input
+          disabled={disabled}
           ref={inputRef}
           onFocus={handleFocus}
           value={value}

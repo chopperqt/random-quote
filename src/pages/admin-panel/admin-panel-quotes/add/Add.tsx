@@ -9,13 +9,13 @@ import { postQuote } from 'utils/quotes'
 import Selector from "components/selector";
 import Button from 'components/button'
 
-import { Stores } from 'services'
 import {
-  IAdminPanelAdd,
+  AdminPanelModal,
   IAdminPanelAddField
 } from '../../constants'
 
 import styles from './Add.module.scss'
+import useAdd from '../hooks/useAdd';
 
 const QUOTE_TEXT = 'Цитата'
 const DATA_TEXT = 'Дата'
@@ -24,30 +24,21 @@ const CREATE_TEXT = 'Создать'
 const QUOTE_PLACEHOLDER = 'Мужчины любят глазами, а девушки ушами'
 const DATA_PLACEHOLDER = '01.01.1999'
 
-const MOCK_DATA = [
-  {
-    key: 1,
-    label: 'Тим Бёртон'
-  },
-  {
-    key: 2,
-    label: 'Аль Пачино'
-  }
-]
-
 const Add = ({
   onClose = () => { },
-}: IAdminPanelAdd) => {
+  isOpened,
+}: AdminPanelModal) => {
   const {
-    NotificationStore: {
-      loading: postQuoteStatus,
-    }
-  } = Stores()
-  const hasLoading = postQuoteStatus.postQuote?.status === 'PENDING'
+    loading,
+    options,
+    loadingOptions,
+  } = useAdd({
+    isOpened,
+  })
+  const hasLoading = loading?.status === 'PENDING'
   const {
     register,
     handleSubmit,
-    watch,
     resetField,
     control,
     formState: {
@@ -85,10 +76,11 @@ const Add = ({
           ref,
         } }) => (
           <Selector
+            disabled={loadingOptions}
             label={AUTHOR_TEXT}
-            options={MOCK_DATA}
+            options={options}
             onChange={onChange}
-            initialValue={MOCK_DATA[0]}
+            initialValue={options[0]}
           />
         )}
       />

@@ -1,11 +1,13 @@
 import { IOption } from 'components/selector'
 
-export interface IAdminPanelQuotes {
+export interface AdminPanelQuoteProps {
   onOpenAddModal: () => void
+  isOpened: boolean
 }
 
-export interface IAdminPanelAdd {
+export interface AdminPanelModal {
   onClose?: () => void
+  isOpened: boolean
 }
 
 export interface IAdminPanelAddField {
