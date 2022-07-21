@@ -1,7 +1,6 @@
 import {
   useForm,
   SubmitHandler,
-  Controller,
 } from 'react-hook-form'
 
 import Button from "components/button"
@@ -12,7 +11,7 @@ import Uploader from 'components/uploader'
 import Icon, { IconList } from 'components/icon'
 import { createAuthor } from 'utils/authors'
 
-import styles from './Add.module.scss'
+import styles from './Edit.module.scss'
 
 const Placeholders = {
   name: 'Имя',

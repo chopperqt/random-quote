@@ -11,11 +11,10 @@ import Button from 'components/button'
 
 import { Stores } from 'services'
 import {
-  AdminPanelModal,
   IAdminPanelAddField
 } from '../../constants'
 
-import styles from './Edti.module.scss'
+import styles from './Edit.module.scss'
 
 const QUOTE_TEXT = 'Цитата'
 const DATA_TEXT = 'Дата'
@@ -35,9 +34,14 @@ const MOCK_DATA = [
   }
 ]
 
+interface EditProps {
+  quote: string
+  onClose: () => void
+}
 const Edit = ({
   onClose = () => { },
-}: AdminPanelModal) => {
+  quote,
+}: EditProps) => {
   const {
     NotificationStore: {
       loading: {
@@ -45,7 +49,7 @@ const Edit = ({
       }
     }
   } = Stores()
-  const hasLoading = loading.status === 'PENDING'
+  const hasLoading = loading?.status === 'PENDING'
 
   const {
     register,
@@ -57,6 +61,7 @@ const Edit = ({
       errors,
     },
   } = useForm<IAdminPanelAddField>();
+
   const onSubmit: SubmitHandler<IAdminPanelAddField> = async (data) => {
     const response = await postQuote({
       text: data.quote,

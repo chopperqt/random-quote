@@ -2,7 +2,9 @@ import { IOption } from 'components/selector'
 
 export interface AdminPanelQuoteProps {
   onOpenAddModal: () => void
+  onOpenEdit: () => void
   isOpened: boolean
+  isOpenedEdit: boolean
 }
 
 export interface AdminPanelModal {

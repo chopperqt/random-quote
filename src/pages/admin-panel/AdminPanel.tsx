@@ -4,11 +4,13 @@ import Modal from 'components/modal'
 import Tabs, { TabItem } from 'components/tabs'
 import useModalAdd from './hooks/useModalAdd'
 import AdminPanelAdd from './admin-panel-quotes/add/Add'
+import Edit from './admin-panel-quotes/edit/Edit'
 import AdminPanelQuotes from './admin-panel-quotes/AdminPanelQuotes'
 import AdminPanelAuthors from './admin-panel-author/AdminPanelAuthors'
 import AdminPanelApplications from './admin-panel-applications/AdminPanelApplications'
 
 import styles from './AdminPanel.module.scss'
+import { useEdit } from './admin-panel-quotes/hooks/useEdit'
 
 const TITLE_ADD_MODAL = 'Добавление цитаты'
 const MOCK_TABS = [
@@ -33,6 +35,12 @@ const AdminPanel = () => {
     open,
   } = useModalAdd()
 
+  const {
+    isOpened,
+    open: onOpen,
+    close: onClose,
+  } = useEdit()
+
   return (
     <div className={styles.adminPanel}>
       <div className={cx("container", styles.wrap)}>
@@ -41,6 +49,8 @@ const AdminPanel = () => {
         >
           <TabItem key={MOCK_TABS[0].key}>
             <AdminPanelQuotes
+              isOpenedEdit={isOpened}
+              onOpenEdit={onOpen}
               isOpened={open}
               onOpenAddModal={handleOpen}
             />
@@ -62,7 +72,12 @@ const AdminPanel = () => {
             onClose={handleClose}
           />
         </Modal>
-
+        <Modal
+          open={isOpened}
+          onClose={onClose}
+        >
+          <Edit onClose={onClose} />
+        </Modal>
       </div>
     </div>
   )

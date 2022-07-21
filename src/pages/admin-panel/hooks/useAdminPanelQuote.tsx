@@ -2,7 +2,14 @@ import { useMemo } from 'react'
 import { Stores } from 'services'
 import { TableAction } from 'components/table'
 
-const useAdminPanelQuote = () => {
+interface UseAdminPanelQuote {
+  onOpenEdit: () => void
+  isOpenedEdit: boolean
+}
+const useAdminPanelQuote = ({
+  onOpenEdit,
+  isOpenedEdit,
+}: UseAdminPanelQuote) => {
   const {
     QuoteStore: {
       quotesAll,
@@ -44,7 +51,7 @@ const useAdminPanelQuote = () => {
     actions: (
       <TableAction
         onDelete={() => { }}
-        onEdit={() => { }}
+        onEdit={onOpenEdit}
       />
     )
   }))
