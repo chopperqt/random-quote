@@ -65,7 +65,7 @@ const useAdminPanelAuthors = () => {
       actions: (
         <TableAction
           onDelete={() => { }}
-          onEdit={() => { }}
+          editElement={(<div></div>)}
         />
       )
     }))

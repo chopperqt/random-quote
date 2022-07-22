@@ -9,9 +9,9 @@ import Table from 'components/table'
 import Icon, { IconList } from 'components/icon'
 import { getQuotes } from 'utils/quotes'
 import { AdminPanelQuoteProps } from '../constants'
+import useAdminPanelQuote from '../hooks/useAdminPanelQuote'
 
 import styles from './AdminPanelQuotes.module.scss'
-import useAdminPanelQuote from '../hooks/useAdminPanelQuote'
 
 const BUTTON_TEXT = 'Создать цитату'
 

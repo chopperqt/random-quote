@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Stores } from 'services'
 import { TableAction } from 'components/table'
+import Edit from '../admin-panel-quotes/edit/Edit'
 
 interface UseAdminPanelQuote {
   onOpenEdit: () => void
@@ -51,7 +52,11 @@ const useAdminPanelQuote = ({
     actions: (
       <TableAction
         onDelete={() => { }}
-        onEdit={onOpenEdit}
+        editElement={
+          <Edit
+            quote={quote.text}
+          />
+        }
       />
     )
   }))

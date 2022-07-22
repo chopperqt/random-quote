@@ -8,13 +8,14 @@ import Input from "components/input"
 import { postQuote } from 'utils/quotes'
 import Selector from "components/selector/";
 import Button from 'components/button'
-
+import { useEdit } from '../hooks/useEdit';
 import { Stores } from 'services'
-import {
-  IAdminPanelAddField
-} from '../../constants'
+import { IAdminPanelAddField } from '../../constants'
+import Modal from 'components/modal';
 
 import styles from './Edit.module.scss'
+import Icon, { IconList } from 'components/icon';
+
 
 const QUOTE_TEXT = 'Цитата'
 const DATA_TEXT = 'Дата'
@@ -36,10 +37,8 @@ const MOCK_DATA = [
 
 interface EditProps {
   quote: string
-  onClose: () => void
 }
 const Edit = ({
-  onClose = () => { },
   quote,
 }: EditProps) => {
   const {
@@ -62,6 +61,12 @@ const Edit = ({
     },
   } = useForm<IAdminPanelAddField>();
 
+  const {
+    isOpened,
+    close,
+    open,
+  } = useEdit()
+
   const onSubmit: SubmitHandler<IAdminPanelAddField> = async (data) => {
     const response = await postQuote({
       text: data.quote,
@@ -73,51 +78,65 @@ const Edit = ({
       resetField('date')
       resetField('quote')
 
-      onClose()
+      close()
     }
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className={styles.form}
-    >
-      <Controller
-        control={control}
-        name="author"
-        render={({ field: {
-          onChange,
-          onBlur,
-          value,
-          ref,
-        } }) => (
-          <Selector
-            label={AUTHOR_TEXT}
-            options={MOCK_DATA}
-            onChange={onChange}
-            initialValue={MOCK_DATA[0]}
-          />
-        )}
-      />
-      <Input
-        label={DATA_TEXT}
-        className={styles.input}
-        error={errors.date && 'This field is Requited'}
-        placeholder={DATA_PLACEHOLDER}
-        {...(register("date", { required: true })) as any}
-      />
-      <Input
-        {...register("quote", { required: true })}
-        label={QUOTE_TEXT}
-        className={styles.input}
-        error={errors.quote && 'This field is Required'}
-        placeholder={QUOTE_PLACEHOLDER}
-      />
+    <>
       <Button
-        loading={hasLoading}
-        type="submit"
-      >{CREATE_TEXT}</Button>
-    </form>
+        className={styles.button}
+        onClick={open}
+      >
+        <Icon icon={IconList.edit} />
+      </Button>
+      <Modal
+        open={isOpened}
+        onClose={close}
+      >
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className={styles.form}
+        >
+          <Controller
+            control={control}
+            name="author"
+            render={({ field: {
+              onChange,
+              onBlur,
+              value,
+              ref,
+            } }) => (
+              <Selector
+                label={AUTHOR_TEXT}
+                options={MOCK_DATA}
+                onChange={onChange}
+                initialValue={MOCK_DATA[0]}
+              />
+            )}
+          />
+          <Input
+            defaultValue={quote}
+            label={DATA_TEXT}
+            className={styles.input}
+            error={errors.date && 'This field is Requited'}
+            placeholder={DATA_PLACEHOLDER}
+            {...(register("date", { required: true })) as any}
+          />
+          <Input
+            {...register("quote", { required: true })}
+            label={QUOTE_TEXT}
+            className={styles.input}
+            error={errors.quote && 'This field is Required'}
+            placeholder={QUOTE_PLACEHOLDER}
+          />
+          <Button
+            loading={hasLoading}
+            type="submit"
+          >{CREATE_TEXT}</Button>
+        </form>
+      </Modal>
+    </>
   )
 }
 

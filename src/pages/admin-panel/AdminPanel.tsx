@@ -4,7 +4,6 @@ import Modal from 'components/modal'
 import Tabs, { TabItem } from 'components/tabs'
 import useModalAdd from './hooks/useModalAdd'
 import AdminPanelAdd from './admin-panel-quotes/add/Add'
-import Edit from './admin-panel-quotes/edit/Edit'
 import AdminPanelQuotes from './admin-panel-quotes/AdminPanelQuotes'
 import AdminPanelAuthors from './admin-panel-author/AdminPanelAuthors'
 import AdminPanelApplications from './admin-panel-applications/AdminPanelApplications'
@@ -71,12 +70,6 @@ const AdminPanel = () => {
             isOpened={open}
             onClose={handleClose}
           />
-        </Modal>
-        <Modal
-          open={isOpened}
-          onClose={onClose}
-        >
-          <Edit onClose={onClose} />
         </Modal>
       </div>
     </div>

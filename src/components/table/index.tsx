@@ -12,9 +12,9 @@ export interface IColumn {
   accessor: string
 }
 
-export interface ITableActions {
-  onEdit: () => void
+export interface TableActionsProps {
   onDelete: () => void
+  editElement: JSX.Element | JSX.Element[]
 }
 
 export {
