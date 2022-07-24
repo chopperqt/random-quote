@@ -3,14 +3,7 @@ import { Stores } from 'services'
 import { TableAction } from 'components/table'
 import Edit from '../admin-panel-quotes/edit/Edit'
 
-interface UseAdminPanelQuote {
-  onOpenEdit: () => void
-  isOpenedEdit: boolean
-}
-const useAdminPanelQuote = ({
-  onOpenEdit,
-  isOpenedEdit,
-}: UseAdminPanelQuote) => {
+const useAdminPanelQuote = () => {
   const {
     QuoteStore: {
       quotesAll,
@@ -54,6 +47,9 @@ const useAdminPanelQuote = ({
         onDelete={() => { }}
         editElement={
           <Edit
+            idAuthor={quote.id_author}
+            updatedAt={quote!.updated_at}
+            createdAt={quote.created_at}
             quote={quote.text}
           />
         }

@@ -8,6 +8,8 @@ import styles from './Input.module.scss'
 
 import { IInputProps } from '.'
 
+const LOADING_ALT = 'Loading...'
+
 export const Input = React.forwardRef(({
   className,
   classNameWrap,
@@ -38,7 +40,7 @@ export const Input = React.forwardRef(({
       <img
         className={styles.loading}
         src={loadingImg}
-        alt="Loading..."
+        alt={LOADING_ALT}
       />
     )}
     {onClear && !loading && value && value.length > 1 && (

@@ -1,10 +1,8 @@
-import { IOption } from 'components/selector'
+import { Option } from 'components/selector'
 
 export interface AdminPanelQuoteProps {
   onOpenAddModal: () => void
-  onOpenEdit: () => void
   isOpened: boolean
-  isOpenedEdit: boolean
 }
 
 export interface AdminPanelModal {
@@ -15,5 +13,6 @@ export interface AdminPanelModal {
 export interface IAdminPanelAddField {
   date: string
   quote: string
-  author: IOption
+  author: Option
+  updatedAt: Date
 }

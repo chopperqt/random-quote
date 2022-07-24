@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   useForm,
   SubmitHandler,
@@ -9,51 +10,36 @@ import { postQuote } from 'utils/quotes'
 import Selector from "components/selector/";
 import Button from 'components/button'
 import { useEdit } from '../hooks/useEdit';
-import { Stores } from 'services'
 import { IAdminPanelAddField } from '../../constants'
 import Modal from 'components/modal';
+import Icon, { IconList } from 'components/icon';
+import Textarea from 'components/textarea';
+import { REQUITE_FIELD } from 'helpers/validateMessages'
 
 import styles from './Edit.module.scss'
-import Icon, { IconList } from 'components/icon';
-
 
 const QUOTE_TEXT = 'Цитата'
-const DATA_TEXT = 'Дата'
+const DATA_TEXT = 'Дата создания'
+const DATA_UPDATE_TEXT = 'Последнее обновления'
 const AUTHOR_TEXT = 'Автор'
-const CREATE_TEXT = 'Редактирование'
+const CREATE_TEXT = 'Изменить'
 const QUOTE_PLACEHOLDER = 'Мужчины любят глазами, а девушки ушами'
-const DATA_PLACEHOLDER = '01.01.1999'
-
-const MOCK_DATA = [
-  {
-    key: 1,
-    label: 'Тим Бёртон'
-  },
-  {
-    key: 2,
-    label: 'Аль Пачино'
-  }
-]
 
 interface EditProps {
   quote: string
+  createdAt: Date,
+  updatedAt?: Date,
+  idAuthor: number
 }
-const Edit = ({
+const Edit = React.memo(({
   quote,
+  createdAt,
+  updatedAt,
+  idAuthor,
 }: EditProps) => {
-  const {
-    NotificationStore: {
-      loading: {
-        postQuote: loading
-      }
-    }
-  } = Stores()
-  const hasLoading = loading?.status === 'PENDING'
-
   const {
     register,
     handleSubmit,
-    watch,
     resetField,
     control,
     formState: {
@@ -65,7 +51,13 @@ const Edit = ({
     isOpened,
     close,
     open,
-  } = useEdit()
+    isUpdateLoading,
+    isAuthorsLoading,
+    options,
+    defaultOption,
+  } = useEdit({
+    idAuthor,
+  })
 
   const onSubmit: SubmitHandler<IAdminPanelAddField> = async (data) => {
     const response = await postQuote({
@@ -98,6 +90,7 @@ const Edit = ({
           onSubmit={handleSubmit(onSubmit)}
           className={styles.form}
         >
+          {console.log(defaultOption, 'defaultOption')}
           <Controller
             control={control}
             name="author"
@@ -109,35 +102,46 @@ const Edit = ({
             } }) => (
               <Selector
                 label={AUTHOR_TEXT}
-                options={MOCK_DATA}
+                options={options}
                 onChange={onChange}
-                initialValue={MOCK_DATA[0]}
+                loading={isAuthorsLoading || !defaultOption}
               />
             )}
           />
           <Input
-            defaultValue={quote}
+            {...(register("date"))}
             label={DATA_TEXT}
             className={styles.input}
-            error={errors.date && 'This field is Requited'}
-            placeholder={DATA_PLACEHOLDER}
-            {...(register("date", { required: true })) as any}
+            defaultValue={createdAt.toString()}
+            disabled={true}
           />
-          <Input
-            {...register("quote", { required: true })}
+          {!!updatedAt && (
+            <Input
+              {...(register('updatedAt'))}
+              label={DATA_UPDATE_TEXT}
+              className={styles.input}
+              defaultValue={updatedAt.toString()}
+              disabled={true}
+            />
+          )}
+          <Textarea
+            {...register('quote', { required: true })}
             label={QUOTE_TEXT}
             className={styles.input}
-            error={errors.quote && 'This field is Required'}
+            error={errors.quote && REQUITE_FIELD}
             placeholder={QUOTE_PLACEHOLDER}
+            defaultValue={quote}
           />
           <Button
-            loading={hasLoading}
+            loading={isUpdateLoading}
             type="submit"
-          >{CREATE_TEXT}</Button>
+          >
+            {CREATE_TEXT}
+          </Button>
         </form>
       </Modal>
     </>
   )
-}
+})
 
 export default Edit

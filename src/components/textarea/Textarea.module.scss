@@ -1,0 +1,21 @@
+@import 'asset/scss/colors';
+@import 'asset/scss/common';
+
+.textarea {
+  resize: none;
+  padding: 10px;
+  border-radius: $border-radius--small;
+  outline: none;
+  border: 1px solid $color-secondary--4;
+  min-height: 150px;
+  margin-top: 5px;
+}
+
+.requited {
+  color: $color-warning--4;
+  margin-left: 5px;
+}
+
+.error {
+  color: $color-warning--4;
+}

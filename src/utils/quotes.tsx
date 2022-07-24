@@ -49,6 +49,7 @@ export interface QuotesApi {
     name: string
   },
   created_at: Date,
+  updated_at?: Date,
   id_quote: number,
   id_author: number,
   text: string,

@@ -1,20 +1,21 @@
 import Selector from './Selector'
 
-export interface IOption {
+export interface Option {
   key: string | number
   label: string
 }
 
-export interface ISelector {
-  options: IOption[]
+export interface SelectorProps {
+  options: Option[]
   className?: string
   classNameInput?: string
   classNameOptions?: string
   fullWidth?: boolean
   label?: string
-  initialValue?: IOption
-  onChange?: (option: IOption) => void
+  initialValue?: Option
+  onChange?: (option: Option) => void
   disabled?: boolean
+  loading?: boolean
 }
 
 export default Selector

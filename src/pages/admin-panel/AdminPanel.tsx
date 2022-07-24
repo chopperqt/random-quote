@@ -34,12 +34,6 @@ const AdminPanel = () => {
     open,
   } = useModalAdd()
 
-  const {
-    isOpened,
-    open: onOpen,
-    close: onClose,
-  } = useEdit()
-
   return (
     <div className={styles.adminPanel}>
       <div className={cx("container", styles.wrap)}>
@@ -48,8 +42,6 @@ const AdminPanel = () => {
         >
           <TabItem key={MOCK_TABS[0].key}>
             <AdminPanelQuotes
-              isOpenedEdit={isOpened}
-              onOpenEdit={onOpen}
               isOpened={open}
               onOpenAddModal={handleOpen}
             />

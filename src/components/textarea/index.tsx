@@ -1,6 +1,6 @@
-import { Input } from './Input'
+import Textarea from './Textarea'
 
-export interface IInputProps extends React.ComponentProps<'input'> {
+export interface TextareaProps extends React.ComponentProps<'textarea'> {
   className?: string
   classNameWrap?: string
   fullWidth?: boolean
@@ -9,7 +9,6 @@ export interface IInputProps extends React.ComponentProps<'input'> {
   loading?: boolean
   value?: string
   onClear?: () => void
-  area?: boolean
 }
 
-export default Input
+export default Textarea

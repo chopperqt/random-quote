@@ -1,12 +1,12 @@
 import React, { useState, useMemo, useEffect } from 'react'
 
 import Icon, { IconList } from 'components/icon'
-import { IOption } from '../'
+import { Option } from '../'
 
 export interface IUseSelector {
   inputRef: HTMLInputElement | null
-  initialValue?: IOption
-  onChange: (option: IOption) => void
+  initialValue?: Option
+  onChange: (option: Option) => void
 }
 
 const useSelector = ({
@@ -14,7 +14,7 @@ const useSelector = ({
   initialValue,
   onChange,
 }: IUseSelector) => {
-  const [option, setOption] = useState<IOption>(initialValue || { label: '', key: '' })
+  const [option, setOption] = useState<Option>(initialValue || { label: '', key: '' })
   const [value, setValue] = useState<string | number>(option.label)
   const [open, setOpen] = useState<boolean>(false)
 
@@ -26,7 +26,7 @@ const useSelector = ({
     setOpen(false)
   }
 
-  const handleClickValue = (data: IOption) => {
+  const handleClickValue = (data: Option) => {
     setOption(data)
     setValue(data.label)
     handleClose()

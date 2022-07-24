@@ -18,17 +18,12 @@ const BUTTON_TEXT = 'Создать цитату'
 const AdminPanelQuotes = ({
   onOpenAddModal,
   isOpened,
-  isOpenedEdit,
-  onOpenEdit,
 }: AdminPanelQuoteProps) => {
   const {
     columns,
     loading,
     formattedData
-  } = useAdminPanelQuote({
-    onOpenEdit,
-    isOpenedEdit,
-  })
+  } = useAdminPanelQuote()
 
   useEffect(() => {
     getQuotes({})
