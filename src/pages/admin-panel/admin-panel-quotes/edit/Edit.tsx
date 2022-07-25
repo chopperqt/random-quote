@@ -40,7 +40,6 @@ const Edit = React.memo(({
   const {
     register,
     handleSubmit,
-    resetField,
     control,
     formState: {
       errors,
@@ -60,18 +59,7 @@ const Edit = React.memo(({
   })
 
   const onSubmit: SubmitHandler<IAdminPanelAddField> = async (data) => {
-    const response = await postQuote({
-      text: data.quote,
-      time: data.date,
-      author: +data.author.key
-    })
-
-    if (response) {
-      resetField('date')
-      resetField('quote')
-
-      close()
-    }
+    console.log(data)
   }
 
   return (
@@ -90,20 +78,17 @@ const Edit = React.memo(({
           onSubmit={handleSubmit(onSubmit)}
           className={styles.form}
         >
-          {console.log(defaultOption, 'defaultOption')}
           <Controller
             control={control}
             name="author"
             render={({ field: {
               onChange,
-              onBlur,
-              value,
-              ref,
             } }) => (
               <Selector
                 label={AUTHOR_TEXT}
                 options={options}
                 onChange={onChange}
+                initialValue={defaultOption}
                 loading={isAuthorsLoading || !defaultOption}
               />
             )}
@@ -113,28 +98,21 @@ const Edit = React.memo(({
             label={DATA_TEXT}
             className={styles.input}
             defaultValue={createdAt.toString()}
-            disabled={true}
+            disabled={false}
+            value={`${createdAt}`}
           />
-          {!!updatedAt && (
-            <Input
-              {...(register('updatedAt'))}
-              label={DATA_UPDATE_TEXT}
-              className={styles.input}
-              defaultValue={updatedAt.toString()}
-              disabled={true}
-            />
-          )}
           <Textarea
             {...register('quote', { required: true })}
             label={QUOTE_TEXT}
             className={styles.input}
-            error={errors.quote && REQUITE_FIELD}
+            error={errors.quote?.message && REQUITE_FIELD}
             placeholder={QUOTE_PLACEHOLDER}
             defaultValue={quote}
           />
           <Button
             loading={isUpdateLoading}
             type="submit"
+            onClick={handleSubmit(onSubmit)}
           >
             {CREATE_TEXT}
           </Button>

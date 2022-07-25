@@ -17,8 +17,8 @@ export const Input = React.forwardRef(({
   label,
   error,
   loading,
-  value,
   onClear,
+  defaultValue,
   ...props
 }: IInputProps, ref: any) => (
   <div className={cx(styles.layout, classNameWrap)}>
@@ -28,12 +28,12 @@ export const Input = React.forwardRef(({
       })}>{label}</label>
     )}
     <input
-      value={value}
       className={cx(styles.input, className, {
         'input--full': fullWidth,
         'input--error': !!error,
       })}
       ref={ref}
+      defaultValue={defaultValue}
       {...props}
     />
     {loading && (
@@ -43,7 +43,7 @@ export const Input = React.forwardRef(({
         alt={LOADING_ALT}
       />
     )}
-    {onClear && !loading && value && value.length > 1 && (
+    {onClear && !loading && props.value && props.value.length > 1 && (
       <button
         onClick={onClear}
         className={cx(styles.loading, styles.clear)}>

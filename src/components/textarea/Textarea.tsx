@@ -7,7 +7,7 @@ import { TextareaProps } from './'
 
 import styles from './Textarea.module.scss'
 
-const Textarea = ({
+const Textarea = React.forwardRef(({
   className,
   classNameWrap,
   fullWidth = false,
@@ -17,7 +17,7 @@ const Textarea = ({
   value,
   onClear = DefaultProps.function,
   ...props
-}: TextareaProps) => (
+}: TextareaProps, ref: any) => (
   <div className={cx(classNameWrap)}>
     <div>
       {label}
@@ -27,8 +27,8 @@ const Textarea = ({
     </div>
     <textarea
       className={cx(styles.textarea, className)}
+      ref={ref}
       {...props}
-
     />
     {!!error && (
       <div className={styles.error}>
@@ -37,6 +37,6 @@ const Textarea = ({
     )}
   </div>
 
-)
+))
 
 export default Textarea

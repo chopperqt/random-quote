@@ -35,23 +35,20 @@ export const useEdit = ({
     setOpened(false)
   }
 
-  const { options, defaultOption } = useMemo(() => {
-    const options = authors.map(({
+  const options = useMemo(() => {
+    return authors.map(({
       id_author,
       name,
     }) => ({
       key: id_author,
       label: name,
     }))
+  }, [authors])
 
-    const defaultOption = options.filter(({ key }) => key === idAuthor)[0]
-
-    return {
-      options,
-      defaultOption,
-    }
+  const defaultOption = useMemo(() => {
+    return options.filter(({ key }) => key === idAuthor)[0]
   }, [
-    authors,
+    options,
     idAuthor,
   ])
 
