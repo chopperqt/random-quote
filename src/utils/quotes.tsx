@@ -41,7 +41,8 @@ export type QuotesRequests =
   'getQuotesLast' |
   'searchQuote' |
   'postQuote' |
-  'getFilterQuotesCount'
+  'getFilterQuotesCount' |
+  'updateQuote'
 
 export interface QuotesApi {
   author: {
@@ -126,6 +127,29 @@ export const getQuote = async (id: number, idUser?: UserID) => {
   })
 
   Store.dispatch(quoteMethods.setQuote(updateData))
+
+  handleSuccess()
+}
+
+export const updateQuote = async (id: number, quote: unknown) => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses('updateQuote')
+
+  handlePending()
+
+  const { data, error } = await supabase
+    .from(Tables.quotes)
+    .update(quote)
+    .match({ id_quote: id })
+
+  if (error) {
+    handleFailure(error)
+
+    return
+  }
 
   handleSuccess()
 }
