@@ -9,7 +9,8 @@ export type QuotesRequests =
   'searchQuote' |
   'postQuote' |
   'getFilterQuotesCount' |
-  'updateQuote'
+  'updateQuote' |
+  'deleteQuote'
 
 export interface QuotesApi {
   author: Author,

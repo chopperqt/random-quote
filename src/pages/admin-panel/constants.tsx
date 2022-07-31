@@ -11,8 +11,6 @@ export interface AdminPanelModal {
 }
 
 export interface IAdminPanelAddField {
-  date: string
-  quote: string
+  text: string
   author: Option
-  updatedAt: Date
 }

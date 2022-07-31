@@ -19,8 +19,6 @@ import { REQUITE_FIELD } from 'helpers/validateMessages'
 import styles from './Edit.module.scss'
 
 const QUOTE_TEXT = 'Цитата'
-const DATA_TEXT = 'Дата создания'
-const DATA_UPDATE_TEXT = 'Последнее обновления'
 const AUTHOR_TEXT = 'Автор'
 const CREATE_TEXT = 'Изменить'
 const QUOTE_PLACEHOLDER = 'Мужчины любят глазами, а девушки ушами'
@@ -33,8 +31,6 @@ interface EditProps {
 }
 const Edit = React.memo(({
   quote,
-  createdAt,
-  updatedAt,
   idAuthor,
 }: EditProps) => {
   const {
@@ -93,19 +89,11 @@ const Edit = React.memo(({
               />
             )}
           />
-          <Input
-            {...(register("date"))}
-            label={DATA_TEXT}
-            className={styles.input}
-            defaultValue={createdAt.toString()}
-            disabled={false}
-            value={`${createdAt}`}
-          />
           <Textarea
-            {...register('quote', { required: true })}
+            {...register('text', { required: true })}
             label={QUOTE_TEXT}
             className={styles.input}
-            error={errors.quote?.message && REQUITE_FIELD}
+            error={errors.text?.message && REQUITE_FIELD}
             placeholder={QUOTE_PLACEHOLDER}
             defaultValue={quote}
           />

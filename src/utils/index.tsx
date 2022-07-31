@@ -1,4 +1,7 @@
-import { QuotesRequests } from 'models/quotes.type'
+import {
+  AuthorID,
+  QuotesRequests
+} from 'models/quotes.type'
 import { AuthorsRequests } from './authors'
 import { AuthRequests } from './auth'
 import { BookmarkRequests } from './bookmarks'
@@ -13,8 +16,7 @@ export type ApiRequests =
 
 export interface IPostQuote {
   text: string
-  time: string
-  author: number
+  authorID: AuthorID
 }
 
 export type TUpdateAction = 'like' | 'dislike'

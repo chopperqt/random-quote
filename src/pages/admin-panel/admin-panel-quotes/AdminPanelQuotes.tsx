@@ -13,7 +13,7 @@ import useAdminPanelQuote from '../hooks/useAdminPanelQuote'
 
 import styles from './AdminPanelQuotes.module.scss'
 
-const BUTTON_TEXT = 'Создать цитату'
+const BUTTON_TEXT = 'Добавить цитату'
 
 const AdminPanelQuotes = ({
   onOpenAddModal,

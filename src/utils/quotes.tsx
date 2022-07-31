@@ -31,13 +31,17 @@ import {
   QuoteID,
   QuotesApiOptional,
   QuotesApi,
+  AuthorID,
 } from 'models/quotes.type'
+import { QuotesAuthorID, RelationQuotesAuthorApi } from 'models/quotesAuthors.type';
 
 const LIMIT_PER_PAGE = 10
 const QUERY_QUOTES = '*, author: id_author (name, path)'
 const QUERY_AUTHOR = 'id, data:quotes(id_quote,text)'
 const DELAY = 800
 
+
+type RelationQuotesAuthorReturn = RelationQuotesAuthorApi[] | null
 
 const createQuotesBuilder = ({
   search,
@@ -139,7 +143,7 @@ export const updateQuote = async (id: QuoteID, quote: QuotesApiOptional) => {
 
 export const getQuotes = async ({
   from = 1,
-  to = 10,
+  to = 50,
   id,
   authors = DefaultProps.array,
 }: IGetQuotes) => {
@@ -254,8 +258,6 @@ export const getRandomQuote = async (idUser?: UserID): Promise<boolean | Postgre
     qq: updateData[0].id_quote,
   })
 
-  console.log('updateDAta: ', updateData)
-
   Store.dispatch(quoteMethods.setQuote(updateData))
 
   handleSuccess()
@@ -273,7 +275,7 @@ export const getQuotesAuthors = async (authors: string[]) => {
   handlePending()
 
   let { data, error } = await supabase
-    .from(Tables.authorsQuotes)
+    .from(Tables.quotesAuthor)
     .select(QUERY_AUTHOR)
     .in('id_author', authors);
 
@@ -355,10 +357,34 @@ export const searchQuote = debounce(async ({
   handleSuccess()
 }, DELAY)
 
+export const deleteQuote = async (quoteID: QuoteID) => {
+  const {
+    handlePending,
+    handleSuccess,
+    handleFailure,
+  } = loadingStatuses('deleteQuote')
+
+  handlePending()
+
+  let { error } = await supabase
+    .from(Tables.quotes)
+    .delete()
+    .match({
+      id_quote: quoteID,
+    })
+
+  if (error) {
+    handleFailure(error)
+
+    return
+  }
+
+  handleSuccess()
+}
+
 export const postQuote = async ({
   text,
-  time,
-  author,
+  authorID,
 }: IPostQuote) => {
   const {
     handlePending,
@@ -368,49 +394,63 @@ export const postQuote = async ({
 
   handlePending()
 
-  let createQuote = await supabase
+  let {
+    data: createQuote,
+    error: createQuoteError,
+  } = await supabase
     .from(Tables.quotes)
-    .insert({ text, data: time })
+    .insert({
+      text,
+      id_author: authorID,
+    })
     .single();
 
-  if (createQuote.error) {
-    const { message } = createQuote.error
+  if (createQuoteError) {
+    const { message } = createQuoteError
 
-    handleFailure(createQuote.error)
+    handleFailure(createQuoteError)
 
     notificationMethods.createNotification(message, 'ERROR')
 
     return
   }
 
-  if (createQuote.data) {
-    const createAuthorQuotes = await supabase
-      .from(Tables.authorsQuotes)
-      .insert({
-        id_author: author,
-        id_quote: createQuote.data.id_quote,
-      })
-      .single();
+  const {
+    data: createRelation,
+    error: createRelationError,
+  } = await supabase
+    .from(Tables.quotesAuthor)
+    .insert({
+      id_author: authorID,
+      id_quote: createQuote.id_quote,
+    })
+    .single();
 
-    if (createAuthorQuotes.error) {
-      const { message } = createAuthorQuotes.error
+  if (createRelationError) {
+    const { message } = createRelationError
 
-      handleFailure(createAuthorQuotes.error)
+    handleFailure(createRelationError)
 
-      notificationMethods.createNotification(message, 'ERROR')
+    notificationMethods.createNotification(message, 'ERROR')
 
-      return
-    }
+    console.log(createQuote)
+
+    await deleteQuote(createQuote?.id_quote)
 
     handleSuccess()
 
-    notificationMethods.createNotification(SuccessMessages.createSuccess, 'SUCCESS')
-
-    return {
-      multiLine: createAuthorQuotes.data,
-      quote: createQuote.data
-    }
+    return
   }
+
+  handleSuccess()
+
+  notificationMethods.createNotification(SuccessMessages.createSuccess, 'SUCCESS')
+
+  return {
+    multiLine: createRelation,
+    quote: createQuote,
+  }
+
 }
 
 export const getFilterQuotesCounter = async (data: GetQuotesSearch) => {
@@ -435,4 +475,65 @@ export const getFilterQuotesCounter = async (data: GetQuotesSearch) => {
   Store.dispatch(filterMethods.updateFiltersCount(count || 0))
 
   handleSuccess()
+}
+
+export async function getRelationQuotesAuthor(quoteID: QuoteID): Promise<RelationQuotesAuthorReturn> {
+  const { data, error } = await supabase
+    .from(Tables.quotesAuthor)
+    .select('*')
+    .match({ id_quote: quoteID })
+
+  if (error) {
+    return null
+  }
+
+  return data
+}
+
+export async function createRelationQuotesAuthor(quoteID: QuoteID, authorID: AuthorID): Promise<RelationQuotesAuthorReturn> {
+  const { data, error } = await supabase
+    .from(Tables.quotesAuthor)
+    .insert({
+      id_author: authorID,
+      id_quote: quoteID,
+    })
+
+  if (error) {
+    return null
+  }
+
+  return data
+}
+
+export async function updateRelationQuotesAuthor(quoteID: QuoteID, authorID?: AuthorID): Promise<RelationQuotesAuthorReturn> {
+  const { data, error } = await supabase
+    .from(Tables.quotesAuthor)
+    .update({
+      id_quote: quoteID,
+      id_author: authorID,
+    })
+    .match({
+      id_quote: quoteID,
+    })
+
+  if (error) {
+    return null
+  }
+
+  return data
+}
+
+export async function deleteRelationQuotesAuthor(id: QuotesAuthorID): Promise<RelationQuotesAuthorReturn> {
+  const { data, error } = await supabase
+    .from(Tables.quotesAuthor)
+    .delete()
+    .match({
+      id,
+    })
+
+  if (error) {
+    return null
+  }
+
+  return data
 }
