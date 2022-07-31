@@ -1,6 +1,5 @@
 import Store, { quoteMethods } from "services"
 import { UserID } from "utils/auth"
-import { QuotesApi } from 'utils/quotes'
 import { getRandomQuote } from "utils/quotes"
 import {
   QuoteData,

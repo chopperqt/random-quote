@@ -48,7 +48,6 @@ const useAdminPanelQuote = () => {
         editElement={
           <Edit
             idAuthor={quote.id_author}
-            updatedAt={quote!.updated_at}
             createdAt={quote.created_at}
             quote={quote.text}
           />

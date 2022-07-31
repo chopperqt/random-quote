@@ -27,34 +27,17 @@ import { QuoteData } from 'services/quotes/QuotesStore';
 import DefaultProps from 'helpers/defaultProps';
 import { UserID } from './auth';
 import { updateUrlParams } from 'helpers/urlParams';
+import {
+  QuoteID,
+  QuotesApiOptional,
+  QuotesApi,
+} from 'models/quotes.type'
 
 const LIMIT_PER_PAGE = 10
 const QUERY_QUOTES = '*, author: id_author (name, path)'
 const QUERY_AUTHOR = 'id, data:quotes(id_quote,text)'
 const DELAY = 800
 
-export type QuotesRequests =
-  'getQuotes' |
-  'getQuote' |
-  'getRandomQuote' |
-  'getQuotesAuthor' |
-  'getQuotesLast' |
-  'searchQuote' |
-  'postQuote' |
-  'getFilterQuotesCount' |
-  'updateQuote'
-
-export interface QuotesApi {
-  author: {
-    path: string,
-    name: string
-  },
-  created_at: Date,
-  updated_at?: Date,
-  id_quote: number,
-  id_author: number,
-  text: string,
-}
 
 const createQuotesBuilder = ({
   search,
@@ -83,7 +66,7 @@ const createQuotesBuilder = ({
   return request
 }
 
-export const getQuote = async (id: number, idUser?: UserID) => {
+export const getQuote = async (id: QuoteID, idUser?: UserID) => {
   const {
     handleFailure,
     handlePending,
@@ -131,7 +114,7 @@ export const getQuote = async (id: number, idUser?: UserID) => {
   handleSuccess()
 }
 
-export const updateQuote = async (id: number, quote: unknown) => {
+export const updateQuote = async (id: QuoteID, quote: QuotesApiOptional) => {
   const {
     handleFailure,
     handlePending,
@@ -242,11 +225,11 @@ export const getRandomQuote = async (idUser?: UserID): Promise<boolean | Postgre
       id_author: data[0].id_author,
       text: data[0].text,
       author: {
-        name: data[0].author,
+        name: data[0].name,
         path: data[0].path,
       }
     },
-  ] as QuotesApi[]
+  ]
 
   if (idUser) {
     const bookmarks = await getBookmarks({ id_user: idUser, list: [data[0].id_quote] })
@@ -260,7 +243,6 @@ export const getRandomQuote = async (idUser?: UserID): Promise<boolean | Postgre
     updateData = data.map((quote: QuoteData) => {
       const isBookmark = bookmarks.data.find((item: QuoteData) => +item.id_quote === +quote.id_quote)
 
-
       return {
         ...quote,
         bookmarked: !!isBookmark,
@@ -271,6 +253,8 @@ export const getRandomQuote = async (idUser?: UserID): Promise<boolean | Postgre
   updateUrlParams({
     qq: updateData[0].id_quote,
   })
+
+  console.log('updateDAta: ', updateData)
 
   Store.dispatch(quoteMethods.setQuote(updateData))
 

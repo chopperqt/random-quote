@@ -1,4 +1,4 @@
-import { QuotesRequests } from './quotes'
+import { QuotesRequests } from 'models/quotes.type'
 import { AuthorsRequests } from './authors'
 import { AuthRequests } from './auth'
 import { BookmarkRequests } from './bookmarks'
