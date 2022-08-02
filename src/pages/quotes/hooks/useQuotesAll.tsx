@@ -9,7 +9,9 @@ import { QUOTES_ALL_TEXT } from '../constants'
 import decOfNum, { quoteWords } from 'helpers/decOfNum'
 import { getRange } from 'helpers/pagination'
 import useResponse from 'helpers/useResponse'
-import { getQuotes, searchQuote } from 'utils/quotes'
+import {
+  getQuotes, searchQuote
+} from 'utils/quotes'
 import { QuotesRequests } from 'models/quotes.type'
 import useUser from 'helpers/useUser'
 import Store, { filterMethods, notificationMethods, Stores } from 'services'

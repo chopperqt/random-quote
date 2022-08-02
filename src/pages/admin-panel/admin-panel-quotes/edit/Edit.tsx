@@ -5,16 +5,18 @@ import {
   Controller,
 } from 'react-hook-form'
 
-import Input from "components/input"
-import { postQuote } from 'utils/quotes'
+import { updateQuote } from 'utils/quotes'
 import Selector from "components/selector/";
 import Button from 'components/button'
 import { useEdit } from '../hooks/useEdit';
-import { IAdminPanelAddField } from '../../constants'
 import Modal from 'components/modal';
 import Icon, { IconList } from 'components/icon';
 import Textarea from 'components/textarea';
 import { REQUITE_FIELD } from 'helpers/validateMessages'
+import {
+  EditProps,
+  EditFormFields,
+} from './Edit.types'
 
 import styles from './Edit.module.scss'
 
@@ -23,15 +25,10 @@ const AUTHOR_TEXT = 'Автор'
 const CREATE_TEXT = 'Изменить'
 const QUOTE_PLACEHOLDER = 'Мужчины любят глазами, а девушки ушами'
 
-interface EditProps {
-  quote: string
-  createdAt: Date,
-  updatedAt?: Date,
-  idAuthor: number
-}
 const Edit = React.memo(({
   quote,
-  idAuthor,
+  quoteID,
+  authorID,
 }: EditProps) => {
   const {
     register,
@@ -40,7 +37,7 @@ const Edit = React.memo(({
     formState: {
       errors,
     },
-  } = useForm<IAdminPanelAddField>();
+  } = useForm<EditFormFields>();
 
   const {
     isOpened,
@@ -51,11 +48,14 @@ const Edit = React.memo(({
     options,
     defaultOption,
   } = useEdit({
-    idAuthor,
+    authorID,
   })
 
-  const onSubmit: SubmitHandler<IAdminPanelAddField> = async (data) => {
-    console.log(data)
+  const onSubmit: SubmitHandler<EditFormFields> = async (data) => {
+    updateQuote(quoteID, +data.author.key, {
+      text: data.text,
+      id_author: +data.author.key
+    })
   }
 
   return (

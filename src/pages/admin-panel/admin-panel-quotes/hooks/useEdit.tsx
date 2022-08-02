@@ -6,12 +6,10 @@ import {
 
 import { Stores } from 'services'
 import { getAuthors } from 'utils/authors'
+import { UseEditProps } from '../edit/Edit.types'
 
-interface UseEditProps {
-  idAuthor: number
-}
 export const useEdit = ({
-  idAuthor,
+  authorID,
 }: UseEditProps) => {
   const {
     NotificationStore: {
@@ -46,10 +44,10 @@ export const useEdit = ({
   }, [authors])
 
   const defaultOption = useMemo(() => {
-    return options.filter(({ key }) => key === idAuthor)[0]
+    return options.filter(({ key }) => key === authorID)[0]
   }, [
     options,
-    idAuthor,
+    authorID,
   ])
 
   useEffect(() => {

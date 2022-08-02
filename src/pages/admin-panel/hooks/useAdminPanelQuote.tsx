@@ -47,7 +47,8 @@ const useAdminPanelQuote = () => {
         onDelete={() => { }}
         editElement={
           <Edit
-            idAuthor={quote.id_author}
+            quoteID={quote.id_quote}
+            authorID={quote.id_author}
             createdAt={quote.created_at}
             quote={quote.text}
           />

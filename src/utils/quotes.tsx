@@ -118,7 +118,7 @@ export const getQuote = async (id: QuoteID, idUser?: UserID) => {
   handleSuccess()
 }
 
-export const updateQuote = async (id: QuoteID, quote: QuotesApiOptional) => {
+export const updateQuote = async (id: QuoteID, authorID: AuthorID, quote: QuotesApiOptional) => {
   const {
     handleFailure,
     handlePending,
@@ -135,6 +135,12 @@ export const updateQuote = async (id: QuoteID, quote: QuotesApiOptional) => {
   if (error) {
     handleFailure(error)
 
+    return
+  }
+
+  const status = updateRelationQuotesAuthor(id, authorID)
+
+  if (status === null) {
     return
   }
 
@@ -476,6 +482,7 @@ export const getFilterQuotesCounter = async (data: GetQuotesSearch) => {
 
   handleSuccess()
 }
+
 
 export async function getRelationQuotesAuthor(quoteID: QuoteID): Promise<RelationQuotesAuthorReturn> {
   const { data, error } = await supabase
