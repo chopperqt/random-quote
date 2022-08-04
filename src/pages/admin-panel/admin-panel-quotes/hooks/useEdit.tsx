@@ -17,10 +17,10 @@ export const useEdit = ({
     },
     AuthorStore: {
       authors,
-    }
+    },
   } = Stores()
 
-  const isUpdateLoading = loading?.postQuote?.status === 'PENDING'
+  const isUpdateLoading = loading?.updateQuote?.status === 'PENDING'
   const isAuthorsLoading = loading?.getAuthors?.status === 'PENDING'
 
   const [isOpened, setOpened] = useState(false)

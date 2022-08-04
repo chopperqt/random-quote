@@ -2,7 +2,6 @@ import { Option } from 'components/selector'
 
 export interface AdminPanelQuoteProps {
   onOpenAddModal: () => void
-  isOpened: boolean
 }
 
 export interface AdminPanelModal {

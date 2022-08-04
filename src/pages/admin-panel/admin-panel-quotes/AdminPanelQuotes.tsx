@@ -1,7 +1,4 @@
-import {
-  useEffect,
-  useMemo,
-} from 'react'
+import { useEffect } from 'react'
 
 import Button from 'components/button'
 import Spin from 'components/spin'
@@ -12,22 +9,18 @@ import { AdminPanelQuoteProps } from '../constants'
 import useAdminPanelQuote from '../hooks/useAdminPanelQuote'
 
 import styles from './AdminPanelQuotes.module.scss'
+import Pagination from 'components/pagination'
 
 const BUTTON_TEXT = 'Добавить цитату'
 
-const AdminPanelQuotes = ({
-  onOpenAddModal,
-  isOpened,
-}: AdminPanelQuoteProps) => {
+const AdminPanelQuotes = ({ onOpenAddModal }: AdminPanelQuoteProps) => {
   const {
     columns,
     loading,
-    formattedData
+    formattedData,
+    currentPage,
+    pages,
   } = useAdminPanelQuote()
-
-  useEffect(() => {
-    getQuotes({})
-  }, [])
 
   return (
     <div className={styles.layout}>
@@ -46,6 +39,11 @@ const AdminPanelQuotes = ({
           columns={columns}
         />
       </Spin>
+      <Pagination
+        page={currentPage}
+        pages={pages}
+        onClick={() => { }}
+      />
     </div>
   )
 }

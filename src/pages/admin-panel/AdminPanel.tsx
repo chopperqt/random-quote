@@ -9,7 +9,6 @@ import AdminPanelAuthors from './admin-panel-author/AdminPanelAuthors'
 import AdminPanelApplications from './admin-panel-applications/AdminPanelApplications'
 
 import styles from './AdminPanel.module.scss'
-import { useEdit } from './admin-panel-quotes/hooks/useEdit'
 
 const TITLE_ADD_MODAL = 'Добавление цитаты'
 const MOCK_TABS = [
@@ -37,14 +36,9 @@ const AdminPanel = () => {
   return (
     <div className={styles.adminPanel}>
       <div className={cx("container", styles.wrap)}>
-        <Tabs
-          tabs={MOCK_TABS}
-        >
+        <Tabs tabs={MOCK_TABS}>
           <TabItem key={MOCK_TABS[0].key}>
-            <AdminPanelQuotes
-              isOpened={open}
-              onOpenAddModal={handleOpen}
-            />
+            <AdminPanelQuotes onOpenAddModal={handleOpen} />
           </TabItem>
           <TabItem key={MOCK_TABS[1].key}>
             <AdminPanelAuthors />

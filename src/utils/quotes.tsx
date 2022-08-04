@@ -26,7 +26,7 @@ import {
 import { QuoteData } from 'services/quotes/QuotesStore';
 import DefaultProps from 'helpers/defaultProps';
 import { UserID } from './auth';
-import { updateUrlParams } from 'helpers/urlParams';
+import { getUrlParam, updateUrlParams } from 'helpers/urlParams';
 import {
   QuoteID,
   QuotesApiOptional,
@@ -34,6 +34,7 @@ import {
   AuthorID,
 } from 'models/quotes.type'
 import { QuotesAuthorID, RelationQuotesAuthorApi } from 'models/quotesAuthors.type';
+import { getRange } from 'helpers/pagination';
 
 const LIMIT_PER_PAGE = 10
 const QUERY_QUOTES = '*, author: id_author (name, path)'
@@ -118,7 +119,7 @@ export const getQuote = async (id: QuoteID, idUser?: UserID) => {
   handleSuccess()
 }
 
-export const updateQuote = async (id: QuoteID, authorID: AuthorID, quote: QuotesApiOptional) => {
+export const updateQuote = async (id: QuoteID, authorID: AuthorID, quote: QuotesApiOptional): Promise<QuotesApiOptional[] | null> => {
   const {
     handleFailure,
     handlePending,
@@ -135,16 +136,31 @@ export const updateQuote = async (id: QuoteID, authorID: AuthorID, quote: Quotes
   if (error) {
     handleFailure(error)
 
-    return
+    return null
   }
 
-  const status = updateRelationQuotesAuthor(id, authorID)
+  if (authorID !== quote?.id_author) {
+    const status = await updateRelationQuotesAuthor(id, quote.id_author)
 
-  if (status === null) {
-    return
+    if (status === null) {
+      return null
+    }
   }
+
+  const page = getUrlParam('p') || 1
+  const {
+    from,
+    to,
+  } = getRange(+page)
+
+  getQuotes({
+    from,
+    to,
+  })
 
   handleSuccess()
+
+  return data
 }
 
 export const getQuotes = async ({

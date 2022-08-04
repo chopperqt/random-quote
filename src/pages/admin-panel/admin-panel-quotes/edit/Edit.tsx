@@ -52,10 +52,16 @@ const Edit = React.memo(({
   })
 
   const onSubmit: SubmitHandler<EditFormFields> = async (data) => {
-    updateQuote(quoteID, +data.author.key, {
+    const response = await updateQuote(quoteID, authorID, {
       text: data.text,
       id_author: +data.author.key
     })
+
+    if (!response) {
+      return
+    }
+
+    close()
   }
 
   return (

@@ -1,5 +1,5 @@
-export const getRange = (from: number) => {
-  if (from === 1) {
+export const getRange = (page: number) => {
+  if (page === 1) {
     return {
       from: 0,
       to: 10,
@@ -7,7 +7,7 @@ export const getRange = (from: number) => {
   }
 
   return {
-    from: (from - 1) * 10,
-    to: from * 10,
+    from: (page - 1) * 10 + 1,
+    to: page * 10,
   }
 }
