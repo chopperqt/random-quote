@@ -1,17 +1,14 @@
-import { useEffect } from 'react'
-
 import Button from 'components/button'
 import Spin from 'components/spin'
 import Table from 'components/table'
 import Icon, { IconList } from 'components/icon'
-import { getQuotes } from 'utils/quotes'
 import { AdminPanelQuoteProps } from '../constants'
 import useAdminPanelQuote from '../hooks/useAdminPanelQuote'
-
-import styles from './AdminPanelQuotes.module.scss'
 import Pagination from 'components/pagination'
 
-const BUTTON_TEXT = 'Добавить цитату'
+import styles from './AdminPanelQuotes.module.scss'
+
+const BUTTON_TEXT = 'Создать цитату'
 
 const AdminPanelQuotes = ({ onOpenAddModal }: AdminPanelQuoteProps) => {
   const {

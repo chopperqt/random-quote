@@ -4,7 +4,7 @@ import {
   Controller,
 } from 'react-hook-form'
 
-import { getRelationQuotesAuthor, postQuote } from 'utils/quotes'
+import { postQuote } from 'utils/quotes'
 import Selector from "components/selector";
 import Button from 'components/button'
 

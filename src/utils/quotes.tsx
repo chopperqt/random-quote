@@ -33,16 +33,12 @@ import {
   QuotesApi,
   AuthorID,
 } from 'models/quotes.type'
-import { QuotesAuthorID, RelationQuotesAuthorApi } from 'models/quotesAuthors.type';
 import { getRange } from 'helpers/pagination';
 
 const LIMIT_PER_PAGE = 10
 const QUERY_QUOTES = '*, author: id_author (name, path)'
 const QUERY_AUTHOR = 'id, data:quotes(id_quote,text)'
 const DELAY = 800
-
-
-type RelationQuotesAuthorReturn = RelationQuotesAuthorApi[] | null
 
 const createQuotesBuilder = ({
   search,
@@ -137,14 +133,6 @@ export const updateQuote = async (id: QuoteID, authorID: AuthorID, quote: Quotes
     handleFailure(error)
 
     return null
-  }
-
-  if (authorID !== quote?.id_author) {
-    const status = await updateRelationQuotesAuthor(id, quote.id_author)
-
-    if (status === null) {
-      return null
-    }
   }
 
   const page = getUrlParam('p') || 1
@@ -379,7 +367,7 @@ export const searchQuote = debounce(async ({
   handleSuccess()
 }, DELAY)
 
-export const deleteQuote = async (quoteID: QuoteID) => {
+export const deleteQuote = async (quoteID: QuoteID): Promise<QuotesApi[] | null> => {
   const {
     handlePending,
     handleSuccess,
@@ -388,7 +376,7 @@ export const deleteQuote = async (quoteID: QuoteID) => {
 
   handlePending()
 
-  let { error } = await supabase
+  const { data, error } = await supabase
     .from(Tables.quotes)
     .delete()
     .match({
@@ -398,16 +386,29 @@ export const deleteQuote = async (quoteID: QuoteID) => {
   if (error) {
     handleFailure(error)
 
-    return
+    return null
   }
 
   handleSuccess()
+
+  const currentPage = getUrlParam('p') || 1
+  const {
+    from,
+    to,
+  } = getRange(+currentPage)
+
+  getQuotes({
+    from,
+    to,
+  })
+
+  return data
 }
 
 export const postQuote = async ({
   text,
   authorID,
-}: IPostQuote) => {
+}: IPostQuote): Promise<QuotesApi[] | null> => {
   const {
     handlePending,
     handleSuccess,
@@ -416,9 +417,9 @@ export const postQuote = async ({
 
   handlePending()
 
-  let {
-    data: createQuote,
-    error: createQuoteError,
+  const {
+    data,
+    error,
   } = await supabase
     .from(Tables.quotes)
     .insert({
@@ -427,52 +428,31 @@ export const postQuote = async ({
     })
     .single();
 
-  if (createQuoteError) {
-    const { message } = createQuoteError
+  if (error) {
+    handleFailure(error)
 
-    handleFailure(createQuoteError)
+    notificationMethods.createNotification(error.message, 'ERROR')
 
-    notificationMethods.createNotification(message, 'ERROR')
-
-    return
-  }
-
-  const {
-    data: createRelation,
-    error: createRelationError,
-  } = await supabase
-    .from(Tables.quotesAuthor)
-    .insert({
-      id_author: authorID,
-      id_quote: createQuote.id_quote,
-    })
-    .single();
-
-  if (createRelationError) {
-    const { message } = createRelationError
-
-    handleFailure(createRelationError)
-
-    notificationMethods.createNotification(message, 'ERROR')
-
-    console.log(createQuote)
-
-    await deleteQuote(createQuote?.id_quote)
-
-    handleSuccess()
-
-    return
+    return null
   }
 
   handleSuccess()
 
   notificationMethods.createNotification(SuccessMessages.createSuccess, 'SUCCESS')
 
-  return {
-    multiLine: createRelation,
-    quote: createQuote,
-  }
+  const currentPage = getUrlParam("p") || 1
 
+  const {
+    from,
+    to,
+  } = getRange(+currentPage)
+
+  getQuotes({
+    from,
+    to,
+  })
+
+  return data
 }
 
 export const getFilterQuotesCounter = async (data: GetQuotesSearch) => {
@@ -497,66 +477,4 @@ export const getFilterQuotesCounter = async (data: GetQuotesSearch) => {
   Store.dispatch(filterMethods.updateFiltersCount(count || 0))
 
   handleSuccess()
-}
-
-
-export async function getRelationQuotesAuthor(quoteID: QuoteID): Promise<RelationQuotesAuthorReturn> {
-  const { data, error } = await supabase
-    .from(Tables.quotesAuthor)
-    .select('*')
-    .match({ id_quote: quoteID })
-
-  if (error) {
-    return null
-  }
-
-  return data
-}
-
-export async function createRelationQuotesAuthor(quoteID: QuoteID, authorID: AuthorID): Promise<RelationQuotesAuthorReturn> {
-  const { data, error } = await supabase
-    .from(Tables.quotesAuthor)
-    .insert({
-      id_author: authorID,
-      id_quote: quoteID,
-    })
-
-  if (error) {
-    return null
-  }
-
-  return data
-}
-
-export async function updateRelationQuotesAuthor(quoteID: QuoteID, authorID?: AuthorID): Promise<RelationQuotesAuthorReturn> {
-  const { data, error } = await supabase
-    .from(Tables.quotesAuthor)
-    .update({
-      id_quote: quoteID,
-      id_author: authorID,
-    })
-    .match({
-      id_quote: quoteID,
-    })
-
-  if (error) {
-    return null
-  }
-
-  return data
-}
-
-export async function deleteRelationQuotesAuthor(id: QuotesAuthorID): Promise<RelationQuotesAuthorReturn> {
-  const { data, error } = await supabase
-    .from(Tables.quotesAuthor)
-    .delete()
-    .match({
-      id,
-    })
-
-  if (error) {
-    return null
-  }
-
-  return data
 }
