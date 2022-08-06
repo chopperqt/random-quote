@@ -15,7 +15,7 @@ import {
 } from './constants'
 import debounce from 'lodash.debounce';
 import { PostgrestError } from '@supabase/supabase-js';
-import { getBookmarks } from './bookmarks'
+import { deleteBookmarks, getBookmarks } from './bookmarks'
 import {
   IPostQuote,
   IGetQuotes,
@@ -376,12 +376,22 @@ export const deleteQuote = async (quoteID: QuoteID): Promise<QuotesApi[] | null>
 
   handlePending()
 
+  const response = await deleteBookmarks(quoteID)
+
+  if (!response) {
+    handleSuccess()
+
+    return null
+  }
+
   const { data, error } = await supabase
     .from(Tables.quotes)
     .delete()
     .match({
       id_quote: quoteID,
     })
+
+  console.log('Доходишь ? ')
 
   if (error) {
     handleFailure(error)

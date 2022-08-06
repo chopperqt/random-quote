@@ -13,9 +13,9 @@ import { getRange } from 'helpers/pagination'
 import moment from 'moment'
 import { getUrlParam } from 'helpers/urlParams'
 import { QuoteID } from 'models/quotes.type'
+import Delete from '../admin-panel-quotes/delete/Delete'
 
 const useAdminPanelQuote = () => {
-  const [isOpenedDelete, setOpenedDelete] = useState<boolean>(false)
   const {
     QuoteStore: {
       quotesAll,
@@ -30,25 +30,6 @@ const useAdminPanelQuote = () => {
   } = Stores()
 
   const isLoadingDeleteQuote = statusDeleteQuote?.status === 'PENDING'
-
-  const closeDelete = () => {
-    setOpenedDelete(false)
-  }
-
-  const openDelete = () => {
-    setOpenedDelete(true)
-  }
-
-  const handleDeleteQuote = async (quoteID: QuoteID) => {
-    console.log(quoteID, 'sda')
-    // const response = await deleteQuote(quoteID)
-
-    // if (!response) {
-    //   return
-    // }
-
-    closeDelete()
-  }
 
   const currentPage = getUrlParam('p') || 1
 
@@ -88,17 +69,10 @@ const useAdminPanelQuote = () => {
     actions: (
       <TableAction
         deleteElement={
-          <div>
-            <TableDelete
-              quoteID={quote.id_quote}
-              onClose={closeDelete}
-              onOpen={openDelete}
-              onClick={handleDeleteQuote}
-              opened={isOpenedDelete}
-              isLoading={isLoadingDeleteQuote}
-            />
-          </div>
-
+          <Delete
+            quoteID={quote.id_quote}
+            isLoading={isLoadingDeleteQuote}
+          />
         }
         editElement={
           <Edit

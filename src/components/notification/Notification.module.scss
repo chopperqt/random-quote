@@ -48,18 +48,18 @@
 
 @keyframes notification-in {
   0% {
-    transform: translate(400px, 0);
+    transform: translate(0, -100px);
   }
   100% {
-    transform: translate(0, 0);
+    transform: translate(0, 20px);
   }
 }
 
 @keyframes notification-out {
   0% {
-    transform: translate(0, 0);
+    transform: translate(0, 20px);
   }
   100% {
-    transform: translate(400px, 0);
+    transform: translate(0, -100px);
   }
 }

@@ -1,23 +1,21 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 
 import Button from "components/button"
 import Icon, { IconList } from "components/icon"
 import Modal from 'components/modal'
 
 import styles from './TableDelete.module.scss'
-import { QuoteID } from 'models/quotes.type'
 
 const DELETE_TEXT = 'Удалить'
 const CANCEL_TEXT = 'Отмена'
 const DESCRIPTION_TEXT = 'Вы уверены, что хотите это сделать ?'
 
 interface TableDeleteProps {
-  onClick: (quoteID: QuoteID) => void
+  onClick: () => void
   onClose: () => void
   opened: boolean
   onOpen: () => void
   isLoading?: boolean
-  quoteID: QuoteID
 }
 const TableDelete = ({
   opened = false,
@@ -25,7 +23,6 @@ const TableDelete = ({
   onOpen,
   onClick,
   isLoading = false,
-  quoteID,
 }: TableDeleteProps) => (
   <>
     <Button
@@ -47,7 +44,7 @@ const TableDelete = ({
           <Button
             className={styles.button}
             color="warning"
-            onClick={() => onClick(quoteID)}
+            onClick={onClick}
             loading={isLoading}
           >
             {DELETE_TEXT}

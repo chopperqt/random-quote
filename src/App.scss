@@ -29,17 +29,24 @@ h1,h2,h3,h4,h5,p {
 
 .notification {
   z-index: 22;
-  position: fixed;
-  width: 340px;
-  height: 400px;
+  position: absolute;
+  width: 450px;
   max-height: 300px;
   top: 0;
-  right: 0;
   padding-right: 40px;
   display: flex;
   flex-direction: column;
   row-gap: 10px;
   justify-content: flex-end;
+}
+
+.notificationWrap {
+  z-index: 22;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .layout {

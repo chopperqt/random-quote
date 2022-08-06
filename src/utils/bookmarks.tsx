@@ -5,17 +5,13 @@ import Store, { quoteMethods } from "services";
 import supabase from "./client";
 import { Tables } from "./constants";
 import { QuoteData } from "services/quotes/QuotesStore";
-
-const BookmarkRequests = {
-  addBookmark: 'addBookmark',
-  removeBookmark: 'removeBookmark',
-  getBookmarks: 'getBookmarks',
-}
+import { QuoteID } from "models/quotes.type";
 
 export type BookmarkRequests =
   'addBookmark' |
   'removeBookmark' |
-  'getBookmarks'
+  'getBookmarks' |
+  'deleteBookmarks'
 
 
 type BookmarksQuote = Pick<QuoteData, 'id_quote'>
@@ -156,3 +152,27 @@ export const deleteBookmark = async ({
 
   return false
 }
+
+export const deleteBookmarks = async (id: QuoteID): Promise<true | null> => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses('deleteBookmarks')
+
+  handlePending()
+
+  const { error } = await supabase.from(Tables.bookmarks)
+    .delete({ returning: 'minimal' })
+    .match({ id_quote: id })
+
+  if (error) {
+    handleFailure(error)
+
+    return null
+  }
+
+  handleSuccess()
+
+  return true
+} 
