@@ -9,7 +9,7 @@ import {
   TableAction,
   TableAuthor,
 } from 'components/table'
-import Img from 'components/img/Img'
+import Delete from '../admin-panel-author/delete/Delete'
 
 const useAdminPanelAuthors = () => {
   const {
@@ -65,6 +65,7 @@ const useAdminPanelAuthors = () => {
       actions: (
         <TableAction
           editElement={(<div></div>)}
+          deleteElement={<Delete />}
         />
       )
     }))
