@@ -1,4 +1,5 @@
-import { Author } from "./author.type"
+import { AuthorApi } from "./author.type"
+import { AuthorID } from "./author.type"
 
 export type QuotesRequests =
   'getQuotes' |
@@ -12,14 +13,15 @@ export type QuotesRequests =
   'updateQuote' |
   'deleteQuote'
 
+type QuoteAuthor = Pick<AuthorApi, 'path' | 'name'>
+
 export interface QuotesApi {
-  author: Author,
+  author: QuoteAuthor,
   created_at: Date,
-  id_quote: QuoteID,
+  id_quote: number,
   id_author: AuthorID,
   text: string,
 }
 
-export type QuoteID = number
-export type AuthorID = number
+export type QuoteID = QuotesApi['id_quote']
 export type QuotesApiOptional = Partial<QuotesApi>

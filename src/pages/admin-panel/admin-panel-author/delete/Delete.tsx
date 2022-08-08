@@ -1,5 +1,6 @@
 import { TableDelete } from 'components/table'
 import { useState } from 'react'
+import { deleteFile } from 'utils/upload'
 
 const Delete = () => {
   const [opened, setOpened] = useState<boolean>(false)
@@ -13,6 +14,7 @@ const Delete = () => {
   ]
 
   const handleDelete = () => {
+    deleteFile()
     console.log('Удаление')
   }
 

@@ -1,8 +1,6 @@
 import { Option } from 'components/selector';
-import {
-  AuthorID,
-  QuoteID,
-} from 'models/quotes.type';
+import { AuthorID } from 'models/author.type';
+import { QuoteID } from 'models/quotes.type';
 
 export interface EditProps {
   quote: string

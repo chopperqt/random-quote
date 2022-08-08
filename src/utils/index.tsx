@@ -1,11 +1,11 @@
+import { QuotesRequests } from 'models/quotes.type'
 import {
+  AuthorsRequests,
   AuthorID,
-  QuotesRequests
-} from 'models/quotes.type'
-import { AuthorsRequests } from './authors'
+} from 'models/author.type'
 import { AuthRequests } from './auth'
 import { BookmarkRequests } from './bookmarks'
-import { UploadRequest } from './upload'
+import { UploadRequest } from 'models/upload.type'
 
 export type ApiRequests =
   QuotesRequests |

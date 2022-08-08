@@ -3,7 +3,7 @@ import Spin from 'components/spin'
 import Table from 'components/table'
 import Icon, { IconList } from 'components/icon'
 import { AdminPanelQuoteProps } from '../constants'
-import useAdminPanelQuote from '../hooks/useAdminPanelQuote'
+import useAdminPanelQuote from './hooks/useAdminPanelQuote'
 import Pagination from 'components/pagination'
 
 import styles from './AdminPanelQuotes.module.scss'

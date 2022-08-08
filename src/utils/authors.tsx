@@ -9,9 +9,6 @@ import { translateUrl } from 'helpers/translateUrl'
 
 const DEFAULT_URL = 'https://gkywdfbpxquelncihepl.supabase.co/storage/v1/object/public/'
 
-export type AuthorsRequests =
-  'getAuthors' |
-  'createAuthor'
 
 export const getAuthors = async () => {
   Store.dispatch(notificationMethods.loadingRequest('getAuthors', ActionsStatus.pending))
@@ -50,6 +47,8 @@ export const createAuthor = async (author: CreateAuthor) => {
   const response = await uploadFile(author.avatar)
 
   if (typeof response !== 'string') {
+    handleSuccess()
+
     return
   }
 

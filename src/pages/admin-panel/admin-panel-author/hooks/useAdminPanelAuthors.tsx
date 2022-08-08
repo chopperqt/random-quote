@@ -9,7 +9,7 @@ import {
   TableAction,
   TableAuthor,
 } from 'components/table'
-import Delete from '../admin-panel-author/delete/Delete'
+import Delete from '../delete/Delete'
 
 const useAdminPanelAuthors = () => {
   const {

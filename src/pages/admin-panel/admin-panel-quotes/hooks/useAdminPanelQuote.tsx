@@ -1,19 +1,16 @@
 import {
-  useState,
   useMemo,
   useEffect,
-  useCallback,
 } from 'react'
 
 import { Stores } from 'services'
-import { TableAction, TableDelete } from 'components/table'
-import Edit from '../admin-panel-quotes/edit/Edit'
-import { deleteQuote, getQuotes } from 'utils/quotes'
+import { TableAction } from 'components/table'
+import Edit from '../edit/Edit'
+import { getQuotes } from 'utils/quotes'
 import { getRange } from 'helpers/pagination'
 import moment from 'moment'
 import { getUrlParam } from 'helpers/urlParams'
-import { QuoteID } from 'models/quotes.type'
-import Delete from '../admin-panel-quotes/delete/Delete'
+import Delete from '../delete/Delete'
 
 const useAdminPanelQuote = () => {
   const {

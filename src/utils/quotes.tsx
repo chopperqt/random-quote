@@ -31,8 +31,8 @@ import {
   QuoteID,
   QuotesApiOptional,
   QuotesApi,
-  AuthorID,
 } from 'models/quotes.type'
+import { AuthorID } from 'models/author.type';
 import { getRange } from 'helpers/pagination';
 
 const LIMIT_PER_PAGE = 10

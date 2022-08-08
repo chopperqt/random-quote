@@ -1,7 +1,6 @@
 import {
   useForm,
   SubmitHandler,
-  Controller,
 } from 'react-hook-form'
 
 import Button from "components/button"
@@ -34,6 +33,7 @@ const Add = () => {
     handleSubmit,
     formState: {
       errors,
+      isValid,
     }
   } = useForm<FormFields>()
 
