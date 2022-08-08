@@ -1,73 +1,23 @@
-import {
-  useEffect,
-  useMemo,
-} from 'react'
-
 import Button from 'components/button'
 import Spin from 'components/spin'
-import Table, { TableAction } from 'components/table'
+import Table from 'components/table'
 import Icon, { IconList } from 'components/icon'
-import { getQuotes } from 'utils/quotes'
-
-import { Stores } from 'services'
-import { IAdminPanelQuotes } from '../constants'
+import { AdminPanelQuoteProps } from '../constants'
+import useAdminPanelQuote from './hooks/useAdminPanelQuote'
+import Pagination from 'components/pagination'
 
 import styles from './AdminPanelQuotes.module.scss'
 
 const BUTTON_TEXT = 'Создать цитату'
 
-const AdminPanelQuotes = ({
-  onOpenAddModal,
-}: IAdminPanelQuotes) => {
+const AdminPanelQuotes = ({ onOpenAddModal }: AdminPanelQuoteProps) => {
   const {
-    QuoteStore: {
-      quotesAll,
-    },
-    NotificationStore: {
-      loading: {
-        getQuotes: loading
-      }
-    }
-  } = Stores()
-
-  const modifyActionsQuotes = quotesAll.map((quote) => ({
-    ...quote,
-    author: quote.author.name || '',
-    actions: (
-      <TableAction
-        onDelete={() => { }}
-        onEdit={() => { }}
-      />
-    )
-  }))
-
-  const columns = useMemo(() => [
-    {
-      Header: 'ID',
-      accessor: 'id_quote',
-    },
-    {
-      Header: 'Quote',
-      accessor: 'text',
-      width: 600,
-    },
-    {
-      Header: 'Author',
-      accessor: 'author',
-    },
-    {
-      Header: 'Create At',
-      accessor: 'created_at',
-    },
-    {
-      Header: 'Actions',
-      accessor: 'actions',
-    }
-  ], [])
-
-  useEffect(() => {
-    getQuotes({})
-  }, [])
+    columns,
+    loading,
+    formattedData,
+    currentPage,
+    pages,
+  } = useAdminPanelQuote()
 
   return (
     <div className={styles.layout}>
@@ -82,10 +32,15 @@ const AdminPanelQuotes = ({
       </Button>
       <Spin loading={loading?.status === 'PENDING'}>
         <Table
-          data={modifyActionsQuotes}
+          data={formattedData}
           columns={columns}
         />
       </Spin>
+      <Pagination
+        page={currentPage}
+        pages={pages}
+        onClick={() => { }}
+      />
     </div>
   )
 }

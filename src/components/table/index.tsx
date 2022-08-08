@@ -1,6 +1,7 @@
 import Table from './Table'
 import TableAction from './table-actions/TableActions'
 import TableAuthor from './table-author/TableAuthor'
+import TableDelete from './table-delete/TableDelete'
 
 export interface ITable {
   columns: IColumn[]
@@ -12,14 +13,15 @@ export interface IColumn {
   accessor: string
 }
 
-export interface ITableActions {
-  onEdit: () => void
-  onDelete: () => void
+export interface TableActionsProps {
+  deleteElement?: JSX.Element | JSX.Element[]
+  editElement?: JSX.Element | JSX.Element[]
 }
 
 export {
   TableAction,
   TableAuthor,
+  TableDelete,
 }
 
 export default Table 

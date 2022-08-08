@@ -1,6 +1,6 @@
 import produce from 'immer'
 
-import { QuotesApi } from 'utils/quotes'
+import { QuotesApi } from 'models/quotes.type'
 import { QuotesActions } from './actions'
 
 const initialState = {

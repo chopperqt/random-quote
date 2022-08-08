@@ -2,8 +2,7 @@
 @import 'asset/scss/common';
 @import 'asset/scss/mixin';
 
-.layout {
-  
+.layout {  
   &--full {
     width: 100%;
   }
@@ -48,9 +47,33 @@
   border-radius: $border-radius--small;
   background-color: $color-white--500;
   border: 1px solid $color-secondary--4;
+  z-index: 1;
 }
 
 .value {
   padding: 5px;
   cursor: pointer;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: .7;
+}
+
+.spinWrap {
+  top: 0;
+  border-radius: $border-radius--small;
+  position: absolute;
+}
+
+.spin {
+  border-radius: $border-radius--small;
+  justify-content: flex-end;
+  align-items: center;
+
+  img {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+  }
 }

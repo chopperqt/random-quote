@@ -15,7 +15,7 @@ import {
 } from './constants'
 import debounce from 'lodash.debounce';
 import { PostgrestError } from '@supabase/supabase-js';
-import { getBookmarks } from './bookmarks'
+import { deleteBookmarks, getBookmarks } from './bookmarks'
 import {
   IPostQuote,
   IGetQuotes,
@@ -26,33 +26,19 @@ import {
 import { QuoteData } from 'services/quotes/QuotesStore';
 import DefaultProps from 'helpers/defaultProps';
 import { UserID } from './auth';
-import { updateUrlParams } from 'helpers/urlParams';
+import { getUrlParam, updateUrlParams } from 'helpers/urlParams';
+import {
+  QuoteID,
+  QuotesApiOptional,
+  QuotesApi,
+} from 'models/quotes.type'
+import { AuthorID } from 'models/author.type';
+import { getRange } from 'helpers/pagination';
 
 const LIMIT_PER_PAGE = 10
 const QUERY_QUOTES = '*, author: id_author (name, path)'
 const QUERY_AUTHOR = 'id, data:quotes(id_quote,text)'
 const DELAY = 800
-
-export type QuotesRequests =
-  'getQuotes' |
-  'getQuote' |
-  'getRandomQuote' |
-  'getQuotesAuthor' |
-  'getQuotesLast' |
-  'searchQuote' |
-  'postQuote' |
-  'getFilterQuotesCount'
-
-export interface QuotesApi {
-  author: {
-    path: string,
-    name: string
-  },
-  created_at: Date,
-  id_quote: number,
-  id_author: number,
-  text: string,
-}
 
 const createQuotesBuilder = ({
   search,
@@ -81,7 +67,7 @@ const createQuotesBuilder = ({
   return request
 }
 
-export const getQuote = async (id: number, idUser?: UserID) => {
+export const getQuote = async (id: QuoteID, idUser?: UserID) => {
   const {
     handleFailure,
     handlePending,
@@ -129,9 +115,45 @@ export const getQuote = async (id: number, idUser?: UserID) => {
   handleSuccess()
 }
 
+export const updateQuote = async (id: QuoteID, authorID: AuthorID, quote: QuotesApiOptional): Promise<QuotesApiOptional[] | null> => {
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses('updateQuote')
+
+  handlePending()
+
+  const { data, error } = await supabase
+    .from(Tables.quotes)
+    .update(quote)
+    .match({ id_quote: id })
+
+  if (error) {
+    handleFailure(error)
+
+    return null
+  }
+
+  const page = getUrlParam('p') || 1
+  const {
+    from,
+    to,
+  } = getRange(+page)
+
+  getQuotes({
+    from,
+    to,
+  })
+
+  handleSuccess()
+
+  return data
+}
+
 export const getQuotes = async ({
   from = 1,
-  to = 10,
+  to = 50,
   id,
   authors = DefaultProps.array,
 }: IGetQuotes) => {
@@ -217,11 +239,11 @@ export const getRandomQuote = async (idUser?: UserID): Promise<boolean | Postgre
       id_author: data[0].id_author,
       text: data[0].text,
       author: {
-        name: data[0].author,
+        name: data[0].name,
         path: data[0].path,
       }
     },
-  ] as QuotesApi[]
+  ]
 
   if (idUser) {
     const bookmarks = await getBookmarks({ id_user: idUser, list: [data[0].id_quote] })
@@ -234,7 +256,6 @@ export const getRandomQuote = async (idUser?: UserID): Promise<boolean | Postgre
 
     updateData = data.map((quote: QuoteData) => {
       const isBookmark = bookmarks.data.find((item: QuoteData) => +item.id_quote === +quote.id_quote)
-
 
       return {
         ...quote,
@@ -264,7 +285,7 @@ export const getQuotesAuthors = async (authors: string[]) => {
   handlePending()
 
   let { data, error } = await supabase
-    .from(Tables.authorsQuotes)
+    .from(Tables.quotesAuthor)
     .select(QUERY_AUTHOR)
     .in('id_author', authors);
 
@@ -346,11 +367,58 @@ export const searchQuote = debounce(async ({
   handleSuccess()
 }, DELAY)
 
+export const deleteQuote = async (quoteID: QuoteID): Promise<QuotesApi[] | null> => {
+  const {
+    handlePending,
+    handleSuccess,
+    handleFailure,
+  } = loadingStatuses('deleteQuote')
+
+  handlePending()
+
+  const response = await deleteBookmarks(quoteID)
+
+  if (!response) {
+    handleSuccess()
+
+    return null
+  }
+
+  const { data, error } = await supabase
+    .from(Tables.quotes)
+    .delete()
+    .match({
+      id_quote: quoteID,
+    })
+
+  console.log('Доходишь ? ')
+
+  if (error) {
+    handleFailure(error)
+
+    return null
+  }
+
+  handleSuccess()
+
+  const currentPage = getUrlParam('p') || 1
+  const {
+    from,
+    to,
+  } = getRange(+currentPage)
+
+  getQuotes({
+    from,
+    to,
+  })
+
+  return data
+}
+
 export const postQuote = async ({
   text,
-  time,
-  author,
-}: IPostQuote) => {
+  authorID,
+}: IPostQuote): Promise<QuotesApi[] | null> => {
   const {
     handlePending,
     handleSuccess,
@@ -359,49 +427,42 @@ export const postQuote = async ({
 
   handlePending()
 
-  let createQuote = await supabase
+  const {
+    data,
+    error,
+  } = await supabase
     .from(Tables.quotes)
-    .insert({ text, data: time })
+    .insert({
+      text,
+      id_author: authorID,
+    })
     .single();
 
-  if (createQuote.error) {
-    const { message } = createQuote.error
+  if (error) {
+    handleFailure(error)
 
-    handleFailure(createQuote.error)
+    notificationMethods.createNotification(error.message, 'ERROR')
 
-    notificationMethods.createNotification(message, 'ERROR')
-
-    return
+    return null
   }
 
-  if (createQuote.data) {
-    const createAuthorQuotes = await supabase
-      .from(Tables.authorsQuotes)
-      .insert({
-        id_author: author,
-        id_quote: createQuote.data.id_quote,
-      })
-      .single();
+  handleSuccess()
 
-    if (createAuthorQuotes.error) {
-      const { message } = createAuthorQuotes.error
+  notificationMethods.createNotification(SuccessMessages.createSuccess, 'SUCCESS')
 
-      handleFailure(createAuthorQuotes.error)
+  const currentPage = getUrlParam("p") || 1
 
-      notificationMethods.createNotification(message, 'ERROR')
+  const {
+    from,
+    to,
+  } = getRange(+currentPage)
 
-      return
-    }
+  getQuotes({
+    from,
+    to,
+  })
 
-    handleSuccess()
-
-    notificationMethods.createNotification(SuccessMessages.createSuccess, 'SUCCESS')
-
-    return {
-      multiLine: createAuthorQuotes.data,
-      quote: createQuote.data
-    }
-  }
+  return data
 }
 
 export const getFilterQuotesCounter = async (data: GetQuotesSearch) => {

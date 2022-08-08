@@ -1,4 +1,4 @@
-import useAdminPanelAuthors from "../hooks/useAdminPanelAuthors"
+import useAdminPanelAuthors from "./hooks/useAdminPanelAuthors"
 import Spin from 'components/spin'
 import Table from "components/table"
 import Content from "./content/Content"

@@ -1,7 +1,8 @@
-import Tabs, { TabItem } from './Tabs'
+import Tabs from './Tabs'
+import Tab from './partials/Tab'
 
 export {
-  TabItem,
+  Tab,
 }
 
 export default Tabs

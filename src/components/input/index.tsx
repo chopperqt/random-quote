@@ -9,6 +9,7 @@ export interface IInputProps extends React.ComponentProps<'input'> {
   loading?: boolean
   value?: string
   onClear?: () => void
+  area?: boolean
 }
 
 export default Input

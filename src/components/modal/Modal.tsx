@@ -17,6 +17,10 @@ const Modal = ({
   children,
   title,
 }: IModal) => {
+  if (!open) {
+    return null
+  }
+
   return (
     <div className={cx(styles.layout, {
       [styles.open]: open

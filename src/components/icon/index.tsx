@@ -1,6 +1,11 @@
 import Icon from './Icon'
 import { IconList } from './IconList'
 
+const Color = {
+  red: 'red',
+  yellow: 'yellow'
+}
+
 export {
   IconList
 }

@@ -1,15 +1,15 @@
-import { IOption } from 'components/selector'
+import { Option } from 'components/selector'
 
-export interface IAdminPanelQuotes {
+export interface AdminPanelQuoteProps {
   onOpenAddModal: () => void
 }
 
-export interface IAdminPanelAdd {
+export interface AdminPanelModal {
   onClose?: () => void
+  isOpened: boolean
 }
 
 export interface IAdminPanelAddField {
-  date: string
-  quote: string
-  author: IOption
+  text: string
+  author: Option
 }

@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 const useModalAdd = () => {
   const [open, setOpen] = useState(false)
+  const [image, setImage] = useState<FileList>()
 
   const handleClose = () => {
     setOpen(false)
@@ -11,10 +12,18 @@ const useModalAdd = () => {
     setOpen(true)
   }
 
+  const handleGetImage = (file: FileList) => {
+    console.log(file, 'file')
+
+    setImage(file)
+  }
+
   return {
-    open,
     handleClose,
     handleOpen,
+    handleGetImage,
+    open,
+    image,
   }
 }
 

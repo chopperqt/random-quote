@@ -1,7 +1,6 @@
 import {
   useForm,
   SubmitHandler,
-  Controller,
 } from 'react-hook-form'
 
 import Button from "components/button"
@@ -10,6 +9,7 @@ import Modal from "components/modal"
 import useModalAdd from "pages/admin-panel/hooks/useModalAdd"
 import Uploader from 'components/uploader'
 import Icon, { IconList } from 'components/icon'
+import { createAuthor } from 'utils/authors'
 
 import styles from './Add.module.scss'
 
@@ -21,9 +21,8 @@ const Placeholders = {
 
 const CREATE_TEXT = 'Создать автора'
 
-interface FormFields {
+export interface FormFields {
   name: string
-  avatar: string
   surName: string
   secondName: string
 }
@@ -32,25 +31,35 @@ const Add = () => {
   const {
     register,
     handleSubmit,
-    resetField,
-    control,
     formState: {
       errors,
+      isValid,
     }
   } = useForm<FormFields>()
+
   const {
     handleClose,
     handleOpen,
+    handleGetImage,
     open,
+    image,
   } = useModalAdd()
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
-    console.log(data)
+    if (!image?.length) {
+      return
+    }
+
+    createAuthor({
+      ...data,
+      avatar: image,
+    })
   }
 
   return (
     <>
       <Button
+        className={styles.create}
         onClick={handleOpen}
       >
         <>
@@ -67,17 +76,21 @@ const Add = () => {
           className={styles.form}
         >
           <div className={styles.section}>
-            <Uploader />
+            <Uploader
+              onChange={handleGetImage}
+            />
             <div className={styles.fields}>
               <Input
                 {...(register('name', { required: true }))}
                 className={styles.input}
                 placeholder={Placeholders.name}
+                error={errors.name && 'This field is Requited'}
               />
               <Input
                 {...(register('surName', { required: true }))}
                 className={styles.input}
                 placeholder={Placeholders.surName}
+                error={errors.surName && 'This field is Requited'}
               />
               <Input
                 {...(register('secondName', { required: false }))}

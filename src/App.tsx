@@ -54,19 +54,21 @@ function App() {
         </Routes>
       </div>
       {hasNotifications && (
-        <div className="notification">
-          {notifications.map(({
-            text,
-            id,
-            type
-          }) => (
-            <Notification
-              key={id}
-              id={id}
-              text={text}
-              type={type}
-            />
-          ))}
+        <div className='notificationWrap'>
+          <div className="notification">
+            {notifications.map(({
+              text,
+              id,
+              type
+            }) => (
+              <Notification
+                key={id}
+                id={id}
+                text={text}
+                type={type}
+              />
+            ))}
+          </div>
         </div>
       )}
     </div>

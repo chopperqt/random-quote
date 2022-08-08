@@ -1,12 +1,16 @@
 import React, { useState, useMemo, useEffect } from 'react'
 
 import Icon, { IconList } from 'components/icon'
-import { IOption } from '../'
+import { Option } from '../'
 
+const DEFAULT_OPTION = {
+  label: '',
+  key: '',
+}
 export interface IUseSelector {
   inputRef: HTMLInputElement | null
-  initialValue?: IOption
-  onChange: (option: IOption) => void
+  initialValue?: Option
+  onChange: (option: Option) => void
 }
 
 const useSelector = ({
@@ -14,7 +18,15 @@ const useSelector = ({
   initialValue,
   onChange,
 }: IUseSelector) => {
-  const [option, setOption] = useState<IOption>(initialValue || { label: '', key: '' })
+  const defaultOption = useMemo(() => {
+    if (initialValue?.key) {
+      return initialValue
+    }
+
+    return DEFAULT_OPTION
+  }, [initialValue])
+
+  const [option, setOption] = useState<Option>(defaultOption)
   const [value, setValue] = useState<string | number>(option.label)
   const [open, setOpen] = useState<boolean>(false)
 
@@ -26,7 +38,7 @@ const useSelector = ({
     setOpen(false)
   }
 
-  const handleClickValue = (data: IOption) => {
+  const handleClickValue = (data: Option) => {
     setOption(data)
     setValue(data.label)
     handleClose()
@@ -63,6 +75,17 @@ const useSelector = ({
   useEffect(() => {
     onChange(option)
   }, [option])
+
+  useEffect(() => {
+    if (!initialValue) {
+      return
+    }
+
+    console.log('Сюда прилетаешь ? ', initialValue)
+
+    setOption(initialValue)
+    setValue(initialValue.label)
+  }, [initialValue])
 
   return {
     open,

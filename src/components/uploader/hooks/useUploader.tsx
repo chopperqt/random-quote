@@ -6,7 +6,12 @@ import {
 
 type ImageType = (ArrayBuffer | string)
 
-export const useUploader = () => {
+interface UseUploaderProps {
+  onChange: (file: FileList) => void
+}
+export const useUploader = ({
+  onChange,
+}: UseUploaderProps) => {
   const [images, setImages] = useState<ImageType[]>([])
   const hasImages = images.length > 0
 
@@ -22,13 +27,12 @@ export const useUploader = () => {
 
     Array.from(files).forEach((file) => {
       const readImage = new FileReader()
+
       readImage.readAsDataURL(file)
       readImage.onloadend = () => {
         if (!readImage?.result) {
           return
         }
-
-
 
         setImages([...images, readImage.result])
 
@@ -66,9 +70,8 @@ export const useUploader = () => {
     //uploadFile(file[0])
   }
 
-  const handleFiles = (files: any) => {
-
-    // return [files].forEach((file) => uploadFiles(file))
+  const handleFiles = (files: FileList) => {
+    return [files].forEach((file) => uploadFiles(file))
   }
 
   const handleDrop = async (e: DragEvent | FileList) => {
@@ -94,7 +97,13 @@ export const useUploader = () => {
     const target = e.target as HTMLInputElement
     const normalizedImages = filesReader(target.files as FileList)
 
-    handleFiles(normalizedImages)
+    if (!target?.files) {
+      return
+    }
+
+    onChange(target.files)
+
+    // handleFiles(normalizedImages)
   }
 
   useEffect(() => {

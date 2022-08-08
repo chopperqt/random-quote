@@ -1,7 +1,7 @@
 export const Tables = {
   authors: 'authors',
   quotes: 'quotes',
-  authorsQuotes: 'authorsQuotes',
+  quotesAuthor: 'quotes-author',
   likes: 'likes',
   rating: 'rating',
   bookmarks: 'bookmarks',

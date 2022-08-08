@@ -1,45 +1,37 @@
-import React, { useState } from 'react'
+import React, {
+  useState,
+  useMemo,
+  useEffect,
+} from 'react'
 import cx from 'classnames'
 
+import {
+  TabsProps,
+  Key,
+  TabProps,
+} from './Tabs.type'
+
 import styles from './Tabs.module.scss'
-
-interface ITabItem {
-  key: TKey
-  children: JSX.Element
-}
-
-export const TabItem = ({
-  key,
-  children,
-}: ITabItem) => (
-  <div>{children}</div>
-)
-
-interface ITabs {
-  children?: any
-  tabs: ITab[]
-  initialTab?: string | number
-}
-
-interface ITab {
-  title: string
-  key: TKey
-}
-
-type TKey = number | string
 
 const Tabs = ({
   tabs,
   initialTab,
-  children
-}: ITabs) => {
+  onChange,
+  children,
+}: TabsProps) => {
   const [currentTab, setCurrentTab] = useState(initialTab || tabs[0].key)
 
-  const handleClickTab = (key: TKey) => {
+  const handleClickTab = (key: Key) => {
     setCurrentTab(key)
+    onChange(key)
   }
 
-  const tabContent = children.find((tab: any) => +currentTab === +tab.key)
+  const tabContent = useMemo(() => {
+    return (children as any[]).find((tab: TabProps) => +currentTab === +tab.key)
+  }, [
+    children,
+    currentTab,
+  ])
 
   return (
     <div>

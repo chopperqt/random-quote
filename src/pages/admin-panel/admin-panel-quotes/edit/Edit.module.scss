@@ -1,3 +1,5 @@
+@import 'asset/scss/colors';
+
 .form {
   display: grid;
   row-gap: 12px;
@@ -5,4 +7,10 @@
 
 .input {
   width: 400px;
+}
+
+.button {
+  :global(.icon-svg) { 
+    fill: $color-white--500;
+  }
 }
