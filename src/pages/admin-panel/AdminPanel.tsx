@@ -7,7 +7,7 @@ import AdminPanelAdd from './admin-panel-quotes/add/Add'
 import AdminPanelQuotes from './admin-panel-quotes/AdminPanelQuotes'
 import AdminPanelAuthors from './admin-panel-author/AdminPanelAuthors'
 import AdminPanelApplications from './admin-panel-applications/AdminPanelApplications'
-import { getUrlParam, updateUrlParams } from 'helpers/urlParams'
+import { deleteUrlParam, getUrlParam, updateUrlParams } from 'helpers/urlParams'
 
 import styles from './AdminPanel.module.scss'
 
@@ -37,6 +37,8 @@ const AdminPanel = () => {
 
   const handleChangeTab = (tab: string | number) => {
     updateUrlParams({ tab })
+
+    deleteUrlParam('p')
   }
 
   return (

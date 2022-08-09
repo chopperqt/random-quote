@@ -9,7 +9,10 @@ import Modal from "components/modal"
 import useModalAdd from "pages/admin-panel/hooks/useModalAdd"
 import Uploader from 'components/uploader'
 import Icon, { IconList } from 'components/icon'
-import { createAuthor } from 'utils/authors'
+import {
+  createAuthor,
+  getAuthors,
+} from 'utils/authors'
 
 import styles from './Add.module.scss'
 
@@ -45,15 +48,22 @@ const Add = () => {
     isLoading,
   } = useModalAdd()
 
-  const onSubmit: SubmitHandler<FormFields> = (data) => {
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
     if (!image?.length) {
       return
     }
 
-    createAuthor({
+    const createResponse = await createAuthor({
       ...data,
       avatar: image,
     })
+
+    if (!createResponse) {
+      return
+    }
+
+    getAuthors()
+    handleClose()
   }
 
   return (

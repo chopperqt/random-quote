@@ -46,7 +46,7 @@ export const getAuthors = async () => {
 interface CreateAuthor extends FormFields {
   avatar: FileList,
 }
-export const createAuthor = async (author: CreateAuthor) => {
+export const createAuthor = async (author: CreateAuthor): Promise<AuthorApi[] | null> => {
   const {
     handleFailure,
     handlePending,
@@ -60,7 +60,7 @@ export const createAuthor = async (author: CreateAuthor) => {
   if (!avatar?.Key) {
     handleFailure()
 
-    return
+    return null
   }
 
   const formattedAvatar = getNormalizedAvatar(avatar.Key)
@@ -71,7 +71,7 @@ export const createAuthor = async (author: CreateAuthor) => {
   } = await supabase
     .from(Tables.authors)
     .insert({
-      avatar: formattedAvatar,
+      avatar: `${DEFAULT_URL}${formattedAvatar}`,
       name: `${author.surName} ${author.name} ${author.secondName}`,
       path: translateUrl(`${author.surName} ${author.name} ${author.secondName}`)
     })
@@ -80,12 +80,12 @@ export const createAuthor = async (author: CreateAuthor) => {
   if (error) {
     handleFailure(error.message)
 
-    return
+    return null
   }
 
   handleSuccess()
 
-  console.log(data)
+  return data
 }
 
 export const deleteAuthor = async (authorID: AuthorID, authorImage: AuthorImage): Promise<AuthorApi[] | null> => {
@@ -116,8 +116,6 @@ export const deleteAuthor = async (authorID: AuthorID, authorImage: AuthorImage)
   await deleteFile(authorImage)
 
   handleSuccess()
-
-  getAuthors()
 
   return data
 }

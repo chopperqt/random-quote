@@ -2,7 +2,7 @@ import { TableDelete } from 'components/table'
 import { AuthorID, AuthorImage } from 'models/author.type'
 import { useState } from 'react'
 import { Stores } from 'services'
-import { deleteAuthor } from 'utils/authors'
+import { deleteAuthor, getAuthors } from 'utils/authors'
 import getNormalizedAvatar from '../helpers/getNormalizedAvatar'
 
 interface DeleteProps {
@@ -37,11 +37,13 @@ const Delete = ({
   const handleDelete = async () => {
     const formattedImage = getNormalizedAvatar(authorImage)
 
-    const response = await deleteAuthor(authorID, formattedImage)
+    const deletedResponse = await deleteAuthor(authorID, formattedImage)
 
-    if (!response) {
+    if (!deletedResponse) {
       return
     }
+
+    getAuthors()
 
     close()
   }
