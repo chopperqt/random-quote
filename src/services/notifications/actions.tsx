@@ -13,12 +13,15 @@ export const actions = {
 }
 
 export const methods = {
-  loadingRequest: (name: string, status: Status) => {
+  loadingRequest: (name: string, status: Status, isLoading: boolean = false, isError?: boolean, error?: string) => {
     return {
       type: actions.CREATE_LOADING,
       payload: {
         name,
         status,
+        isLoading,
+        isError: isError || false,
+        error: error || '',
       }
     }
   },

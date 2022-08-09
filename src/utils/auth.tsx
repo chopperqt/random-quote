@@ -50,7 +50,7 @@ export const signInWithGoogle = async () => {
   })
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
   }
 
   handleSuccess()
@@ -85,7 +85,7 @@ export const login = async ({
       return LOGIN_ERROR
     }
 
-    handleFailure(error)
+    handleFailure(error.message)
 
     return
   }
@@ -121,7 +121,7 @@ export const signUp = async ({
   })
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return false
   }
@@ -146,7 +146,7 @@ export const deleteUser = async (id: UserID) => {
   } = await supabase.auth.api.deleteUser(id)
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
   }
 
   console.log(user)
@@ -169,7 +169,7 @@ export const validateEmail = debounce(async (email: UserEmail): Promise<any[]> =
     .like('email', email)
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return []
   }
@@ -194,7 +194,7 @@ export const getUser = async (token: string) => {
   } = await supabase.auth.api.getUser(token)
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return
   }

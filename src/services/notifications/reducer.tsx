@@ -36,12 +36,18 @@ export interface Status {
 
 export interface StatusData {
   status: StatusTypes
+  isLoading: boolean
+  isError: boolean
+  error: string
   count: number
 }
 
 interface CreateLoading {
   name: ApiRequests
   status: Status
+  isLoading: boolean
+  isError: boolean
+  error: string
 }
 
 export type CountAction = 'INCREASE' | 'DECREASE'
@@ -59,7 +65,13 @@ const notificationsStore = (
   }) => produce(state, (draft: NotificationsStore) => {
     switch (type) {
       case CREATE_LOADING: {
-        const { name, status } = payload as CreateLoading
+        const {
+          name,
+          status,
+          isLoading,
+          isError,
+          error,
+        } = payload as CreateLoading
         let count = draft.loading[name]?.count || 0
 
         if (status.action === 'INCREASE') {
@@ -73,6 +85,9 @@ const notificationsStore = (
         draft.loading[name] = {
           status: status.status,
           count,
+          isLoading,
+          isError,
+          error,
         }
 
         break;

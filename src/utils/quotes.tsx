@@ -82,7 +82,7 @@ export const getQuote = async (id: QuoteID, idUser?: UserID) => {
     .match({ id_quote: id })
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return
   }
@@ -130,7 +130,7 @@ export const updateQuote = async (id: QuoteID, authorID: AuthorID, quote: Quotes
     .match({ id_quote: id })
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return null
   }
@@ -172,7 +172,7 @@ export const getQuotes = async ({
   } = await createQuotesBuilder({ from, to, authors })
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return
   }
@@ -227,7 +227,7 @@ export const getRandomQuote = async (idUser?: UserID): Promise<boolean | Postgre
   const { data, error } = await supabase.rpc(SupabaseFunctions.getRandomQuote)
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return error
   }
@@ -249,7 +249,7 @@ export const getRandomQuote = async (idUser?: UserID): Promise<boolean | Postgre
     const bookmarks = await getBookmarks({ id_user: idUser, list: [data[0].id_quote] })
 
     if (bookmarks.error) {
-      handleFailure(bookmarks.error)
+      handleFailure(bookmarks.error.message)
 
       return bookmarks.error
     }
@@ -290,7 +290,7 @@ export const getQuotesAuthors = async (authors: string[]) => {
     .in('id_author', authors);
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return
   }
@@ -312,7 +312,7 @@ export const getLastQuotes = async () => {
   const { data, error, count } = await createQuotesBuilder({ lastUpdates: true })
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return
   }
@@ -354,7 +354,7 @@ export const searchQuote = debounce(async ({
   } = response
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return
   }
@@ -394,7 +394,7 @@ export const deleteQuote = async (quoteID: QuoteID): Promise<QuotesApi[] | null>
   console.log('Доходишь ? ')
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return null
   }
@@ -439,7 +439,7 @@ export const postQuote = async ({
     .single();
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     notificationMethods.createNotification(error.message, 'ERROR')
 
@@ -479,7 +479,7 @@ export const getFilterQuotesCounter = async (data: GetQuotesSearch) => {
   const { count, error } = response
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return
   }

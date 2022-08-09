@@ -24,6 +24,7 @@ const useAdminPanelAuthors = () => {
   } = Stores()
 
   const isLoading = loading?.status !== 'SUCCESS'
+  const isError = loading?.isError
 
   const columns = useMemo(() => [
     {
@@ -65,12 +66,16 @@ const useAdminPanelAuthors = () => {
       actions: (
         <TableAction
           editElement={(<div></div>)}
-          deleteElement={<Delete />}
+          deleteElement={(
+            <Delete
+              authorID={author.id_author}
+              authorImage={author.avatar}
+            />
+          )}
         />
       )
     }))
   }, [authors])
-
 
   useEffect(() => {
     getAuthors()
@@ -81,6 +86,7 @@ const useAdminPanelAuthors = () => {
     authors,
     columns,
     isLoading,
+    isError,
     data,
   }
 }

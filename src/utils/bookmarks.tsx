@@ -61,7 +61,7 @@ export const getBookmarks = async ({
     .in('id_quote', list)
 
   if (error) {
-    status = handleFailure(error)
+    status = handleFailure(error.message)
   }
 
   status()
@@ -97,7 +97,7 @@ export const addBookmark = async ({
     })
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return false
   }
@@ -138,7 +138,7 @@ export const deleteBookmark = async ({
     })
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return false
   }
@@ -167,7 +167,7 @@ export const deleteBookmarks = async (id: QuoteID): Promise<true | null> => {
     .match({ id_quote: id })
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return null
   }

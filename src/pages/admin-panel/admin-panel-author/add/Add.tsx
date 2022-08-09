@@ -33,7 +33,6 @@ const Add = () => {
     handleSubmit,
     formState: {
       errors,
-      isValid,
     }
   } = useForm<FormFields>()
 
@@ -43,6 +42,7 @@ const Add = () => {
     handleGetImage,
     open,
     image,
+    isLoading,
   } = useModalAdd()
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
@@ -101,6 +101,7 @@ const Add = () => {
           </div>
           <Button
             type='submit'
+            loading={isLoading}
             className={styles.button}
           >
             {CREATE_TEXT}

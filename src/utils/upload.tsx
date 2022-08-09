@@ -29,7 +29,7 @@ export const uploadFile = async (file: FileList): Promise<UploadApi | null> => {
     .upload(file[0].name, file[0], defaultOptions)
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return null
   }
@@ -39,7 +39,7 @@ export const uploadFile = async (file: FileList): Promise<UploadApi | null> => {
   return data
 }
 
-export const deleteFile = async () => {
+export const deleteFile = async (image: string): Promise<boolean | null> => {
   const {
     handleFailure,
     handlePending,
@@ -48,23 +48,20 @@ export const deleteFile = async () => {
 
   handlePending()
 
-  const {
-    data,
-    error
-  } = await supabase
+  const { error } = await supabase
     .storage
     .from(Storages.images)
-    .remove(['Vertinskiy.e05.2021.WEB-DL.(1080p).Getty.mkv_snapshot_32.15.465.jpg'])
+    .remove([image])
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return null
   }
 
   handleSuccess()
 
-  return
+  return true
 }
 
 export const updateFile = async () => {

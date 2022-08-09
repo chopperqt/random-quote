@@ -1,8 +1,19 @@
 import { useState } from 'react'
+import { Stores } from 'services'
 
 const useModalAdd = () => {
   const [open, setOpen] = useState(false)
   const [image, setImage] = useState<FileList>()
+
+  const {
+    NotificationStore: {
+      loading: {
+        createAuthor: loading,
+      },
+    }
+  } = Stores()
+
+  const isLoading = loading?.status === 'PENDING'
 
   const handleClose = () => {
     setOpen(false)
@@ -24,6 +35,7 @@ const useModalAdd = () => {
     handleGetImage,
     open,
     image,
+    isLoading,
   }
 }
 

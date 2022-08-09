@@ -36,16 +36,22 @@ export const ActionsStatus: Action = {
 }
 
 const loadingStatuses = (requestName: ApiRequests) => {
-  const handlePending = () => Store.dispatch(notificationMethods.loadingRequest(requestName, ActionsStatus.pending))
+  const handlePending = () => {
+    Store.dispatch(notificationMethods.loadingRequest(requestName, ActionsStatus.pending, true, false))
+  }
 
-  const handleFailure = ({ message }: ErrorType) => {
-    Store.dispatch(notificationMethods.loadingRequest(requestName, ActionsStatus.failure))
+  const handleFailure = (message?: string) => {
+    Store.dispatch(notificationMethods.loadingRequest(requestName, ActionsStatus.failure, false, true, message))
+
+    if (!message) {
+      return
+    }
 
     notificationMethods.createNotification(message, 'ERROR')
   }
 
   const handleSuccess = (message?: string) => {
-    Store.dispatch(notificationMethods.loadingRequest(requestName, ActionsStatus.success))
+    Store.dispatch(notificationMethods.loadingRequest(requestName, ActionsStatus.success, false))
 
     if (message) {
       notificationMethods.createNotification(message || SuccessMessages.createSuccess, 'SUCCESS')

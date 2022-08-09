@@ -1,6 +1,7 @@
 export type AuthorsRequests =
   'getAuthors' |
-  'createAuthor'
+  'createAuthor' |
+  'deleteAuthor'
 
 export interface AuthorApi {
   id_author: number;
@@ -11,3 +12,4 @@ export interface AuthorApi {
 }
 
 export type AuthorID = AuthorApi['id_author']
+export type AuthorImage = AuthorApi['path']

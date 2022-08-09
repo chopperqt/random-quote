@@ -1,25 +1,54 @@
 import { TableDelete } from 'components/table'
+import { AuthorID, AuthorImage } from 'models/author.type'
 import { useState } from 'react'
-import { deleteFile } from 'utils/upload'
+import { Stores } from 'services'
+import { deleteAuthor } from 'utils/authors'
+import getNormalizedAvatar from '../helpers/getNormalizedAvatar'
 
-const Delete = () => {
+interface DeleteProps {
+  authorID: AuthorID
+  authorImage: AuthorImage
+}
+
+const Delete = ({
+  authorID,
+  authorImage
+}: DeleteProps) => {
+  const {
+    NotificationStore: {
+      loading: {
+        deleteAuthor: loading,
+      }
+    }
+  } = Stores()
+
+  const isLoading = loading?.status === 'PENDING'
+
   const [opened, setOpened] = useState<boolean>(false)
 
   const close = () => {
     setOpened(false)
   }
 
-  const open = () => [
+  const open = () => {
     setOpened(true)
-  ]
+  }
 
-  const handleDelete = () => {
-    deleteFile()
-    console.log('Удаление')
+  const handleDelete = async () => {
+    const formattedImage = getNormalizedAvatar(authorImage)
+
+    const response = await deleteAuthor(authorID, formattedImage)
+
+    if (!response) {
+      return
+    }
+
+    close()
   }
 
   return (
     <TableDelete
+      isLoading={isLoading}
       opened={opened}
       onOpen={open}
       onClose={close}

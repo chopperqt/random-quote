@@ -1,31 +1,42 @@
 import supabase from "./client";
 
-import Store, { notificationMethods, authorsMethods } from 'services'
+import Store, { authorsMethods } from 'services'
 import { Tables } from './constants'
-import loadingStatuses, { ActionsStatus } from "helpers/loadingStatuses";
+import loadingStatuses from "helpers/loadingStatuses";
 import { FormFields } from "pages/admin-panel/admin-panel-author/add/Add";
-import { uploadFile } from "./upload";
+import { deleteFile, uploadFile } from "./upload";
 import { translateUrl } from 'helpers/translateUrl'
+import { AuthorApi, AuthorID, AuthorImage } from "models/author.type";
+import getNormalizedAvatar from "pages/admin-panel/admin-panel-author/helpers/getNormalizedAvatar";
 
 const DEFAULT_URL = 'https://gkywdfbpxquelncihepl.supabase.co/storage/v1/object/public/'
 
 
 export const getAuthors = async () => {
-  Store.dispatch(notificationMethods.loadingRequest('getAuthors', ActionsStatus.pending))
+  const {
+    handleFailure,
+    handlePending,
+    handleSuccess,
+  } = loadingStatuses('getAuthors')
 
-  const { data, error, count } = await supabase
+  handlePending()
+
+  const {
+    data,
+    error,
+    count,
+  } = await supabase
     .from(Tables.authors)
     .select("*", { count: 'exact' });
 
   if (error) {
-    const { message } = error
+    handleFailure(error.message)
 
-    Store.dispatch(notificationMethods.loadingRequest('getAuthors', ActionsStatus.failure))
-
-    notificationMethods.createNotification(message, 'ERROR')
+    return
   }
 
-  Store.dispatch(notificationMethods.loadingRequest('getAuthors', ActionsStatus.success))
+  handleSuccess()
+
   Store.dispatch(authorsMethods.getAuthors({
     data,
     count,
@@ -44,25 +55,30 @@ export const createAuthor = async (author: CreateAuthor) => {
 
   handlePending()
 
-  const response = await uploadFile(author.avatar)
+  const avatar = await uploadFile(author.avatar)
 
-  if (typeof response !== 'string') {
-    handleSuccess()
+  if (!avatar?.Key) {
+    handleFailure()
 
     return
   }
 
-  const { data, error } = await supabase
+  const formattedAvatar = getNormalizedAvatar(avatar.Key)
+
+  const {
+    data,
+    error,
+  } = await supabase
     .from(Tables.authors)
     .insert({
-      avatar: `${DEFAULT_URL}${response}`,
+      avatar: formattedAvatar,
       name: `${author.surName} ${author.name} ${author.secondName}`,
       path: translateUrl(`${author.surName} ${author.name} ${author.secondName}`)
     })
     .single()
 
   if (error) {
-    handleFailure(error)
+    handleFailure(error.message)
 
     return
   }
@@ -70,4 +86,38 @@ export const createAuthor = async (author: CreateAuthor) => {
   handleSuccess()
 
   console.log(data)
+}
+
+export const deleteAuthor = async (authorID: AuthorID, authorImage: AuthorImage): Promise<AuthorApi[] | null> => {
+  const {
+    handlePending,
+    handleFailure,
+    handleSuccess,
+  } = loadingStatuses('deleteAuthor')
+
+  handlePending()
+
+  const {
+    data,
+    error
+  } = await supabase
+    .from(Tables.authors)
+    .delete()
+    .match({
+      id_author: authorID,
+    })
+
+  if (error) {
+    handleFailure(error.message)
+
+    return null
+  }
+
+  await deleteFile(authorImage)
+
+  handleSuccess()
+
+  getAuthors()
+
+  return data
 }
