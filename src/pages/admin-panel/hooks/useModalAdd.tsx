@@ -24,7 +24,8 @@ const useModalAdd = () => {
   }
 
   const handleGetImage = (file: FileList) => {
-    console.log(file, 'file')
+
+    console.log(file, 'test')
 
     setImage(file)
   }

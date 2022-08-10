@@ -13,3 +13,4 @@ export interface AuthorApi {
 
 export type AuthorID = AuthorApi['id_author']
 export type AuthorImage = AuthorApi['path']
+export type AuthorApiOptional = Partial<AuthorApi>

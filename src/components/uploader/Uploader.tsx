@@ -21,6 +21,8 @@ const Uploader = ({
     inputRef,
     hasImages,
     images,
+    handleReset,
+    handleChange,
   } = useUploader({
     onChange,
   })
@@ -41,6 +43,7 @@ const Uploader = ({
             accept="image/*"
             id="uploader"
             className={styles.input}
+            onChange={handleChange}
           />
           <label
             htmlFor="uploader"
@@ -61,9 +64,16 @@ const Uploader = ({
           />
         )
       })}
-      <Button className={styles.upload}>
-        <Icon icon={IconList.upload} />
-      </Button>
+      {hasImages && (
+        <Button
+          className={styles.upload}
+          color="warning"
+          type="button"
+          onClick={handleReset}
+        >
+          <Icon icon={IconList.trash} />
+        </Button>
+      )}
     </div>
   )
 }

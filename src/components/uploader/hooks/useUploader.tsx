@@ -1,4 +1,4 @@
-import {
+import React, {
   useState,
   useEffect,
   useRef,
@@ -19,8 +19,6 @@ export const useUploader = ({
   const inputRef = useRef<HTMLInputElement | null>(null)
 
   const filesReader = (files: FileList): ImageType[] => {
-    console.log(files)
-
     let buffer: ImageType[] = []
 
     // uploadFile(files[0])
@@ -43,94 +41,27 @@ export const useUploader = ({
     return buffer
   }
 
-  const preventDefaults = (e: Event) => {
-    e.preventDefault()
-    e.stopPropagation()
-  }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const image = e.target?.files
 
-  const hightLight = () => {
-    if (!layoutRef.current) {
+    if (image === null) {
       return
     }
 
-    layoutRef.current.classList.add('hightLight')
+    onChange(image)
+    filesReader(image)
   }
 
-  const unhightLight = () => {
-    if (!layoutRef.current) {
-      return
-    }
-
-    layoutRef.current.classList.remove('unhighlight')
+  const handleReset = (): void => {
+    setImages([])
   }
-
-  const uploadFiles = (file: any) => {
-    //console.log('file: ', file)
-
-    //uploadFile(file[0])
-  }
-
-  const handleFiles = (files: FileList) => {
-    return [files].forEach((file) => uploadFiles(file))
-  }
-
-  const handleDrop = async (e: DragEvent | FileList) => {
-    if (e instanceof DragEvent) {
-      const dt = e.dataTransfer
-
-      if (dt) {
-        const files = dt.files
-
-        const normalizedImages = filesReader(files)
-
-
-        //console.log(normalizedImages)
-
-        //setImages([...images, ...normalizedImages])
-
-        //handleFiles(normalizedImages)
-      }
-    }
-  }
-
-  const handleSelectFile = (e: Event) => {
-    const target = e.target as HTMLInputElement
-    const normalizedImages = filesReader(target.files as FileList)
-
-    if (!target?.files) {
-      return
-    }
-
-    onChange(target.files)
-
-    // handleFiles(normalizedImages)
-  }
-
-  useEffect(() => {
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((eventName) => {
-      layoutRef.current?.addEventListener(eventName, preventDefaults, false)
-    });
-
-    ['dragenter', 'dragover'].forEach(eventName => {
-      layoutRef.current?.addEventListener(eventName, hightLight, false)
-    });
-
-    ['dragleave', 'drop'].forEach(eventName => {
-      layoutRef.current?.addEventListener(eventName, unhightLight, false)
-    });
-
-    layoutRef.current?.addEventListener('drop', handleDrop, false)
-
-    inputRef.current?.addEventListener('change', handleSelectFile)
-  }, [])
 
   return {
     layoutRef,
     inputRef,
-    handleDrop,
-    handleFiles,
-    handleSelectFile,
+    handleChange,
     hasImages,
     images,
+    handleReset,
   }
 }

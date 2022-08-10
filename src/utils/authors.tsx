@@ -6,11 +6,14 @@ import loadingStatuses from "helpers/loadingStatuses";
 import { FormFields } from "pages/admin-panel/admin-panel-author/add/Add";
 import { deleteFile, uploadFile } from "./upload";
 import { translateUrl } from 'helpers/translateUrl'
-import { AuthorApi, AuthorID, AuthorImage } from "models/author.type";
+import {
+  AuthorApi,
+  AuthorID,
+  AuthorImage,
+} from "models/author.type";
 import getNormalizedAvatar from "pages/admin-panel/admin-panel-author/helpers/getNormalizedAvatar";
 
 const DEFAULT_URL = 'https://gkywdfbpxquelncihepl.supabase.co/storage/v1/object/public/'
-
 
 export const getAuthors = async () => {
   const {

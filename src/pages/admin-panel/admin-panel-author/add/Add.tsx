@@ -55,7 +55,7 @@ const Add = () => {
 
     const createResponse = await createAuthor({
       ...data,
-      avatar: image,
+      avatar: image as FileList,
     })
 
     if (!createResponse) {
@@ -86,9 +86,7 @@ const Add = () => {
           className={styles.form}
         >
           <div className={styles.section}>
-            <Uploader
-              onChange={handleGetImage}
-            />
+            <Uploader onChange={handleGetImage} />
             <div className={styles.fields}>
               <Input
                 {...(register('name', { required: true }))}
