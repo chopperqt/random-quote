@@ -39,6 +39,7 @@ const useAdminPanelQuote = () => {
     {
       Header: 'ID',
       accessor: 'id_quote',
+      width: 50,
     },
     {
       Header: 'Цитата',
@@ -56,6 +57,7 @@ const useAdminPanelQuote = () => {
     {
       Header: 'Опции',
       accessor: 'actions',
+      width: 100,
     }
   ], [])
 

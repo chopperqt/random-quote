@@ -33,7 +33,9 @@ const Add = () => {
     handleSubmit,
     formState: {
       errors,
-    }
+    },
+    control,
+    reset,
   } = useForm<FormFields>()
 
   const {
@@ -45,14 +47,16 @@ const Add = () => {
   } = useModalAdd()
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
+    console.log(data)
+
     if (!image?.length) {
       return
     }
 
-    createAuthor({
-      ...data,
-      avatar: image,
-    })
+    // createAuthor({
+    //   ...data,
+    //   avatar: image,
+    // })
   }
 
   return (
@@ -76,7 +80,10 @@ const Add = () => {
         >
           <div className={styles.section}>
             <Uploader
+              control={control}
+              name='test'
               onChange={handleGetImage}
+              onReset={() => { }}
             />
             <div className={styles.fields}>
               <Input

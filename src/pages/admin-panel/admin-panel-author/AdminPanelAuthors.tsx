@@ -6,7 +6,7 @@ import { DefaultMessage } from "components/Information"
 
 const AdminPanelAuthors = () => {
   const {
-    data,
+    normalizedAuthors,
     isLoading,
     columns,
     isError,
@@ -25,7 +25,7 @@ const AdminPanelAuthors = () => {
       <Content />
       <Spin loading={isLoading}>
         <Table
-          data={data}
+          data={normalizedAuthors}
           columns={columns}
         />
       </Spin>

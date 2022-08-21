@@ -28,6 +28,7 @@ export interface FormFields {
   name: string
   surName: string
   secondName: string
+  avatar: FileList
 }
 
 const Add = () => {
@@ -36,7 +37,9 @@ const Add = () => {
     handleSubmit,
     formState: {
       errors,
-    }
+    },
+    control,
+    reset,
   } = useForm<FormFields>()
 
   const {
@@ -44,26 +47,20 @@ const Add = () => {
     handleOpen,
     handleGetImage,
     open,
-    image,
     isLoading,
   } = useModalAdd()
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    if (!image?.length) {
-      return
-    }
+    console.log(data)
 
-    const createResponse = await createAuthor({
-      ...data,
-      avatar: image as FileList,
-    })
+    // const createResponse = await createAuthor(data)
 
-    if (!createResponse) {
-      return
-    }
+    // if (!createResponse) {
+    //   return
+    // }
 
-    getAuthors()
-    handleClose()
+    // getAuthors()
+    // handleClose()
   }
 
   return (
@@ -86,7 +83,12 @@ const Add = () => {
           className={styles.form}
         >
           <div className={styles.section}>
-            <Uploader onChange={handleGetImage} />
+            <Uploader
+              name="avatar"
+              control={control}
+              onChange={handleGetImage}
+              onReset={reset}
+            />
             <div className={styles.fields}>
               <Input
                 {...(register('name', { required: true }))}

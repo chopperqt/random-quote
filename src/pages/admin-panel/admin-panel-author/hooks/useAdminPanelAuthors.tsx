@@ -5,11 +5,8 @@ import {
 
 import { Stores } from 'services'
 import { getAuthors } from 'utils/authors'
-import {
-  TableAction,
-  TableAuthor,
-} from 'components/table'
-import Delete from '../delete/Delete'
+
+import { getNormalizeAuthor } from '../helpers/getNormalizedAuthor'
 
 const useAdminPanelAuthors = () => {
   const {
@@ -30,6 +27,7 @@ const useAdminPanelAuthors = () => {
     {
       Header: 'ID',
       accessor: 'id_author',
+      width: 30,
     },
     {
       Header: 'Name',
@@ -50,44 +48,24 @@ const useAdminPanelAuthors = () => {
     {
       Header: 'Actions',
       accessor: 'actions',
+      width: 100,
     },
   ], [])
 
-  const data = useMemo(() => {
-    return authors.map((author) => ({
-      ...author,
-      avatar: (
-        <TableAuthor
-          name={author.name}
-          avatar={author.avatar}
-          height={30}
-        />
-      ),
-      actions: (
-        <TableAction
-          editElement={(<div></div>)}
-          deleteElement={(
-            <Delete
-              authorID={author.id_author}
-              authorImage={author.avatar}
-            />
-          )}
-        />
-      )
-    }))
+  const normalizedAuthors = useMemo(() => {
+    return authors.map(getNormalizeAuthor)
   }, [authors])
 
   useEffect(() => {
     getAuthors()
   }, [])
 
-
   return {
     authors,
     columns,
     isLoading,
     isError,
-    data,
+    normalizedAuthors,
   }
 }
 

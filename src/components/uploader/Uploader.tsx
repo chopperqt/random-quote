@@ -1,70 +1,80 @@
 import cx from 'classnames'
+import { useController } from 'react-hook-form'
 
 import Img from 'components/img'
 import Button from 'components/button'
 import Icon, { IconList } from 'components/icon'
-
-import styles from './Uploader.module.scss'
 import { useUploader } from './hooks/useUploader'
 
-const UPLOAD_TEXT = 'Загрузите изображение'
+import type { Control } from 'react-hook-form'
 
+import styles from './Uploader.module.scss'
+
+const UPLOAD_TEXT = 'Загрузите\nизображение'
 
 interface UploaderProps {
   onChange: (file: FileList) => void
+  name: string
+  control: Control<any, any>
+  onReset: () => void
 }
 const Uploader = ({
-  onChange,
+  onReset,
+  name,
+  control,
 }: UploaderProps) => {
   const {
-    layoutRef,
-    inputRef,
-    hasImages,
-    images,
-    handleReset,
+    field: {
+      onChange: updateField,
+    },
+  } = useController({
+    control,
+    name,
+  })
+
+  const {
     handleChange,
+    handleReset,
+    image,
   } = useUploader({
-    onChange,
+    onChange: updateField,
+    onReset,
   })
 
   return (
     <div
-      ref={layoutRef}
       className={cx(styles.layout, {
-        [styles.layoutImage]: hasImages,
+        [styles.layoutImage]: image,
       })}
     >
-      {!hasImages && (
+      {!image && (
         <>
           <input
-            ref={inputRef}
             type="file"
-            multiple
             accept="image/*"
             id="uploader"
             className={styles.input}
             onChange={handleChange}
+            name={name}
+            value={image}
           />
           <label
             htmlFor="uploader"
-            className={styles.button}
+            className={styles.label}
           >
             {UPLOAD_TEXT}
           </label>
         </>
       )}
-      {images && images.map((image, index) => {
-        return (
-          <Img
-            key={index}
-            className={styles.image}
-            height={250}
-            src={image}
-            alt="SomeImage"
-          />
-        )
-      })}
-      {hasImages && (
+      {image && (
+        <Img
+          src={image.toString()}
+          height={250}
+          alt="test"
+          className={styles.image}
+        />
+      )}
+      {image && (
         <Button
           className={styles.upload}
           color="warning"

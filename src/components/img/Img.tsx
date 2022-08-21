@@ -8,7 +8,7 @@ const PlaceholderComponent = () => (
 
 interface ImgProps {
   height: number
-  src: string | ArrayBuffer
+  src: string
   alt: string
   className?: string
 }
@@ -23,7 +23,7 @@ const Img = ({
     height={height}
     placeholder={<PlaceholderComponent />}
     effect="blur"
-    src={src.toString()}
+    src={src}
     alt={alt}
   />
 )

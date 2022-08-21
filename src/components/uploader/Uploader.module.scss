@@ -8,7 +8,6 @@
   color: $color-secondary--5;
   width: 200px;
   height: 250px;
-  padding: 20px;
   position: relative;
 }
 
@@ -17,13 +16,15 @@
   border: none
 }
 
-.button {
+.label {
   @include reset-button();
   display: flex;
+  justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
   text-align: center;
+  white-space: pre-wrap;
 }
 
 .input {

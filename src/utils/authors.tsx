@@ -46,10 +46,7 @@ export const getAuthors = async () => {
   }))
 }
 
-interface CreateAuthor extends FormFields {
-  avatar: FileList,
-}
-export const createAuthor = async (author: CreateAuthor): Promise<AuthorApi[] | null> => {
+export const createAuthor = async (author: FormFields): Promise<AuthorApi[] | null> => {
   const {
     handleFailure,
     handlePending,

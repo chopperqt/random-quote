@@ -1,67 +1,48 @@
-import React, {
+import {
   useState,
-  useEffect,
-  useRef,
 } from 'react'
+import getNormalizeFile from '../helper/getNormalizeFile'
 
-type ImageType = (ArrayBuffer | string)
-
+import type { ChangeEvent } from 'react'
 interface UseUploaderProps {
-  onChange: (file: FileList) => void
+  onChange: (file: any) => void
+  onReset: () => void
 }
 export const useUploader = ({
   onChange,
+  onReset,
 }: UseUploaderProps) => {
-  const [images, setImages] = useState<ImageType[]>([])
-  const hasImages = images.length > 0
+  const [image, setImage] = useState<string>('')
 
-  const layoutRef = useRef<HTMLDivElement | null>(null)
-  const inputRef = useRef<HTMLInputElement | null>(null)
-
-  const filesReader = (files: FileList): ImageType[] => {
-    let buffer: ImageType[] = []
-
-    // uploadFile(files[0])
-
-    Array.from(files).forEach((file) => {
-      const readImage = new FileReader()
-
-      readImage.readAsDataURL(file)
-      readImage.onloadend = () => {
-        if (!readImage?.result) {
-          return
-        }
-
-        setImages([...images, readImage.result])
-
-        buffer = [...buffer, ((readImage?.result as ImageType) || '')]
-      }
-    })
-
-    return buffer
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const image = e.target?.files
+  const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement
+    const image = target?.files as FileList
 
     if (image === null) {
       return
     }
 
+    const normalizedFile = await getNormalizeFile(image[0])
+
+    if (!normalizedFile) {
+      return
+    }
+
+    setImage(normalizedFile.toString())
+
+    console.log(image)
+
     onChange(image)
-    filesReader(image)
   }
 
-  const handleReset = (): void => {
-    setImages([])
+  const handleReset = () => {
+    onReset()
+    setImage('')
   }
 
   return {
-    layoutRef,
-    inputRef,
     handleChange,
-    hasImages,
-    images,
     handleReset,
+    image,
   }
 }
